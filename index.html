@@ -1,0 +1,337 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --green:#087f5b; --dark:#063c2e; --light:#e9f7ef;
+      --bg:#f3f7f5; --text:#183f35; --muted:#6b7c75;
+      --border:#dce7e1; --white:#fff; --red:#c0392b;
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; font:14px Arial,sans-serif; background:var(--bg); color:var(--text); }
+    header { background:var(--dark); color:white; padding:22px; }
+    header h1 { margin:0 0 6px; font-size:24px; }
+    header p { margin:0; color:#c9e4d7; }
+    .wrap { max-width:1200px; margin:auto; padding:20px; }
+    .grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; }
+    .card { background:white; border:1px solid var(--border); border-radius:14px; padding:17px; margin-bottom:16px; }
+    .metric { font-size:26px; font-weight:bold; margin-top:8px; }
+    .muted { color:var(--muted); font-size:12px; }
+    h2 { font-size:17px; margin:0 0 15px; }
+    label { display:block; margin-bottom:6px; font-weight:bold; }
+    input,select { width:100%; padding:11px; border:1px solid #ccd9d2; border-radius:8px; background:white; color:var(--text); }
+    button { border:0; border-radius:8px; background:var(--green); color:white; padding:11px 14px; font-weight:bold; cursor:pointer; }
+    button.secondary { background:#e7efeb; color:var(--dark); }
+    button.danger { background:var(--red); }
+    button:disabled { opacity:.5; cursor:wait; }
+    .row { display:flex; gap:10px; flex-wrap:wrap; align-items:end; }
+    .field { flex:1; min-width:190px; }
+    .actions { display:flex; gap:8px; flex-wrap:wrap; }
+    .status { padding:12px; background:var(--light); border-radius:8px; margin-bottom:15px; white-space:pre-wrap; }
+    .error { background:#fdecea; color:#922b21; }
+    .tablewrap { overflow:auto; }
+    table { width:100%; border-collapse:collapse; min-width:650px; }
+    th,td { padding:10px; text-align:left; border-bottom:1px solid var(--border); }
+    th { background:#f0f6f2; }
+    .pill { display:inline-block; border-radius:20px; padding:5px 8px; background:var(--light); font-size:11px; }
+    .tiny { padding:7px 9px; font-size:12px; }
+    #loading { color:var(--muted); padding:10px 0; }
+    @media(max-width:800px) { .grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .wrap { padding:12px; } }
+    @media(max-width:420px) { .grid { grid-template-columns:1fr 1fr; gap:8px; } .metric { font-size:22px; } }
+  </style>
+</head>
+<body>
+<header>
+  <h1>RS NETWORK</h1>
+  <p>Email & Invoice Control Panel</p>
+</header>
+
+<div class="wrap">
+  <div id="message" class="status">Connecting to your secure panel...</div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="muted">Customer Records</div>
+      <div id="total" class="metric">—</div>
+    </div>
+    <div class="card">
+      <div class="muted">Auto Email</div>
+      <div id="auto" class="metric">—</div>
+    </div>
+    <div class="card">
+      <div class="muted">Monthly Trigger</div>
+      <div id="trigger" class="metric">—</div>
+    </div>
+    <div class="card">
+      <div class="muted">Report Month</div>
+      <div id="month" class="metric" style="font-size:18px">—</div>
+    </div>
+  </div>
+
+  <section class="card">
+    <h2>📧 Target Email Settings</h2>
+    <div class="row">
+      <div class="field">
+        <label for="email">Report recipient</label>
+        <input id="email" type="email" placeholder="admin@example.com">
+      </div>
+      <button onclick="saveEmail()">Save Target Email</button>
+    </div>
+    <p class="muted">This address receives instant reports, tests and monthly summaries.</p>
+  </section>
+
+  <section class="card">
+    <h2>⚡ Instant Actions</h2>
+    <div class="actions">
+      <button onclick="runAction('testEmail')">Send Test Email + PDF</button>
+      <button onclick="runAction('sendInstantSummary')">Send Instant Summary</button>
+      <button class="secondary" onclick="loadData()">Refresh Dashboard</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>📅 Monthly Invoice / Summary Download</h2>
+    <div class="row">
+      <div class="field">
+        <label for="year">Year</label>
+        <select id="year"></select>
+      </div>
+      <div class="field">
+        <label for="monthSelect">Month</label>
+        <select id="monthSelect">
+          <option value="1">January</option><option value="2">February</option>
+          <option value="3">March</option><option value="4">April</option>
+          <option value="5">May</option><option value="6">June</option>
+          <option value="7">July</option><option value="8">August</option>
+          <option value="9">September</option><option value="10">October</option>
+          <option value="11">November</option><option value="12">December</option>
+        </select>
+      </div>
+      <button onclick="downloadMonthly()">Download Monthly PDF</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>🔁 Automatic Monthly Email</h2>
+    <p class="muted">Runs on the 1st of each month and emails the previous month's dated records.</p>
+    <div class="actions">
+      <button onclick="setAuto(true)">Enable Auto Email</button>
+      <button class="danger" onclick="setAuto(false)">Disable Auto Email</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>👤 Customer Invoices</h2>
+    <p class="muted">Select a customer row to create a one-customer PDF or email it to the configured Target Email.</p>
+    <input id="search" placeholder="Search customer, ID or phone..." oninput="renderCustomers()">
+    <div class="tablewrap" style="margin-top:12px">
+      <table>
+        <thead><tr><th>Sheet Row</th><th>Customer ID</th><th>Name</th><th>Phone</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="customers"><tr><td colspan="6">Loading...</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>🧾 Send History</h2>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Time</th><th>Admin</th><th>Action</th><th>Details</th></tr></thead>
+        <tbody id="history"><tr><td colspan="4">Loading...</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<script>
+  let dashboard = null;
+
+  function notify(text, error) {
+    const el = document.getElementById('message');
+    el.textContent = text;
+    el.className = 'status' + (error ? ' error' : '');
+  }
+
+  function runAction(fn, ...args) {
+    notify('Working... please wait.');
+    google.script.run
+      .withSuccessHandler(result => {
+        notify(typeof result === 'string' ? result : 'Completed.');
+        loadData();
+      })
+      .withFailureHandler(err => notify(err.message || String(err), true))[fn](...args);
+  }
+
+  function loadData() {
+    google.script.run
+      .withSuccessHandler(data => {
+        dashboard = data;
+        document.getElementById('total').textContent = data.counts.totalRecords;
+        document.getElementById('auto').textContent = data.counts.autoEmail ? 'ON' : 'OFF';
+        document.getElementById('trigger').textContent = data.counts.monthlyTrigger ? 'ON' : 'OFF';
+        document.getElementById('month').textContent = data.counts.currentMonth;
+        document.getElementById('email').value = data.counts.targetEmail || '';
+        renderCustomers();
+        renderHistory(data.history || []);
+        notify('Dashboard loaded successfully.');
+      })
+      .withFailureHandler(err => notify(err.message || String(err), true))
+      .getDashboard();
+  }
+
+  function saveEmail() {
+    const email = document.getElementById('email').value.trim();
+    notify('Saving target email...');
+    google.script.run
+      .withSuccessHandler(msg => { notify(msg); loadData(); })
+      .withFailureHandler(err => notify(err.message || String(err), true))
+      .saveTargetEmail(email);
+  }
+
+  function setAuto(enabled) {
+    const question = enabled
+      ? 'Enable automatic monthly email?'
+      : 'Disable automatic monthly email?';
+    if (!confirm(question)) return;
+    runAction('setMonthlyAuto', enabled);
+  }
+
+  function initYears() {
+    const sel = document.getElementById('year');
+    const current = new Date().getFullYear();
+    for (let y = current - 5; y <= current + 1; y++) {
+      const option = document.createElement('option');
+      option.value = y;
+      option.textContent = y;
+      if (y === current) option.selected = true;
+      sel.appendChild(option);
+    }
+    document.getElementById('monthSelect').value = new Date().getMonth() + 1;
+  }
+
+  function downloadMonthly() {
+    const y = document.getElementById('year').value;
+    const m = document.getElementById('monthSelect').value;
+    notify('Preparing monthly PDF...');
+    google.script.run
+      .withSuccessHandler(file => {
+        downloadBase64(file.base64, file.filename, 'application/pdf');
+        notify('Monthly PDF prepared. Records: ' + file.count);
+      })
+      .withFailureHandler(err => notify(err.message || String(err), true))
+      .downloadMonthlySummary(y, m);
+  }
+
+  function invoice(rowNumber) {
+    notify('Generating customer invoice...');
+    google.script.run
+      .withSuccessHandler(file => {
+        downloadBase64(file.base64, file.filename, 'application/pdf');
+        notify('Customer PDF downloaded.');
+      })
+      .withFailureHandler(err => notify(err.message || String(err), true))
+      .downloadCustomerInvoice(rowNumber);
+  }
+
+  function sendInvoice(rowNumber) {
+    if (!confirm('Send this invoice PDF to the configured Target Email?')) return;
+    runAction('sendCustomerInvoice', rowNumber);
+  }
+
+  function downloadBase64(base64, filename, type) {
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    const blob = new Blob([bytes], {type});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  function renderCustomers() {
+    const tbody = document.getElementById('customers');
+    if (!dashboard) return;
+
+    const query = document.getElementById('search').value.toLowerCase().trim();
+    const filtered = dashboard.customers.filter(c =>
+      [c.id, c.name, c.phone, c.status, ...(c.row || [])]
+        .join(' ').toLowerCase().includes(query)
+    );
+
+    tbody.replaceChildren();
+
+    if (!filtered.length) {
+      const tr = document.createElement('tr');
+      const td = document.createElement('td');
+      td.colSpan = 6;
+      td.textContent = 'No matching customers found.';
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+      return;
+    }
+
+    filtered.forEach(c => {
+      const tr = document.createElement('tr');
+      [c.rowNumber, c.id, c.name, c.phone, c.status].forEach(v => {
+        const td = document.createElement('td');
+        td.textContent = v || '—';
+        tr.appendChild(td);
+      });
+
+      const td = document.createElement('td');
+      const pdf = document.createElement('button');
+      pdf.className = 'tiny secondary';
+      pdf.textContent = 'PDF';
+      pdf.onclick = () => invoice(c.rowNumber);
+
+      const mail = document.createElement('button');
+      mail.className = 'tiny';
+      mail.textContent = 'Email';
+      mail.style.marginLeft = '5px';
+      mail.onclick = () => sendInvoice(c.rowNumber);
+
+      td.append(pdf, mail);
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderHistory(items) {
+    const tbody = document.getElementById('history');
+    tbody.replaceChildren();
+
+    if (!items.length) {
+      const tr = document.createElement('tr');
+      const td = document.createElement('td');
+      td.colSpan = 4;
+      td.textContent = 'No activity recorded yet.';
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+      return;
+    }
+
+    items.forEach(item => {
+      const tr = document.createElement('tr');
+      [item.time, item.user, item.action, item.detail].forEach(v => {
+        const td = document.createElement('td');
+        td.textContent = v || '';
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+  }
+
+  initYears();
+  loadData();
+</script>
+</body>
+</html>
