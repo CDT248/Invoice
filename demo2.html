@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RS NETWORK | Billing Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--nav:#091d32;--green:#10a778;--bg:#f3f6fb;--white:#fff;--text:#17283e;--muted:#718096;--line:#e4eaf1;--red:#df4e5b;--amber:#c78a1d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:13px Inter,'Hind Siliguri',sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;border:0}
+.layout{min-height:100vh;display:grid;grid-template-columns:235px 1fr}
+.sidebar{background:var(--nav);color:white;padding:22px 15px;display:flex;flex-direction:column;gap:25px}
+.brand{display:flex;align-items:center;gap:12px;padding:0 8px}
+.logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#20d39a,#08785c);display:grid;place-items:center;font-size:17px;font-weight:900}
+.brand b{font-size:15px}.brand small{display:block;color:#8ea5bd;font-size:10px;letter-spacing:1px;margin-top:4px}
+.navtitle{color:#7890aa;font-size:10px;font-weight:800;padding:0 12px}
+nav{display:grid;gap:6px}
+nav button{background:none;color:#a9bad0;text-align:left;padding:12px;border-radius:9px;font-weight:600}
+nav button.active,nav button:hover{background:#173b56;color:white}
+.sideinfo{margin-top:auto;background:#102b45;padding:14px;border:1px solid #28435e;border-radius:12px;color:#b7c7d8;font-size:11px;line-height:1.6}
+main{min-width:0}
+.topbar{height:68px;background:white;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 25px;position:sticky;top:0;z-index:5}
+.topbar b{font-size:13px}.tag{background:#fff5df;color:#94620d;border-radius:20px;padding:7px 11px;font-size:10px;font-weight:800}
+.content{max-width:1600px;margin:auto;padding:26px}
+.pagehead{display:flex;justify-content:space-between;gap:15px;align-items:flex-start;margin-bottom:22px}
+.eyebrow{font-size:10px;letter-spacing:1.5px;color:var(--green);font-weight:800;margin-bottom:8px}
+h1{font-size:24px;margin:0 0 7px}h2{font-size:16px;margin:0}p{color:var(--muted)}
+.btn{padding:10px 14px;border-radius:8px;font-weight:700;background:white;border:1px solid var(--line);color:var(--text)}
+.primary{background:var(--green);color:white;border-color:var(--green)}
+.danger{background:#fff0f1;color:var(--red);border-color:#ffe0e3}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:18px}
+.stat,.panel{background:white;border:1px solid var(--line);border-radius:13px;box-shadow:0 5px 22px #10294408}
+.stat{padding:17px}.stat small{color:var(--muted);font-weight:700;font-size:10px}.stat strong{display:block;font-size:25px;margin-top:12px}
+.panel{overflow:hidden;margin-bottom:17px}.panelhead{padding:17px 19px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.tools{padding:13px 17px;display:flex;gap:9px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.tools input,.tools select{padding:10px;border:1px solid var(--line);border-radius:8px;background:white}
+.tools input{flex:1;min-width:180px}
+.tablewrap{overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:1000px}
+th,td{text-align:left;padding:12px 13px;border-bottom:1px solid #edf0f5;white-space:nowrap;font-size:11px}
+th{background:#f8fafc;color:#78869a;font-size:10px}
+tr:last-child td{border:0}
+.pill{display:inline-block;border-radius:20px;padding:5px 9px;font-size:10px;font-weight:800}
+.paid{background:#e5f8f0;color:#087b58}.due{background:#fff0f1;color:#c13e4c}.upcoming{background:#fff5df;color:#98630c}.neutral{background:#edf1f6;color:#66758a}
+.rowbtn{padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:white;margin-right:3px}
+.hidden{display:none!important}
+.modalbg{display:none;position:fixed;inset:0;background:#07182bc9;z-index:20;align-items:center;justify-content:center;padding:15px}
+.modalbg.open{display:flex}
+.modal{width:min(850px,100%);max-height:92vh;overflow:auto;background:white;border-radius:14px}
+.modalhead,.modalfoot{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.modalfoot{border-top:1px solid var(--line);border-bottom:0}
+.modalbody{padding:19px}
+.formgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
+.field label{display:block;font-size:10px;font-weight:700;color:var(--muted);margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:7px;background:white}
+.field textarea{min-height:65px}
+.section{grid-column:1/-1;color:var(--green);font-size:10px;font-weight:800;letter-spacing:1px;margin-top:8px}
+.toast{position:fixed;right:18px;bottom:18px;background:#102b45;color:white;padding:13px 17px;border-radius:9px;z-index:50;box-shadow:0 8px 25px #0002}
+.notice{background:#fff7e7;border:1px solid #f1dfba;color:#865d1b;padding:12px;border-radius:9px;font-size:11px;line-height:1.6;margin-bottom:15px}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+.card{background:white;border:1px solid var(--line);border-radius:12px;padding:18px}
+.card h3{font-size:14px;margin:0 0 8px}
+.card p{font-size:11px;line-height:1.6}
+.empty{text-align:center;padding:35px;color:var(--muted)}
+@media(max-width:900px){.layout{grid-template-columns:190px 1fr}.stats{grid-template-columns:repeat(2,1fr)}.formgrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){.layout{display:block}.sidebar{padding:11px;position:sticky;top:0;z-index:8;display:block}.brand{padding:0}.logo{width:33px;height:33px}.navtitle,.sideinfo{display:none}nav{display:flex;overflow:auto;margin-top:10px}nav button{white-space:nowrap;padding:9px;font-size:11px}.topbar{height:52px;padding:0 13px}.content{padding:17px 11px}.pagehead{display:block}.pagehead .actions{margin-top:14px}.stats{gap:8px}.stat{padding:12px}.stat strong{font-size:21px}.formgrid{grid-template-columns:1fr 1fr}.cards{grid-template-columns:1fr}h1{font-size:21px}}
+@media(max-width:400px){.formgrid{grid-template-columns:1fr}}
+@media print{body *{visibility:hidden}.invoiceprint,.invoiceprint *{visibility:visible}.invoiceprint{position:absolute;left:0;top:0;width:100%}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+ <div class="brand"><div class="logo">RS</div><div><b>RS NETWORK</b><small>BILLING CONTROL</small></div></div>
+ <div class="navtitle">MAIN MENU</div>
+ <nav>
+  <button class="active" data-page="dashboard">▦ Overview</button>
+  <button data-page="customers">♙ Customers</button>
+  <button data-page="invoices">▤ Invoices & Due</button>
+  <button data-page="expenses">৳ Expenses</button>
+  <button data-page="settings">⚙ Settings</button>
+ </nav>
+ <div class="sideinfo">● DEMO MODE<br>এই ডেমোর তথ্য শুধু এই ব্রাউজারে সেভ হবে। এখনো Google Sheet বা Email-এর সাথে যুক্ত নয়।</div>
+</aside>
+<main>
+ <header class="topbar"><b id="pageTitle">Overview</b><span class="tag">● DEMO VERSION</span></header>
+ <div class="content">
+
+ <!-- DASHBOARD -->
+ <section id="page-dashboard" class="page">
+  <div class="pagehead"><div><div class="eyebrow">NETWORK MANAGEMENT</div><h1>Customer & Billing Overview</h1><p>আপনার কাস্টমার, বিল ও খরচ এক জায়গায় পরিচালনা করুন।</p></div><div class="actions"><button class="btn" onclick="exportCustomers()">⇩ Export CSV</button><button class="btn primary" onclick="openCustomer()">＋ Add Customer</button></div></div>
+  <div class="stats">
+   <div class="stat"><small>TOTAL CUSTOMERS</small><strong id="totalCustomers">0</strong></div>
+   <div class="stat"><small>COLLECTED INCOME</small><strong id="totalIncome">৳0</strong></div>
+   <div class="stat"><small>TOTAL DUE</small><strong id="totalDue">৳0</strong></div>
+   <div class="stat"><small>TOTAL EXPENSE</small><strong id="totalExpense">৳0</strong></div>
+  </div>
+  <div class="panel"><div class="panelhead"><h2>Recent Customers</h2><button class="btn" onclick="go('customers')">View All</button></div><div class="tablewrap"><table><thead><tr><th>Customer</th><th>Phone</th><th>Billing Date</th><th>Bill</th><th>Status</th><th>Action</th></tr></thead><tbody id="recentRows"></tbody></table></div></div>
+  <div class="cards">
+   <div class="card"><h3>Financial Snapshot</h3><p>Collected Income: <b id="snapIncome">৳0</b></p><p>Total Expenses: <b id="snapExpense">৳0</b></p><p>Net Balance: <b id="snapNet">৳0</b></p></div>
+   <div class="card"><h3>Quick Actions</h3><div class="actions"><button class="btn primary" onclick="openCustomer()">＋ Add Customer</button><button class="btn" onclick="go('expenses')">＋ Add Expense</button><button class="btn" onclick="go('invoices')">View Invoices</button></div></div>
+  </div>
+ </section>
+
+ <!-- CUSTOMERS -->
+ <section id="page-customers" class="page hidden">
+  <div class="pagehead"><div><div class="eyebrow">CUSTOMER DATABASE</div><h1>Customer Management</h1><p>সব কাস্টমারের তথ্য যোগ, পরিবর্তন ও পরিচালনা করুন।</p></div><button class="btn primary" onclick="openCustomer()">＋ Add Customer</button></div>
+  <div class="panel">
+   <div class="tools"><input id="customerSearch" placeholder="Search name, phone, IP, email..." oninput="renderCustomers()"><select id="customerFilter" onchange="renderCustomers()"><option value="all">All Customers</option><option value="DUE">Due</option><option value="COLLECT">Collected</option></select></div>
+   <div class="tablewrap"><table><thead><tr><th>Name / IP</th><th>Phone</th><th>Bill</th><th>Billing Date</th><th>Status</th><th>Auto Email</th><th>Renew</th><th>Actions</th></tr></thead><tbody id="customerRows"></tbody></table></div>
+  </div>
+ </section>
+
+ <!-- INVOICES -->
+ <section id="page-invoices" class="page hidden">
+  <div class="pagehead"><div><div class="eyebrow">BILLING CENTER</div><h1>Invoices & Due</h1><p>ইনভয়েস দেখুন এবং ম্যানুয়ালি পাঠানোর Demo করুন।</p></div></div>
+  <div class="notice">এখান থেকে Send চাপলে শুধু Demo confirmation দেখাবে। সত্যিকারের Email পাঠাতে Apps Script সংযোগ প্রয়োজন।</div>
+  <div class="panel"><div class="panelhead"><h2>Invoice Records</h2><span id="invoiceCount"></span></div><div class="tablewrap"><table><thead><tr><th>Customer</th><th>Billing Date</th><th>Total Bill</th><th>Status</th><th>Email</th><th>Auto Email</th><th>Action</th></tr></thead><tbody id="invoiceRows"></tbody></table></div></div>
+ </section>
+
+ <!-- EXPENSES -->
+ <section id="page-expenses" class="page hidden">
+  <div class="pagehead"><div><div class="eyebrow">BUSINESS ACCOUNTING</div><h1>Expense Management</h1><p>আপনার ব্যবসার সব খরচ হিসাব রাখুন।</p></div><div class="actions"><button class="btn" onclick="exportExpenses()">⇩ Export CSV</button><button class="btn primary" onclick="openExpense()">＋ Add Expense</button></div></div>
+  <div class="stats">
+   <div class="stat"><small>TOTAL EXPENSE</small><strong id="expenseTotal">৳0</strong></div>
+   <div class="stat"><small>THIS MONTH</small><strong id="expenseMonth">৳0</strong></div>
+   <div class="stat"><small>COLLECTED INCOME</small><strong id="expenseIncome">৳0</strong></div>
+   <div class="stat"><small>NET BALANCE</small><strong id="expenseNet">৳0</strong></div>
+  </div>
+  <div class="panel"><div class="tools"><input id="expenseSearch" placeholder="Search expense..." oninput="renderExpenses()"><select id="expenseCategoryFilter" onchange="renderExpenses()"><option value="all">All Categories</option><option>Internet / Bandwidth</option><option>Electricity</option><option>Equipment</option><option>Office Rent</option><option>Transport</option><option>Staff Salary</option><option>Repair & Maintenance</option><option>Other</option></select></div>
+   <div class="tablewrap"><table><thead><tr><th>Date</th><th>Expense Name</th><th>Category</th><th>Payment</th><th>Amount</th><th>Note</th><th>Action</th></tr></thead><tbody id="expenseRows"></tbody></table></div>
+  </div>
+ </section>
+
+ <!-- SETTINGS -->
+ <section id="page-settings" class="page hidden">
+  <div class="pagehead"><div><div class="eyebrow">CONFIGURATION</div><h1>Settings</h1><p>Billing এবং Email-এর Demo সেটিংস।</p></div></div>
+  <div class="notice">এখানে সেটিংস পরিবর্তন করলে Demo-তে সংরক্ষিত হবে। এখনো কোনো ইমেইল পাঠানো বা অটোমেশন চালু হবে না।</div>
+  <div class="cards">
+   <div class="card"><h3>Email Settings</h3><div class="field"><label>Admin Email</label><input id="adminEmail" type="email" placeholder="admin@example.com"></div><br><div class="field"><label>Email Subject</label><input id="emailSubject" value="RS NETWORK - Monthly Bill Invoice"></div><br><label><input type="checkbox" id="globalAuto"> Enable Auto Email (Demo)</label><br><br><button class="btn primary" onclick="saveSettings()">Save Settings</button></div>
+   <div class="card"><h3>Reminder Settings</h3><p><label><input type="checkbox" id="reminder3" checked> ৩ দিন আগে Reminder</label></p><p><label><input type="checkbox" id="reminderDue" checked> Billing Date-এ Reminder</label></p><p><label><input type="checkbox" id="reminderOverdue" checked> Overdue Reminder</label></p><p><label><input type="checkbox" id="pdfAttach" checked> PDF Invoice Attach (পরবর্তী Integration)</label></p><button class="btn" onclick="downloadBackup()">Download Backup</button> <button class="btn danger" onclick="resetDemo()">Reset Demo</button></div>
+  </div>
+ </section>
+ </div>
+</main>
+</div>
+
+<!-- CUSTOMER MODAL -->
+<div class="modalbg" id="customerModal"><div class="modal">
+ <div class="modalhead"><h2 id="customerModalTitle">Add Customer</h2><button class="btn" onclick="closeModal('customerModal')">✕</button></div>
+ <form onsubmit="saveCustomer(event)">
+ <div class="modalbody"><input type="hidden" id="c-id">
+  <div class="formgrid">
+   <div class="section">Customer Information</div>
+   <div class="field"><label>Customer Name</label><input id="c-name" required></div>
+   <div class="field"><label>Phone</label><input id="c-phone"></div>
+   <div class="field"><label>IP Address</label><input id="c-ip"></div>
+   <div class="field"><label>Reason / Package</label><input id="c-reason"></div>
+   <div class="field"><label>Area</label><input id="c-area"></div>
+   <div class="field"><label>Address</label><input id="c-address"></div>
+   <div class="field"><label>Location</label><input id="c-location"></div>
+   <div class="field"><label>ONU</label><input id="c-onu"></div>
+   <div class="field"><label>2C</label><input id="c-c2"></div>
+   <div class="field"><label>4C</label><input id="c-c4"></div>
+   <div class="section">Billing Information</div>
+   <div class="field"><label>Bill Trigger</label><input id="c-billTrigger"></div>
+   <div class="field"><label>Customer Bill (৳)</label><input id="c-customerBill" type="number" min="0" value="0"></div>
+   <div class="field"><label>Billing Date</label><input id="c-billingDate" type="date"></div>
+   <div class="field"><label>IP Bill Trigger</label><input id="c-ipBillTrigger"></div>
+   <div class="field"><label>IP Bill (৳)</label><input id="c-ipBill" type="number" min="0" value="0"></div>
+   <div class="section">Email & Control</div>
+   <div class="field"><label>Customer Gmail</label><input id="c-email" type="email"></div>
+   <div class="field"><label>Send Status</label><select id="c-send"><option value="No">No</option><option value="Yes">Yes</option></select></div>
+   <div class="field"><label>Auto Send</label><select id="c-autoSend"><option value="OFF">OFF</option><option value="ON">ON</option></select></div>
+   <div class="field"><label>Auto Email</label><select id="c-autoEmail"><option value="false">OFF</option><option value="true">ON</option></select></div>
+   <div class="field"><label>Bill Collect</label><select id="c-collect"><option value="DUE">DUE</option><option value="COLLECT">COLLECT</option></select></div>
+   <div class="field"><label>Bill Renew</label><select id="c-renew"><option value="Renew">Renew</option><option value="No Renew">No Renew</option></select></div>
+  </div>
+ </div>
+ <div class="modalfoot"><button type="button" class="btn danger" id="deleteCustomerBtn" onclick="deleteCurrentCustomer()">Delete</button><div class="actions"><button type="button" class="btn" onclick="closeModal('customerModal')">Cancel</button><button class="btn primary" type="submit">Save Customer</button></div></div>
+ </form>
+</div></div>
+
+<!-- EXPENSE MODAL -->
+<div class="modalbg" id="expenseModal"><div class="modal">
+ <div class="modalhead"><h2 id="expenseModalTitle">Add Expense</h2><button class="btn" onclick="closeModal('expenseModal')">✕</button></div>
+ <form onsubmit="saveExpense(event)">
+ <div class="modalbody"><input type="hidden" id="e-id"><div class="formgrid">
+  <div class="field"><label>Expense Name</label><input id="e-name" required placeholder="Internet Bandwidth"></div>
+  <div class="field"><label>Amount (৳)</label><input id="e-amount" type="number" min="1" required></div>
+  <div class="field"><label>Category</label><select id="e-category" required><option value="">Select Category</option><option>Internet / Bandwidth</option><option>Electricity</option><option>Equipment</option><option>Office Rent</option><option>Transport</option><option>Staff Salary</option><option>Repair & Maintenance</option><option>Other</option></select></div>
+  <div class="field"><label>Date</label><input id="e-date" type="date" required></div>
+  <div class="field"><label>Payment Method</label><select id="e-method"><option>Cash</option><option>Bank</option><option>bKash</option><option>Nagad</option><option>Rocket</option><option>Other</option></select></div>
+  <div class="field"><label>Paid To / Reference</label><input id="e-reference"></div>
+  <div class="field" style="grid-column:1/-1"><label>Note</label><textarea id="e-note"></textarea></div>
+ </div></div>
+ <div class="modalfoot"><button type="button" class="btn danger" id="deleteExpenseBtn" onclick="deleteCurrentExpense()">Delete</button><div class="actions"><button type="button" class="btn" onclick="closeModal('expenseModal')">Cancel</button><button class="btn primary">Save Expense</button></div></div>
+ </form>
+</div></div>
+
+<!-- INVOICE MODAL -->
+<div class="modalbg" id="invoiceModal"><div class="modal">
+ <div class="modalhead"><h2>Invoice Preview</h2><button class="btn" onclick="closeModal('invoiceModal')">✕</button></div>
+ <div class="modalbody invoiceprint" id="invoiceContent"></div>
+ <div class="modalfoot"><span style="font-size:10px;color:#718096">Demo invoice preview</span><div class="actions"><button class="btn" onclick="window.print()">Print / Save PDF</button><button class="btn primary" onclick="sendInvoice()">Send Email (Demo)</button></div></div>
+</div></div>
+<div id="toastArea"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const STORE='rs_network_customers_v1';
+const EXPENSES='rs_network_expenses_v1';
+const SETTINGS='rs_network_settings_v1';
+let customers=load(STORE,[]);
+let expenses=load(EXPENSES,[]);
+let activeInvoice='';
+function load(key,fallback){try{const x=JSON.parse(localStorage.getItem(key));return Array.isArray(fallback)?(Array.isArray(x)?x:fallback):(x||fallback)}catch(e){return fallback}}
+function save(key,data){localStorage.setItem(key,JSON.stringify(data))}
+function money(n){return '৳'+Number(n||0).toLocaleString('en-BD')}
+function today(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function dateText(v){if(!v)return '—';return new Date(v+'T00:00:00').toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function toast(msg){$('toastArea').innerHTML='<div class="toast">'+esc(msg)+'</div>';setTimeout(()=>$('toastArea').innerHTML='',2800)}
+function total(c){return Number(c.customerBill||0)+Number(c.ipBill||0)}
+function status(c){if(c.collect==='COLLECT')return 'COLLECT';if(c.billingDate&&c.billingDate<today())return 'DUE';return 'UPCOMING'}
+function statusPill(s){return `<span class="pill ${s==='COLLECT'?'paid':s==='DUE'?'due':'upcoming'}">${s}</span>`}
+function saveCustomers(){save(STORE,customers)}
+function saveExpenses(){save(EXPENSES,expenses)}
+function go(page){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));$('page-'+page).classList.remove('hidden');document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));$('pageTitle').textContent=({dashboard:'Overview',customers:'Customers',invoices:'Invoices & Due',expenses:'Expenses',settings:'Settings'})[page];if(page==='customers')renderCustomers();if(page==='invoices')renderInvoices();if(page==='expenses')renderExpenses()}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>go(b.dataset.page));
+function openModal(id){$(id).classList.add('open')}
+function closeModal(id){$(id).classList.remove('open')}
+function openCustomer(id=''){
+ const c=customers.find(x=>x.id===id);
+ $('customerModalTitle').textContent=c?'Edit Customer':'Add Customer';
+ $('deleteCustomerBtn').classList.toggle('hidden',!c);
+ $('c-id').value=c?.id||'';
+ const fields=['name','phone','ip','reason','area','address','location','onu','c2','c4','billTrigger','customerBill','billingDate','ipBillTrigger','ipBill','email','send','autoSend','autoEmail','collect','renew'];
+ fields.forEach(k=>{const el=$('c-'+k);if(!el)return;let v=c?.[k];if(k==='autoEmail')v=String(c?!!c.autoEmail:false);if(k==='customerBill'||k==='ipBill')v=v??0;el.value=v??(k==='collect'?'DUE':k==='renew'?'Renew':k==='send'?'No':k==='autoSend'?'OFF':'')});
+ openModal('customerModal');
+}
+function saveCustomer(ev){
+ ev.preventDefault();
+ const id=$('c-id').value||'c'+Date.now();
+ const obj={id};
+ ['name','phone','ip','reason','area','address','location','onu','c2','c4','billTrigger','customerBill','billingDate','ipBillTrigger','ipBill','email','send','autoSend','collect','renew'].forEach(k=>obj[k]=$('c-'+k).value.trim());
+ obj.customerBill=Number(obj.customerBill||0);obj.ipBill=Number(obj.ipBill||0);obj.autoEmail=$('c-autoEmail').value==='true';
+ if(!obj.name&&!obj.phone){toast('Customer name অথবা phone দিন');return}
+ const idx=customers.findIndex(c=>c.id===id);
+ if(idx>=0)customers[idx]=obj;else customers.unshift(obj);
+ saveCustomers();closeModal('customerModal');renderAll();toast(idx>=0?'Customer updated':'Customer added');
+}
+function deleteCurrentCustomer(){const id=$('c-id').value;if(!id)return;deleteCustomer(id)}
+function deleteCustomer(id){const c=customers.find(x=>x.id===id);if(!c||!confirm('এই Customer Delete করবেন?'))return;customers=customers.filter(x=>x.id!==id);saveCustomers();closeModal('customerModal');renderAll();toast('Customer deleted')}
+function collectBill(id){const c=customers.find(x=>x.id===id);if(!c)return;if(!confirm(`${c.name} এর বিল Collect করবেন? Billing Date এক মাস এগিয়ে যাবে।`))return;c.collect='COLLECT';if(c.billingDate){const d=new Date(c.billingDate+'T12:00:00');d.setMonth(d.getMonth()+1);c.billingDate=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}saveCustomers();renderAll();toast('Bill collected; date advanced one month')}
+function toggleAuto(id){const c=customers.find(x=>x.id===id);if(!c)return;c.autoEmail=!c.autoEmail;saveCustomers();renderAll()}
+function toggleRenew(id){const c=customers.find(x=>x.id===id);if(!c)return;c.renew=c.renew==='Renew'?'No Renew':'Renew';saveCustomers();renderAll()}
+function renderCustomers(){
+ const q=($('customerSearch')?.value||'').toLowerCase();const f=$('customerFilter')?.value||'all';
+ const list=customers.filter(c=>(f==='all'||status(c)===f)&&[c.name,c.phone,c.ip,c.email,c.address].join(' ').toLowerCase().includes(q));
+ $('customerRows').innerHTML=list.map(c=>`<tr><td><b>${esc(c.name)}</b><small style="display:block;color:#718096">${esc(c.ip||'')}</small></td><td>${esc(c.phone||'—')}</td><td><b>${money(total(c))}</b></td><td>${dateText(c.billingDate)}</td><td>${statusPill(status(c))}</td><td><button class="rowbtn" onclick="toggleAuto('${c.id}')">${c.autoEmail?'ON':'OFF'}</button></td><td><button class="rowbtn" onclick="toggleRenew('${c.id}')">${esc(c.renew||'Renew')}</button></td><td><button class="rowbtn" onclick="openCustomer('${c.id}')">Edit</button><button class="rowbtn" onclick="collectBill('${c.id}')">Collect</button><button class="rowbtn" onclick="previewInvoice('${c.id}')">Invoice</button></td></tr>`).join('')||'<tr><td colspan="8" class="empty">কোনো Customer পাওয়া যায়নি</td></tr>';
+}
+function renderInvoices(){
+ $('invoiceCount').textContent=customers.length+' records';
+ $('invoiceRows').innerHTML=customers.map(c=>`<tr><td><b>${esc(c.name)}</b></td><td>${dateText(c.billingDate)}</td><td><b>${money(total(c))}</b></td><td>${statusPill(status(c))}</td><td>${esc(c.email||'—')}</td><td>${c.autoEmail?'ON':'OFF'}</td><td><button class="rowbtn" onclick="previewInvoice('${c.id}')">Preview</button><button class="rowbtn" onclick="sendNow('${c.id}')">Send</button></td></tr>`).join('')||'<tr><td colspan="7" class="empty">No invoice records</td></tr>';
+}
+function previewInvoice(id){
+ const c=customers.find(x=>x.id===id);if(!c)return;activeInvoice=id;
+ $('invoiceContent').innerHTML=`<div style="padding:20px;color:#17283e"><div style="display:flex;justify-content:space-between;border-bottom:2px solid #10a778;padding-bottom:18px"><div><h2 style="color:#087b58">RS NETWORK</h2><small>INTERNET SERVICE INVOICE</small></div><div><b>INVOICE</b><br>${dateText(today())}</div></div><h3>Bill To</h3><p><b>${esc(c.name)}</b><br>${esc(c.phone||'')}<br>${esc(c.address||'')}<br>${esc(c.email||'')}</p><table style="min-width:0;width:100%"><thead><tr><th>Description</th><th>Amount</th></tr></thead><tbody><tr><td>Customer Bill</td><td>${money(c.customerBill)}</td></tr><tr><td>IP Bill</td><td>${money(c.ipBill)}</td></tr></tbody></table><h2 style="text-align:right;margin-top:25px">Total: ${money(total(c))}</h2><p>Billing Date: ${dateText(c.billingDate)}</p><p>Status: ${status(c)}</p><hr><small>Thank you for choosing RS NETWORK.</small></div>`;
+ openModal('invoiceModal');
+}
+function sendNow(id){const c=customers.find(x=>x.id===id);if(!c)return;if(!c.email){toast('Customer Gmail address দিন');return}previewInvoice(id)}
+function sendInvoice(){const c=customers.find(x=>x.id===activeInvoice);if(!c)return;closeModal('invoiceModal');toast('Demo only: Email পাঠানো হয়নি। Apps Script যুক্ত করতে হবে।')}
+function income(){return customers.filter(c=>c.collect==='COLLECT').reduce((s,c)=>s+total(c),0)}
+function renderDashboard(){
+ const due=customers.filter(c=>status(c)==='DUE').reduce((s,c)=>s+total(c),0);
+ const exp=expenses.reduce((s,e)=>s+Number(e.amount||0),0);
+ $('totalCustomers').textContent=customers.length;$('totalIncome').textContent=money(income());$('totalDue').textContent=money(due);$('totalExpense').textContent=money(exp);
+ $('snapIncome').textContent=money(income());$('snapExpense').textContent=money(exp);$('snapNet').textContent=money(income()-exp);
+ $('recentRows').innerHTML=customers.slice(0,8).map(c=>`<tr><td><b>${esc(c.name)}</b></td><td>${esc(c.phone||'—')}</td><td>${dateText(c.billingDate)}</td><td>${money(total(c))}</td><td>${statusPill(status(c))}</td><td><button class="rowbtn" onclick="openCustomer('${c.id}')">Edit</button></td></tr>`).join('')||'<tr><td colspan="6" class="empty">Add your first customer</td></tr>';
+}
+function openExpense(id=''){
+ const e=expenses.find(x=>x.id===id);$('expenseModalTitle').textContent=e?'Edit Expense':'Add Expense';$('deleteExpenseBtn').classList.toggle('hidden',!e);$('e-id').value=e?.id||'';
+ ['name','amount','category','date','method','reference','note'].forEach(k=>{$('e-'+k).value=e?.[k]??(k==='date'?today():k==='method'?'Cash':'')});
+ openModal('expenseModal');
+}
+function saveExpense(ev){
+ ev.preventDefault();const id=$('e-id').value||'e'+Date.now();
+ const obj={id,name:$('e-name').value.trim(),amount:Number($('e-amount').value),category:$('e-category').value,date:$('e-date').value,method:$('e-method').value,reference:$('e-reference').value.trim(),note:$('e-note').value.trim()};
+ if(!obj.name||!(obj.amount>0)||!obj.date||!obj.category){toast('সব প্রয়োজনীয় তথ্য দিন');return}
+ const i=expenses.findIndex(x=>x.id===id);if(i>=0)expenses[i]=obj;else expenses.unshift(obj);
+ saveExpenses();closeModal('expenseModal');renderAll();toast(i>=0?'Expense updated':'Expense added');
+}
+function deleteCurrentExpense(){const id=$('e-id').value;const e=expenses.find(x=>x.id===id);if(!e)return;if(!confirm('এই খরচটি মুছে ফেলবেন?'))return;expenses=expenses.filter(x=>x.id!==id);saveExpenses();closeModal('expenseModal');renderAll();toast('Expense deleted')}
+function renderExpenses(){
+ const q=($('expenseSearch')?.value||'').toLowerCase(),cat=$('expenseCategoryFilter')?.value||'all';
+ const list=expenses.filter(e=>(cat==='all'||e.category===cat)&&[e.name,e.category,e.note,e.reference].join(' ').toLowerCase().includes(q));
+ $('expenseRows').innerHTML=list.map(e=>`<tr><td>${dateText(e.date)}</td><td><b>${esc(e.name)}</b></td><td>${esc(e.category)}</td><td>${esc(e.method)}</td><td><b>${money(e.amount)}</b></td><td>${esc(e.note||'—')}</td><td><button class="rowbtn" onclick="openExpense('${e.id}')">Edit</button><button class="rowbtn" onclick="deleteExpense('${e.id}')">Delete</button></td></tr>`).join('')||'<tr><td colspan="7" class="empty">কোনো খরচের তথ্য নেই</td></tr>';
+ const totalExp=expenses.reduce((s,e)=>s+Number(e.amount||0),0),month=expenses.filter(e=>(e.date||'').slice(0,7)===today().slice(0,7)).reduce((s,e)=>s+Number(e.amount||0),0);
+ $('expenseTotal').textContent=money(totalExp);$('expenseMonth').textContent=money(month);$('expenseIncome').textContent=money(income());$('expenseNet').textContent=money(income()-totalExp);
+}
+function renderAll(){renderCustomers();renderInvoices();renderDashboard();renderExpenses()}
+function exportCustomers(){
+ const cols=['Name','Phone','IP','Reason','Bill Trigger','Customer Bill','Billing Date','IP Bill Trigger','IP Bill','Area','Address','Location','ONU','2C','4C','Gmail','Send','Auto Send','Auto Email','Collect','Renew'];
+ const keys=['name','phone','ip','reason','billTrigger','customerBill','billingDate','ipBillTrigger','ipBill','area','address','location','onu','c2','c4','email','send','autoSend','autoEmail','collect','renew'];
+ downloadCSV('rs-network-customers.csv',[cols,...customers.map(c=>keys.map(k=>c[k]??''))]);
+}
+function exportExpenses(){downloadCSV('rs-network-expenses.csv',[['Date','Name','Category','Amount','Payment','Reference','Note'],...expenses.map(e=>[e.date,e.name,e.category,e.amount,e.method,e.reference,e.note])])}
+function downloadCSV(filename,rows){const csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));a.download=filename;a.click();URL.revokeObjectURL(a.href);toast('CSV Downloaded')}
+function saveSettings(){const s={adminEmail:$('adminEmail').value,emailSubject:$('emailSubject').value,globalAuto:$('globalAuto').checked,reminder3:$('reminder3').checked,reminderDue:$('reminderDue').checked,reminderOverdue:$('reminderOverdue').checked,pdfAttach:$('pdfAttach').checked};save(SETTINGS,s);toast('Demo settings saved')}
+function applySettings(){const s=load(SETTINGS,{});Object.keys(s).forEach(k=>{if($(k)){if($(k).type==='checkbox')$(k).checked=!!s[k];else $(k).value=s[k]}})}
+function downloadBackup(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({customers,expenses,settings:load(SETTINGS,{})},null,2)],{type:'application/json'}));a.download='rs-network-backup.json';a.click();URL.revokeObjectURL(a.href)}
+function resetDemo(){if(!confirm('সব Demo data মুছে ফেলবেন?'))return;customers=[];expenses=[];localStorage.removeItem(STORE);localStorage.removeItem(EXPENSES);localStorage.removeItem(SETTINGS);applySettings();renderAll();toast('Demo reset complete')}
+document.querySelectorAll('.modalbg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModal(m.id)}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modalbg.open').forEach(m=>closeModal(m.id))});
+applySettings();renderAll();
+</script>
+</body>
+</html>
