@@ -3,236 +3,990 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0b1220">
-<title>Gmail Invoice | RS NETWORK</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#087f5b">
+<title>RS NETWORK | Gmail Invoice</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="icon" href="https://cdn-icons-png.flaticon.com/128/2818/2818765.png">
 <style>
-:root{--bg:#f3f6fb;--panel:#fff;--text:#182338;--muted:#748198;--line:#e5eaf2;--side:#0b1220;--primary:#4776f5;--green:#0eaa75;--red:#e94c61;--shadow:0 8px 28px #1423460d}
-body.dark{--bg:#0b1120;--panel:#121b2d;--text:#e9eef8;--muted:#9aa9c1;--line:#26344a;--side:#070c16;--primary:#7394ff;--green:#35d6a0;--red:#ff7183;--shadow:0 8px 28px #0002}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;font-size:14px}button,input,textarea,select{font:inherit}button{cursor:pointer}
-.sidebar{position:fixed;inset:0 auto 0 0;width:250px;background:var(--side);color:white;padding:22px 15px;display:flex;flex-direction:column;z-index:20;transition:.25s}
-.brand{display:flex;gap:12px;align-items:center;padding:0 8px 25px;border-bottom:1px solid #ffffff16}.logo{width:43px;height:43px;border-radius:13px;background:linear-gradient(135deg,#5e83ff,#7b50e9);display:grid;place-items:center;font-size:20px}.brandname{font-weight:800;letter-spacing:.5px}.brandsub{font-size:10px;color:#9baac4;margin-top:5px;letter-spacing:1px}
-.navlabel{font-size:10px;letter-spacing:1.5px;color:#687893;font-weight:700;padding:24px 12px 9px}.nav{display:flex;align-items:center;gap:12px;padding:13px;border-radius:10px;margin:3px 0;text-decoration:none;color:#a9b5ca;font-weight:500}.nav i{width:19px;text-align:center}.nav:hover,.nav.active{background:#4776f526;color:white}.nav.active{box-shadow:inset 3px 0 #7091ff}.sidefoot{margin-top:auto;border-top:1px solid #ffffff16;padding:17px 10px 0;color:#8290a8;font-size:11px;line-height:1.8}
-.main{margin-left:250px;min-height:100vh}.topbar{height:76px;background:var(--panel);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 30px;position:sticky;top:0;z-index:10}.pagetitle{font-size:19px;font-weight:800}.crumb{font-size:11px;color:var(--muted);margin-top:5px}.topactions{display:flex;gap:9px;align-items:center}.iconbtn{width:40px;height:40px;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:11px}.menubtn{display:none}.profile{display:flex;gap:10px;align-items:center;margin-left:5px}.avatar{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:#e6edff;color:#315ce0}.pname{font-size:12px;font-weight:700}.prole{font-size:10px;color:var(--muted);margin-top:4px}
-.content{max-width:1500px;margin:auto;padding:28px 30px 45px}.welcome{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;margin-bottom:23px}.eyebrow{font-size:10px;font-weight:800;color:var(--primary);letter-spacing:1.4px;margin-bottom:9px}.welcome h1{font-size:25px;letter-spacing:-.7px;margin:0 0 8px}.welcome p{color:var(--muted);font-size:12px;line-height:1.7;margin:0}.pill{display:flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--panel);border-radius:25px;padding:9px 12px;font-size:11px;color:var(--muted);white-space:nowrap}.dot{width:7px;height:7px;border-radius:50%;background:#f59e0b}.dot.ok{background:var(--green)}
-.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:22px}.stat,.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}.stat{padding:18px}.stathead{display:flex;justify-content:space-between;align-items:center;gap:8px;color:var(--muted);font-size:11px;font-weight:600}.staticon{width:36px;height:36px;border-radius:11px;background:#4776f51a;color:var(--primary);display:grid;place-items:center}.statnum{font-size:26px;font-weight:800;margin-top:15px;letter-spacing:-.7px}.statnote{font-size:10px;color:var(--muted);margin-top:6px}
-.panel{margin-bottom:20px;overflow:hidden}.panelhead{padding:20px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}.ptitle{font-size:14px;font-weight:800}.pdesc{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.6}.panelbody{padding:22px}
-.tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px}.tab{border:1px solid var(--line);border-radius:9px;background:var(--panel);color:var(--muted);padding:10px 14px;font-size:12px;font-weight:700}.tab.active{background:var(--primary);border-color:var(--primary);color:white}
-.editorgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.85fr);gap:22px}.field{margin-bottom:16px}.field label{display:block;font-size:11px;font-weight:700;margin-bottom:8px}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:10px;padding:12px;outline:none}.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--primary);box-shadow:0 0 0 3px #4776f51a}.field textarea{min-height:135px;resize:vertical;line-height:1.7}.field textarea.big{min-height:190px}.help{font-size:10px;color:var(--muted);line-height:1.6;margin-top:6px}
-.btn{border:0;border-radius:9px;padding:11px 14px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:11px;font-weight:700}.primary{background:var(--primary);color:white}.greenbtn{background:var(--green);color:white}.soft{background:var(--bg);border:1px solid var(--line);color:var(--text)}.danger{background:var(--red);color:white}.btn:disabled{opacity:.6;cursor:wait}.btnrow{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
-.note{padding:13px 14px;border:1px solid #4776f53b;background:#4776f50b;border-radius:11px;display:flex;gap:10px;line-height:1.6;margin-bottom:17px}.note i{color:var(--primary);margin-top:3px}.note strong{display:block;font-size:11px;margin-bottom:3px}.note span{font-size:10px;color:var(--muted)}
-.preview{border:1px solid var(--line);border-radius:13px;overflow:hidden;background:white;color:#263248;min-height:320px}.previewhead{background:#f4f7fc;padding:15px;border-bottom:1px solid #e4eaf3;font-size:11px}.previewbody{padding:23px;font-size:13px;line-height:1.8;overflow-wrap:anywhere;white-space:normal}.previewbody p{margin:0 0 12px}.previewbody .brandbanner{background:#0b1730;color:white;padding:18px;border-radius:8px;margin-bottom:20px}.previewbody .brandbanner strong{font-size:18px}.previewbody .foot{border-top:1px solid #e6ebf3;padding-top:13px;color:#7a879b;font-size:10px;margin-top:25px}.previewbody a{color:#315ce0}.templatehint{font-size:10px;color:var(--muted);line-height:1.7;margin-top:12px}
-.tabletools{display:flex;gap:9px;flex-wrap:wrap;align-items:center}.search{min-width:210px;position:relative}.search i{position:absolute;left:11px;top:13px;color:var(--muted)}.search input{width:100%;padding:11px 12px 11px 33px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--text)}
-.tablewrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:680px}th{text-align:left;background:var(--bg);color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.6px;padding:14px 18px;white-space:nowrap}td{padding:14px 18px;border-top:1px solid var(--line);font-size:11px;white-space:nowrap}tbody tr:hover{background:var(--bg)}.cname{font-weight:700}.sub{font-size:10px;color:var(--muted);margin-top:4px}.tag{display:inline-block;padding:6px 8px;border-radius:20px;background:#0eaa7517;color:var(--green);font-size:10px;font-weight:700}.tag.redtag{background:#e94c6117;color:var(--red)}.actionbtn{height:32px;width:34px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--text)}.empty{padding:30px;text-align:center;color:var(--muted)}
-.settingrow{padding:15px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:15px}.settingrow:last-child{border:0}.settingname{font-size:11px;font-weight:700}.settingdesc{font-size:10px;color:var(--muted);margin-top:5px;line-height:1.6}.switch{width:42px;height:24px;position:relative;flex-shrink:0}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;inset:0;background:#9da8b8;border-radius:20px;cursor:pointer}.slider:before{content:"";position:absolute;left:3px;top:3px;width:18px;height:18px;background:white;border-radius:50%;transition:.2s}.switch input:checked+.slider{background:var(--green)}.switch input:checked+.slider:before{transform:translateX(18px)}
-#toast{display:none;position:fixed;right:20px;bottom:20px;z-index:90;max-width:calc(100vw - 35px);padding:14px 17px;border-radius:11px;background:#132039;color:white;box-shadow:0 10px 30px #0002;font-size:12px;line-height:1.6}#toast.show{display:block}#toast.error{background:#b72e45}#toast.success{background:#087f5b}
-.footer{text-align:center;padding:14px;color:var(--muted);font-size:10px}
-@media(max-width:1100px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.editorgrid{grid-template-columns:1fr}.content{padding:23px}}
-@media(max-width:800px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0);box-shadow:10px 0 40px #0004}.main{margin-left:0}.menubtn{display:inline-block}.topbar{padding:0 15px}.profileinfo{display:none}}
-@media(max-width:520px){.topbar{height:66px;padding:0 11px}.pagetitle{font-size:15px}.content{padding:18px 12px 30px}.welcome{flex-direction:column}.welcome h1{font-size:22px}.stats{gap:9px}.stat{padding:13px}.statnum{font-size:22px}.staticon{width:30px;height:30px}.panelhead,.panelbody{padding:16px}.panelhead{align-items:flex-start;flex-direction:column}.search{min-width:100%;width:100%}.btn{padding:10px 11px}}
+:root{
+ --primary:#087f5b;--primary2:#12a879;--bg:#f4f7f8;
+ --card:#fff;--text:#172b24;--muted:#738078;
+ --border:#e5ece8;--danger:#e5484d;--warning:#d98b13;
+ --shadow:0 5px 22px rgba(16,50,35,.06);
+}
+body.dark{
+ --bg:#101a17;--card:#182520;--text:#e6f1eb;
+ --muted:#9aaca2;--border:#2b3d34;--shadow:0 5px 22px #0003;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;font-size:14px}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.app{display:flex;min-height:100vh}
+.sidebar{
+ width:245px;background:var(--card);border-right:1px solid var(--border);
+ padding:22px 15px;position:fixed;top:0;bottom:0;left:0;z-index:20;
+ display:flex;flex-direction:column
+}
+.brand{display:flex;align-items:center;gap:11px;padding:5px 10px 28px}
+.brand-icon{width:42px;height:42px;background:var(--primary);border-radius:13px;color:white;display:grid;place-items:center;font-size:21px;font-weight:800}
+.brand h2{font-size:16px;margin:0;font-weight:800}
+.brand small{color:var(--muted);font-size:10px;letter-spacing:1px}
+.nav-label{color:var(--muted);font-size:10px;font-weight:800;letter-spacing:1.4px;padding:13px 12px 8px}
+.nav-btn{width:100%;border:0;background:transparent;color:var(--muted);padding:12px;border-radius:10px;text-align:left;display:flex;align-items:center;gap:12px;margin:3px 0;font-weight:600}
+.nav-btn:hover,.nav-btn.active{background:#e9f7f0;color:var(--primary)}
+body.dark .nav-btn:hover,body.dark .nav-btn.active{background:#203b30;color:#70d8a8}
+.nav-icon{width:20px;text-align:center;font-size:17px}
+.sidebar-bottom{margin-top:auto;border-top:1px solid var(--border);padding-top:15px}
+.main{margin-left:245px;width:calc(100% - 245px);padding:25px 30px 50px;max-width:1600px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;gap:15px}
+.topbar h1{font-size:23px;margin:0;font-weight:800}
+.topbar p{color:var(--muted);margin:6px 0 0;font-size:12px}
+.top-actions{display:flex;gap:9px;align-items:center}
+.icon-btn{border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:10px;padding:10px 13px}
+.mobile-menu{display:none}
+.page{display:none}.page.active{display:block}
+.grid{display:grid;gap:17px}
+.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:22px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:20px;box-shadow:var(--shadow);min-width:0}
+.stat-top{display:flex;justify-content:space-between;align-items:center}
+.stat-icon{width:39px;height:39px;display:grid;place-items:center;border-radius:11px;background:#e7f6ef;font-size:19px}
+body.dark .stat-icon{background:#254234}
+.stat-label{color:var(--muted);font-size:12px;font-weight:600}
+.stat-number{font-size:27px;font-weight:800;margin-top:13px;overflow-wrap:anywhere}
+.stat-sub{color:var(--muted);font-size:11px;margin-top:5px}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:23px 0 14px}
+.section-head h2{font-size:16px;margin:0}
+.section-head p{font-size:12px;color:var(--muted);margin:5px 0 0}
+.two-col{grid-template-columns:1fr 1fr}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.field{display:flex;flex-direction:column;gap:7px;min-width:0}
+.field.full{grid-column:1/-1}
+.field label{font-size:12px;font-weight:700;color:var(--muted)}
+.field input,.field textarea,.field select,.search{
+ width:100%;border:1px solid var(--border);background:var(--bg);
+ color:var(--text);padding:11px 12px;border-radius:9px;outline:none;min-width:0
+}
+.field input:focus,.field textarea:focus,.field select:focus,.search:focus{border-color:var(--primary)}
+.field textarea{min-height:110px;resize:vertical;line-height:1.6}
+.btn{border:0;border-radius:9px;padding:11px 16px;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.btn-primary{background:var(--primary);color:white}
+.btn-primary:hover{background:#066b4d}
+.btn-light{background:var(--bg);border:1px solid var(--border);color:var(--text)}
+.btn-danger{background:#fff0f0;color:#c53439}
+.btn-warning{background:#fff6e7;color:#9c650c}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+.muted{color:var(--muted)}
+.small{font-size:11px}
+.notice{padding:13px 15px;border-radius:10px;background:#eaf7f0;color:#176443;font-size:12px;line-height:1.6;margin:13px 0}
+body.dark .notice{background:#203b30;color:#9ce2bc}
+.warning-note{background:#fff7e8;color:#93600e}
+body.dark .warning-note{background:#40331c;color:#f4d28a}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:15px}
+.toolbar .search{max-width:330px}
+.table-wrap{overflow:auto;border:1px solid var(--border);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:650px;background:var(--card)}
+th,td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--border);font-size:12px;white-space:nowrap}
+th{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.6px;background:var(--bg)}
+tr:last-child td{border-bottom:0}
+.status{display:inline-block;border-radius:30px;padding:5px 9px;font-size:10px;font-weight:800}
+.status.success{background:#e4f7eb;color:#16834d}
+.status.failed{background:#ffeded;color:#c63535}
+.status.pending{background:#fff4df;color:#9a690f}
+.empty{text-align:center;padding:35px;color:var(--muted)}
+.preview{background:#edf1ee;border-radius:12px;padding:16px;min-height:280px;overflow:auto}
+body.dark .preview{background:#111b16}
+.preview-inner{background:white;color:#24352c;padding:23px;border-radius:8px;max-width:650px;margin:auto;min-height:240px}
+.preview-inner h2{color:#087f5b}
+.preview-inner .preview-brand{background:#087f5b;color:white;padding:17px;border-radius:8px;font-size:20px;font-weight:800}
+.template-note{font-size:11px;color:var(--muted);line-height:1.6;margin-top:8px}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);gap:15px}
+.toggle-row:last-child{border:0}
+.toggle-row strong{font-size:13px}
+.toggle-row p{font-size:11px;color:var(--muted);margin:5px 0 0}
+.switch{position:relative;width:43px;height:24px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;inset:0;background:#b9c4bd;border-radius:30px;transition:.2s}
+.slider:before{content:"";position:absolute;width:18px;height:18px;left:3px;top:3px;background:white;border-radius:50%;transition:.2s}
+.switch input:checked+.slider{background:var(--primary)}
+.switch input:checked+.slider:before{transform:translateX(19px)}
+.toast{position:fixed;right:22px;bottom:22px;background:#172b24;color:white;padding:13px 18px;border-radius:10px;z-index:100;box-shadow:var(--shadow);opacity:0;transform:translateY(12px);transition:.25s;pointer-events:none;max-width:90vw}
+.toast.show{opacity:1;transform:translateY(0)}
+.loading{display:none;position:fixed;inset:0;background:#0005;z-index:90;place-items:center}
+.loading.show{display:grid}
+.loading-box{background:var(--card);padding:22px 28px;border-radius:14px;color:var(--text);font-weight:700}
+.spinner{display:inline-block;width:15px;height:15px;border:2px solid #ddd;border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.footer-note{font-size:10px;color:var(--muted);text-align:center;margin-top:28px}
+@media(max-width:1050px){.stats{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}}
+@media(max-width:720px){
+ .sidebar{transform:translateX(-100%);transition:.25s;width:260px;box-shadow:var(--shadow)}
+ .sidebar.open{transform:translateX(0)}
+ .main{margin-left:0;width:100%;padding:18px 14px 40px}
+ .mobile-menu{display:inline-flex}
+ .topbar h1{font-size:19px}
+ .topbar{align-items:flex-start}
+ .stats{gap:10px}
+ .card{padding:15px}
+ .stat-number{font-size:22px}
+ .form-grid{grid-template-columns:1fr}
+ .field.full{grid-column:auto}
+ .top-actions .desktop-only{display:none}
+}
+@media(max-width:390px){.stats{grid-template-columns:1fr 1fr}.stat-number{font-size:19px}}
 </style>
 </head>
 <body>
+
+<div class="app">
 <aside class="sidebar" id="sidebar">
-  <div class="brand"><div class="logo"><i class="fa-solid fa-network-wired"></i></div><div><div class="brandname">RS NETWORK</div><div class="brandsub">BILLING MANAGEMENT</div></div></div>
-  <div class="navlabel">MAIN MENU</div>
-  <a class="nav" href="index.html"><i class="fa-solid fa-grid-2"></i> Dashboard</a>
-  <a class="nav" href="customer.html"><i class="fa-solid fa-users"></i> Customer Management</a>
-  <a class="nav active" href="gmail.html"><i class="fa-solid fa-envelope"></i> Gmail Invoice</a>
-  <div class="navlabel">MANAGEMENT</div>
-  <a class="nav" href="#settings"><i class="fa-solid fa-sliders"></i> Email Settings</a>
-  <a class="nav" href="#history"><i class="fa-solid fa-clock-rotate-left"></i> Email History</a>
-  <div class="sidefoot"><i class="fa-solid fa-shield-halved"></i> Secure Admin Panel<br>RS NETWORK © 2026</div>
+  <div class="brand">
+    <div class="brand-icon">R</div>
+    <div><h2>RS NETWORK</h2><small>GMAIL INVOICE SYSTEM</small></div>
+  </div>
+
+  <div class="nav-label">WORKSPACE</div>
+  <button class="nav-btn active" data-page="dashboard"><span class="nav-icon">▦</span> Dashboard</button>
+  <button class="nav-btn" data-page="customers"><span class="nav-icon">♙</span> Customer Directory</button>
+  <button class="nav-btn" data-page="invoice"><span class="nav-icon">✉</span> Gmail Invoice</button>
+
+  <div class="nav-label">MANAGEMENT</div>
+  <button class="nav-btn" data-page="settings"><span class="nav-icon">⚙</span> Email Settings</button>
+  <button class="nav-btn" data-page="history"><span class="nav-icon">◷</span> Email History</button>
+
+  <div class="sidebar-bottom">
+    <button class="nav-btn" id="sidebarTheme"><span class="nav-icon">◐</span> Change Theme</button>
+    <div class="small muted" style="padding:10px">RS NETWORK Billing Panel</div>
+  </div>
 </aside>
 
 <main class="main">
 <header class="topbar">
-  <div style="display:flex;align-items:center;gap:11px">
-    <button class="iconbtn menubtn" id="menuBtn"><i class="fa-solid fa-bars"></i></button>
-    <div><div class="pagetitle">Gmail Invoice</div><div class="crumb">RS NETWORK / Email Management</div></div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <button class="icon-btn mobile-menu" id="menuBtn">☰</button>
+    <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Email invoice management overview</p></div>
   </div>
-  <div class="topactions">
-    <button class="iconbtn" id="refreshBtn" title="Refresh"><i class="fa-solid fa-rotate"></i></button>
-    <button class="iconbtn" id="themeBtn" title="Dark / Light Mode"><i class="fa-solid fa-moon"></i></button>
-    <div class="profile"><div class="avatar"><i class="fa-solid fa-user-shield"></i></div><div class="profileinfo"><div class="pname">Administrator</div><div class="prole">Billing Admin</div></div></div>
+  <div class="top-actions">
+    <button class="icon-btn desktop-only" id="refreshBtn">↻ Refresh</button>
+    <button class="icon-btn" id="themeBtn" title="Toggle theme">◐</button>
   </div>
 </header>
 
-<div class="content">
-  <section class="welcome">
-    <div><div class="eyebrow">EMAIL AUTOMATION CENTER</div><h1>Email Template & Invoice Studio</h1><p>Edit your Test Email and customer Invoice messages, preview them and send using your Apps Script backend.</p></div>
-    <div class="pill"><span class="dot" id="apiDot"></span><span id="apiStatus">Connecting...</span></div>
-  </section>
+<!-- DASHBOARD -->
+<section class="page active" id="page-dashboard">
+  <div class="grid stats">
+    <div class="card">
+      <div class="stat-top"><span class="stat-label">Total Customers</span><span class="stat-icon">♙</span></div>
+      <div class="stat-number" id="statCustomers">—</div>
+      <div class="stat-sub">Customers from Google Sheet</div>
+    </div>
+    <div class="card">
+      <div class="stat-top"><span class="stat-label">Total Bill Amount</span><span class="stat-icon">৳</span></div>
+      <div class="stat-number" id="statBill">৳ 0</div>
+      <div class="stat-sub">Internet + IP bill</div>
+    </div>
+    <div class="card">
+      <div class="stat-top"><span class="stat-label">Emails Sent</span><span class="stat-icon">✉</span></div>
+      <div class="stat-number" id="statSent">0</div>
+      <div class="stat-sub">Successful email records</div>
+    </div>
+    <div class="card">
+      <div class="stat-top"><span class="stat-label">Failed Emails</span><span class="stat-icon">⚠</span></div>
+      <div class="stat-number" id="statFailed">0</div>
+      <div class="stat-sub">Failed email records</div>
+    </div>
+  </div>
 
-  <section class="stats">
-    <div class="stat"><div class="stathead">Total Customers <span class="staticon"><i class="fa-solid fa-users"></i></span></div><div class="statnum" id="totalCustomers">—</div><div class="statnote">Customer records loaded</div></div>
-    <div class="stat"><div class="stathead">Email Available <span class="staticon"><i class="fa-solid fa-at"></i></span></div><div class="statnum" id="emailCustomers">—</div><div class="statnote">Customers with email addresses</div></div>
-    <div class="stat"><div class="stathead">Successful Emails <span class="staticon"><i class="fa-solid fa-paper-plane"></i></span></div><div class="statnum" id="sentCount">—</div><div class="statnote">Based on returned history</div></div>
-    <div class="stat"><div class="stathead">Failed Emails <span class="staticon"><i class="fa-solid fa-circle-exclamation"></i></span></div><div class="statnum" id="failedCount">—</div><div class="statnote">Based on returned history</div></div>
-  </section>
-
-  <section class="panel" id="editor">
-    <div class="panelhead"><div><div class="ptitle"><i class="fa-solid fa-pen-to-square" style="color:var(--primary);margin-right:8px"></i>Email Template Editor</div><div class="pdesc">Choose Test Email or Invoice, edit the text and preview before sending.</div></div></div>
-    <div class="panelbody">
-      <div class="tabs">
-        <button class="tab active" data-tab="test"><i class="fa-solid fa-vial"></i> Test Email Editor</button>
-        <button class="tab" data-tab="invoice"><i class="fa-solid fa-file-invoice"></i> Invoice Email Editor</button>
+  <div class="grid two-col">
+    <div class="card">
+      <div class="section-head" style="margin-top:0"><div><h2>Quick Actions</h2><p>Common invoice operations</p></div></div>
+      <div class="actions">
+        <button class="btn btn-primary" onclick="navigate('invoice')">✉ Send Invoice</button>
+        <button class="btn btn-light" onclick="sendMonthly()">▤ Monthly Summary</button>
+        <button class="btn btn-light" onclick="sendTestQuick()">✓ Test Email</button>
+        <button class="btn btn-light" onclick="refreshAll()">↻ Refresh Data</button>
       </div>
+      <div class="notice">Your customer data is read from the existing Google Sheet. This page does not modify the customer sheet structure.</div>
+    </div>
+    <div class="card">
+      <div class="section-head" style="margin-top:0"><div><h2>Automation Status</h2><p>Current settings from Google Sheet</p></div></div>
+      <div class="toggle-row"><div><strong>Auto Reminder</strong><p>Automatic billing reminders</p></div><span id="dashReminder" class="status pending">OFF</span></div>
+      <div class="toggle-row"><div><strong>Monthly Summary</strong><p>Monthly report on day 1</p></div><span id="dashMonthly" class="status pending">OFF</span></div>
+      <div class="toggle-row"><div><strong>Admin Email</strong><p id="dashAdmin">Not configured</p></div></div>
+    </div>
+  </div>
 
-      <div class="note"><i class="fa-solid fa-circle-info"></i><div><strong>Important: edits are included in the send request</strong><span>This page passes your edited subject, message and HTML body to Apps Script. For the edited text to appear in the actual email, Code.gs must read those parameters and use them when sending.</span></div></div>
+  <div class="section-head"><div><h2>Recent Email Activity</h2><p>Latest sending records</p></div><button class="btn btn-light" onclick="navigate('history')">View All</button></div>
+  <div class="card"><div class="table-wrap"><table><thead><tr><th>Date</th><th>Type</th><th>Recipient</th><th>Subject</th><th>Status</th></tr></thead><tbody id="recentHistory"><tr><td colspan="5" class="empty">Loading...</td></tr></tbody></table></div></div>
+</section>
 
-      <div class="editorgrid">
-        <div>
-          <div class="field"><label for="editSubject">Email Subject</label><input id="editSubject" maxlength="250"></div>
-          <div class="field"><label for="editGreeting">Greeting / Heading</label><input id="editGreeting" maxlength="250"></div>
-          <div class="field"><label for="editBody">Email Message</label><textarea id="editBody" class="big" placeholder="Write the email message here..."></textarea><div class="help">This is editable plain text. Use the available placeholders listed below.</div></div>
-          <div class="field"><label for="editFooter">Footer / Signature</label><textarea id="editFooter" rows="3" placeholder="RS NETWORK&#10;Thank you for being our customer."></textarea></div>
-          <div class="field"><label for="editHtml">Advanced HTML Body (optional)</label><textarea id="editHtml" rows="5" placeholder="Optional: paste custom HTML email body. Leave blank to use the formatted editor above."></textarea><div class="help">If provided, this HTML body is sent as the preferred custom email body when the backend supports htmlBody.</div></div>
-          <div class="btnrow">
-            <button class="btn primary" id="saveTemplateBtn"><i class="fa-solid fa-floppy-disk"></i> Save Template</button>
-            <button class="btn soft" id="resetTemplateBtn"><i class="fa-solid fa-rotate-left"></i> Reset Default</button>
-            <button class="btn soft" id="previewBtn"><i class="fa-solid fa-eye"></i> Update Preview</button>
-          </div>
-          <div class="templatehint">Placeholders supported by this page: <b>{{name}}</b>, <b>{{phone}}</b>, <b>{{ip}}</b>, <b>{{billingDate}}</b>, <b>{{bill}}</b>, <b>{{email}}</b>. The actual invoice PDF is generated by your Apps Script backend.</div>
-        </div>
-        <div>
-          <div style="font-size:12px;font-weight:800;margin-bottom:10px"><i class="fa-solid fa-display" style="color:var(--primary);margin-right:7px"></i>Live Email Preview</div>
-          <div class="preview">
-            <div class="previewhead"><div><b>Subject:</b> <span id="previewSubject"></span></div><div style="margin-top:7px"><b>Template:</b> <span id="previewType">Test Email</span></div></div>
-            <div class="previewbody" id="previewBody"></div>
-          </div>
-          <div class="btnrow"><button class="btn greenbtn" id="sendTestBtn"><i class="fa-solid fa-paper-plane"></i> Send Test Email</button></div>
-          <div class="field" style="margin-top:15px"><label for="testRecipient">Test Recipient Email</label><input type="email" id="testRecipient" placeholder="you@example.com"><div class="help">The test message will be sent to this address.</div></div>
-        </div>
+<!-- CUSTOMERS -->
+<section class="page" id="page-customers">
+  <div class="card">
+    <div class="section-head" style="margin-top:0"><div><h2>Customer Directory</h2><p>Customer information from CUSTOMERS sheet</p></div><button class="btn btn-light" onclick="loadCustomers()">↻ Reload</button></div>
+    <div class="toolbar">
+      <input class="search" id="customerSearch" placeholder="Search name, IP, phone or email...">
+      <span class="muted small" id="customerCount">0 customers</span>
+    </div>
+    <div class="table-wrap"><table><thead><tr><th>SI</th><th>Customer</th><th>IP Address</th><th>Phone</th><th>Billing Date</th><th>Bill</th><th>Email</th><th>Action</th></tr></thead><tbody id="customerTable"><tr><td colspan="8" class="empty">Loading customers...</td></tr></tbody></table></div>
+  </div>
+</section>
+
+<!-- INVOICE -->
+<section class="page" id="page-invoice">
+  <div class="grid two-col">
+    <div class="card">
+      <div class="section-head" style="margin-top:0"><div><h2>Send Customer Invoice</h2><p>Send invoice PDF to customer email</p></div></div>
+      <div class="field">
+        <label>Select Customer</label>
+        <select id="invoiceCustomer"><option value="">Loading customers...</option></select>
+      </div>
+      <div id="selectedCustomerInfo" class="notice">Select a customer to see their billing information.</div>
+      <div class="field">
+        <label>Recipient Email</label>
+        <input id="invoiceEmail" type="email" placeholder="customer@example.com">
+      </div>
+      <div class="field" style="margin-top:13px">
+        <label>Email Subject</label>
+        <input id="invoiceSubject" placeholder="RS NETWORK - Your Internet Bill Invoice">
+      </div>
+      <div class="notice warning-note">Invoice PDF and email content will use the same invoice design generated by Code.gs. The email-only body editor is intentionally not used for invoices.</div>
+      <div class="actions">
+        <button class="btn btn-primary" id="sendInvoiceBtn">✉ Send Invoice PDF</button>
+        <button class="btn btn-light" id="clearInvoiceBtn">Clear</button>
       </div>
     </div>
-  </section>
 
-  <section class="panel" id="sendInvoice">
-    <div class="panelhead"><div><div class="ptitle"><i class="fa-solid fa-file-invoice-dollar" style="color:var(--primary);margin-right:8px"></i>Send Customer Invoice</div><div class="pdesc">Select a customer and send the edited Invoice email with the PDF generated by the backend.</div></div></div>
-    <div class="panelbody">
-      <div class="grid-placeholder">
-        <div class="field"><label for="customerSearch">Search Customer</label><input id="customerSearch" placeholder="Search name, IP, phone or email"></div>
-        <div class="field"><label for="customerSelect">Choose Customer *</label><select id="customerSelect"><option value="">Loading customers...</option></select><div class="help" id="selectedEmail">Select a customer to see their email address.</div></div>
-      </div>
-      <div class="note"><i class="fa-solid fa-envelope-open-text"></i><div><strong>Invoice email content</strong><span>The Invoice Email Editor above controls the subject and message. Select Invoice Email Editor, edit and save your template, then send the invoice here.</span></div></div>
-      <div class="btnrow"><button class="btn primary" id="sendInvoiceBtn"><i class="fa-solid fa-paper-plane"></i> Send Invoice PDF</button><button class="btn soft" id="reloadCustomersBtn"><i class="fa-solid fa-rotate"></i> Reload Customers</button></div>
+    <div class="card">
+      <div class="section-head" style="margin-top:0"><div><h2>Invoice Design Settings</h2><p>These shared fields affect PDF and email invoice</p></div></div>
+      <div class="field"><label>Payment Note</label><textarea id="paymentNote" placeholder="Payment instruction..."></textarea></div>
+      <div class="field" style="margin-top:13px"><label>Invoice Footer</label><textarea id="invoiceFooter" placeholder="Thank you for choosing RS NETWORK."></textarea></div>
+      <div class="actions"><button class="btn btn-primary" id="saveInvoiceDesign">Save Invoice Design</button></div>
+      <p class="template-note">These settings are saved in the Google Sheet SETTINGS tab. The next invoice will use the updated design text.</p>
     </div>
-  </section>
+  </div>
 
-  <section class="panel" id="settings">
-    <div class="panelhead"><div><div class="ptitle"><i class="fa-solid fa-sliders" style="color:var(--primary);margin-right:8px"></i>Email Settings</div><div class="pdesc">Set the report recipient and test the email connection.</div></div></div>
-    <div class="panelbody">
-      <div class="editorgrid">
-        <div>
-          <div class="field"><label for="adminEmail">Admin / Report Recipient Email</label><input type="email" id="adminEmail" placeholder="admin@example.com"></div>
-          <div class="field"><label for="senderEmail">Sender Gmail (display setting)</label><input type="email" id="senderEmail" placeholder="your-gmail@gmail.com"><div class="help">The actual sender is determined by the Google account authorizing the Apps Script.</div></div>
-          <button class="btn primary" id="saveSettingsBtn"><i class="fa-solid fa-floppy-disk"></i> Save Settings</button>
-        </div>
-        <div>
-          <div class="note"><i class="fa-solid fa-shield-halved"></i><div><strong>Gmail authorization</strong><span>Apps Script must be authorized to send email. Changing the sender address in this form alone does not switch the Google account.</span></div></div>
-          <div class="settingrow"><div><div class="settingname">Automatic Reminders</div><div class="settingdesc">Requires backend support and an installed scheduled trigger.</div></div><label class="switch"><input type="checkbox" id="autoReminder"><span class="slider"></span></label></div>
-          <div class="settingrow"><div><div class="settingname">Monthly Summary</div><div class="settingdesc">Requires a matching backend setting and scheduled trigger.</div></div><label class="switch"><input type="checkbox" id="monthlyToggle"><span class="slider"></span></label></div>
-          <div class="btnrow"><button class="btn soft" id="saveAutomationBtn">Save Preferences</button><button class="btn soft" id="monthlySummaryBtn">Send Summary Now</button></div>
+  <div class="card" style="margin-top:18px">
+    <div class="section-head" style="margin-top:0"><div><h2>Test Email Template</h2><p>Edit and save your test email subject, greeting, message and footer</p></div></div>
+    <div class="grid two-col">
+      <div>
+        <div class="field"><label>Test Recipient Email</label><input id="testEmailTo" type="email" placeholder="admin@example.com"></div>
+        <div class="field" style="margin-top:12px"><label>Email Subject</label><input id="testSubject"></div>
+        <div class="field" style="margin-top:12px"><label>Greeting / Title</label><input id="testGreeting"></div>
+        <div class="field" style="margin-top:12px"><label>Email Message</label><textarea id="testBody"></textarea></div>
+        <div class="field" style="margin-top:12px"><label>Footer</label><textarea id="testFooter"></textarea></div>
+        <div class="actions">
+          <button class="btn btn-primary" id="saveTestTemplate">Save Template</button>
+          <button class="btn btn-light" id="resetTestTemplate">Reset Default</button>
+          <button class="btn btn-light" id="sendTestBtn">Send Test</button>
         </div>
       </div>
+      <div>
+        <div class="muted small" style="font-weight:700;margin-bottom:9px">LIVE PREVIEW</div>
+        <div class="preview"><div class="preview-inner" id="testPreview"></div></div>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="panel">
-    <div class="panelhead"><div><div class="ptitle"><i class="fa-solid fa-users" style="color:var(--primary);margin-right:8px"></i>Customer Email Directory</div><div class="pdesc">Find customers and choose one to send an invoice.</div></div><div class="tabletools"><div class="search"><i class="fa-solid fa-magnifying-glass"></i><input id="tableSearch" placeholder="Search customers..."></div></div></div>
-    <div class="tablewrap"><table><thead><tr><th>Customer</th><th>Phone</th><th>Billing Date</th><th>Bill Amount</th><th>Email</th><th>Action</th></tr></thead><tbody id="customerTable"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody></table></div>
-    <div class="footer" id="customerFooter">Loading customer data...</div>
-  </section>
+<!-- SETTINGS -->
+<section class="page" id="page-settings">
+  <div class="grid two-col">
+    <div class="card">
+      <div class="section-head" style="margin-top:0"><div><h2>Email Configuration</h2><p>Configure admin email and sender display name</p></div></div>
+      <div class="field"><label>Admin / Report Email</label><input id="adminEmail" type="email" placeholder="admin@example.com"></div>
+      <div class="field" style="margin-top:13px"><label>Sender Display Name</label><input id="senderName" placeholder="RS NETWORK"></div>
+      <div class="actions"><button class="btn btn-primary" id="saveEmailSettings">Save Email Settings</button></div>
+      <div class="notice">Apps Script MailApp sends email using the Google account that owns/runs the script. Sender Display Name changes the visible sender name, not the Gmail account address.</div>
+    </div>
 
-  <section class="panel" id="history">
-    <div class="panelhead"><div><div class="ptitle"><i class="fa-solid fa-clock-rotate-left" style="color:var(--primary);margin-right:8px"></i>Email History</div><div class="pdesc">View recent email activity recorded by Apps Script.</div></div><button class="btn soft" id="reloadHistoryBtn"><i class="fa-solid fa-rotate"></i> Refresh History</button></div>
-    <div class="tablewrap"><table><thead><tr><th>Date / Time</th><th>Customer</th><th>Recipient</th><th>Subject / Details</th><th>Status</th></tr></thead><tbody id="historyTable"><tr><td colspan="5" class="empty">Loading...</td></tr></tbody></table></div>
-    <div class="footer" id="historyFooter">Email history</div>
-  </section>
-  <div class="footer">RS NETWORK Billing Management · Gmail Invoice Center</div>
-</div>
+    <div class="card">
+      <div class="section-head" style="margin-top:0"><div><h2>Automation Controls</h2><p>Enable or disable scheduled email jobs</p></div></div>
+      <div class="toggle-row"><div><strong>Auto Reminder</strong><p>3 days before due date, due date and overdue</p></div><label class="switch"><input type="checkbox" id="autoReminder"><span class="slider"></span></label></div>
+      <div class="toggle-row"><div><strong>Monthly Summary</strong><p>Send previous month report on the 1st</p></div><label class="switch"><input type="checkbox" id="monthlySummary"><span class="slider"></span></label></div>
+      <div class="actions"><button class="btn btn-primary" id="saveAutomation">Save Automation Settings</button><button class="btn btn-light" id="runReminder">Run Reminder Now</button></div>
+      <p class="template-note">Daily trigger runs at approximately 8 AM in the Apps Script project timezone. Install it once using setupGmailOnce().</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:18px">
+    <div class="section-head" style="margin-top:0"><div><h2>Monthly Summary</h2><p>Send a monthly report manually</p></div></div>
+    <div class="form-grid">
+      <div class="field"><label>Year</label><input type="number" id="summaryYear"></div>
+      <div class="field"><label>Month</label><select id="summaryMonth">
+        <option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option>
+      </select></div>
+    </div>
+    <div class="actions"><button class="btn btn-primary" id="sendMonthlyBtn">Send Monthly Summary</button></div>
+  </div>
+</section>
+
+<!-- HISTORY -->
+<section class="page" id="page-history">
+  <div class="card">
+    <div class="section-head" style="margin-top:0"><div><h2>Email History</h2><p>Invoice, test, reminder and monthly summary records</p></div><button class="btn btn-light" onclick="loadHistory()">↻ Reload</button></div>
+    <div class="toolbar">
+      <input class="search" id="historySearch" placeholder="Search recipient, subject, type...">
+      <select class="search" id="historyFilter" style="max-width:180px"><option value="">All Types</option><option>INVOICE</option><option>TEST</option><option>REMINDER</option><option>MONTHLY SUMMARY</option></select>
+    </div>
+    <div class="table-wrap"><table><thead><tr><th>Date</th><th>Time</th><th>Type</th><th>Recipient</th><th>Customer</th><th>Subject</th><th>Status</th><th>Details</th></tr></thead><tbody id="historyTable"><tr><td colspan="8" class="empty">Loading...</td></tr></tbody></table></div>
+  </div>
+</section>
+
+<div class="footer-note">RS NETWORK • Gmail Invoice Management System</div>
 </main>
-<div id="toast" role="status" aria-live="polite"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="loading" id="loading"><div class="loading-box"><span class="spinner"></span><span id="loadingText">Please wait...</span></div></div>
 
 <script>
-(() => {
-'use strict';
-const API_URL='https://script.google.com/macros/s/AKfycbyioEIFcRitWzLOpr_6YolutiNN0uiUb4pqpb_awVf_bFZoOTlCFPIx5cPnKR3t_4o_kw/exec';
-const $=id=>document.getElementById(id);
-let customers=[],historyData=[],settings={},activeTab='test',toastTimer;
+/* =====================================================
+   API CONFIGURATION
+===================================================== */
 
-const DEFAULTS={
- test:{
-  subject:'RS NETWORK - Test Email',
-  greeting:'Email Test Successful',
-  body:'Hello,\\n\\nThis is a test email from RS NETWORK.\\n\\nIf you received this message, email delivery is working.\\n\\nThank you.',
-  footer:'RS NETWORK\\nBilling Management Team',
-  html:''
- },
- invoice:{
-  subject:'RS NETWORK - Your Internet Bill Invoice',
-  greeting:'Dear {{name}},',
-  body:'Your internet billing invoice is ready.\\n\\nCustomer Name: {{name}}\\nCustomer IP: {{ip}}\\nPhone: {{phone}}\\nBilling Date: {{billingDate}}\\nBill Amount: {{bill}}\\n\\nPlease review the attached invoice PDF and complete your payment on time. If you have already paid, please disregard this reminder.',
-  footer:'RS NETWORK\\nThank you for choosing our internet service.\\nFor billing assistance, please contact our support team.',
-  html:''
- }
+const API_URL = 'https://script.google.com/macros/s/AKfycbyioEIFcRitWzLOpr_6YolutiNN0uiUb4pqpb_awVf_bFZoOTlCFPIx5cPnKR3t_4o_kw/exec';
+
+const DEFAULTS = {
+  testSubject: 'RS NETWORK - Test Email',
+  testGreeting: 'Email Test Successful',
+  testBody: 'Hello,\n\nThis is a test email from RS NETWORK.\n\nIf you received this message, email delivery is working.\n\nThank you.',
+  testFooter: 'RS NETWORK\nBilling Management Team',
+  invoiceSubject: 'RS NETWORK - Your Internet Bill Invoice',
+  invoiceFooter: 'Thank you for choosing RS NETWORK.',
+  paymentNote: 'Please pay your bill on or before the due date.'
 };
 
-function toast(msg,type='success'){const el=$('toast');el.textContent=msg;el.className='show '+type;clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.className='',4500)}
-function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function money(v){const n=Number(String(v??'').replace(/[৳,\s]/g,''));return Number.isFinite(n)?'৳'+n.toLocaleString('en-BD',{maximumFractionDigits:2}):(v||'—')}
-function api(action,params={}){return new Promise((resolve,reject)=>{const cb='rsCB_'+Date.now()+'_'+Math.random().toString(36).slice(2);const qs=new URLSearchParams({action,...params,callback:cb});const s=document.createElement('script');let done=false;const timer=setTimeout(()=>finish(new Error('Request timed out. Check Apps Script deployment.')),25000);function finish(err,data){if(done)return;done=true;clearTimeout(timer);try{delete window[cb]}catch(e){}s.remove();err?reject(err):resolve(data)}window[cb]=d=>finish(null,d);s.onerror=()=>finish(new Error('Could not connect to Apps Script.'));s.src=API_URL+'?'+qs.toString();document.body.appendChild(s)})}
-function ok(d){return !!d&&(d.success===true||d.ok===true||d.status==='success')}
-function normalize(c){return {...c,row:Number(c.row||c.sheetRow||c.rowNumber||0),si:c.si??c.SI??'',ip:c.ip??c.IP??'',name:c.name??c.Name??'',phone:c.phone??c.Phone??'',billingDate:c.billingDate??c.billDate??c.billing_date??c['Biling date']??c['Billing Date']??'',bill:c.customerBill??c.bill??c.customer_bill??c['Customar Bill']??c['Customer Bill']??'',email:c.email??c.gmail??c["Gmail's"]??c.Email??'',collect:c.collect??c.Collect??''}}
-function themeInit(){if(localStorage.getItem('rs-network-theme')==='dark')document.body.classList.add('dark');themeIcon()}
-function themeIcon(){$('themeBtn').innerHTML=document.body.classList.contains('dark')?'<i class="fa-solid fa-sun"></i>':'<i class="fa-solid fa-moon"></i>'}
-$('themeBtn').onclick=()=>{document.body.classList.toggle('dark');localStorage.setItem('rs-network-theme',document.body.classList.contains('dark')?'dark':'light');themeIcon()};
-$('menuBtn').onclick=()=>$('sidebar').classList.toggle('open');
-document.addEventListener('click',e=>{if(innerWidth<=800&&!$('sidebar').contains(e.target)&&!$('menuBtn').contains(e.target))$('sidebar').classList.remove('open')});
-themeInit();
+let customers = [];
+let historyData = [];
+let settings = {};
+let selectedCustomer = null;
 
-function templateKey(type){return 'rs-network-email-template-v2-'+type}
-function getTemplate(type){try{const saved=JSON.parse(localStorage.getItem(templateKey(type))||'null');return {...DEFAULTS[type],...(saved||{})}}catch(e){return {...DEFAULTS[type]}}}
-function readEditor(){return {subject:$('editSubject').value,greeting:$('editGreeting').value,body:$('editBody').value,footer:$('editFooter').value,html:$('editHtml').value}}
-function loadEditor(type){activeTab=type;const t=getTemplate(type);$('editSubject').value=t.subject;$('editGreeting').value=t.greeting;$('editBody').value=t.body;$('editFooter').value=t.footer;$('editHtml').value=t.html||'';document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===type));$('previewType').textContent=type==='test'?'Test Email':'Invoice Email';$('sendTestBtn').style.display=type==='test'?'inline-flex':'none';updatePreview()}
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>loadEditor(b.dataset.tab));
-function replaceVars(text,c){return String(text??'').replace(/\{\{(name|phone|ip|billingDate|bill|email)\}\}/g,(_,k)=>String(({name:c?.name||'Customer',phone:c?.phone||'',ip:c?.ip||'',billingDate:c?.billingDate||'',bill:money(c?.bill||''),email:c?.email||''})[k]??''))}
-function currentCustomer(){return customers.find(c=>String(c.row)===$('customerSelect').value)||null}
-function buildHtml(t,c){if(t.html.trim())return replaceVars(t.html,c);const greeting=replaceVars(t.greeting,c);const body=replaceVars(t.body,c).split(/\n/).map(line=>line.trim()?'<p>'+esc(line)+'</p>':'').join('');const footer=replaceVars(t.footer,c).split(/\n/).map(line=>esc(line)).join('<br>');return '<div style="font-family:Arial,sans-serif;color:#263248;max-width:650px;margin:auto;line-height:1.7"><div style="background:#0b1730;color:#fff;padding:20px;border-radius:8px;margin-bottom:22px"><strong style="font-size:20px">RS NETWORK</strong><div style="font-size:11px;color:#d4def4">BILLING & CUSTOMER SERVICE</div></div><p>'+esc(greeting)+'</p>'+body+'<div style="border-top:1px solid #e6ebf3;margin-top:24px;padding-top:14px;color:#748198;font-size:12px">'+footer+'</div></div>'}
-function updatePreview(){const t=readEditor();const c=currentCustomer()||{name:'Customer',phone:'01XXXXXXXXX',ip:'192.168.x.x',billingDate:'01-Nov-2026',bill:'500',email:'customer@example.com'};$('previewSubject').textContent=replaceVars(t.subject,c);$('previewBody').innerHTML=buildHtml(t,c)}
-['editSubject','editGreeting','editBody','editFooter','editHtml','customerSelect'].forEach(id=>$(id).addEventListener('input',updatePreview));
-$('previewBtn').onclick=()=>{updatePreview();toast('Preview updated.')};
-$('saveTemplateBtn').onclick=()=>{try{localStorage.setItem(templateKey(activeTab),JSON.stringify(readEditor()));toast((activeTab==='test'?'Test Email':'Invoice Email')+' template saved on this browser.')}catch(e){toast('Could not save template in this browser.','error')}};
-$('resetTemplateBtn').onclick=()=>{if(!confirm('Reset this template to the default text?'))return;localStorage.removeItem(templateKey(activeTab));loadEditor(activeTab);toast('Default template restored.')};
+/* =====================================================
+   UTILITIES
+===================================================== */
 
-function renderStats(){$('totalCustomers').textContent=customers.length;$('emailCustomers').textContent=customers.filter(c=>String(c.email).includes('@')).length;$('sentCount').textContent=historyData.filter(h=>/sent|success|successfully/i.test(String(h.status||h.result||''))&&!/fail|error/i.test(String(h.status||h.result||''))).length;$('failedCount').textContent=historyData.filter(h=>/fail|error/i.test(String(h.status||h.result||''))).length}
-function renderSelect(){const q=$('customerSearch').value.toLowerCase().trim(),old=$('customerSelect').value;const arr=customers.filter(c=>[c.name,c.ip,c.phone,c.email,c.si].some(v=>String(v||'').toLowerCase().includes(q)));$('customerSelect').innerHTML='<option value="">Select a customer...</option>'+arr.map(c=>'<option value="'+esc(c.row)+'">'+esc((c.name||'Unnamed')+' · '+(c.ip||'No IP')+' · '+(c.phone||'No phone'))+'</option>').join('');if(arr.some(c=>String(c.row)===old))$('customerSelect').value=old;updateSelectedEmail()}
-function updateSelectedEmail(){const c=currentCustomer();$('selectedEmail').textContent=c?(c.email?'Invoice recipient: '+c.email:'No email found. Add email in column P of CUSTOMERS first.'):'Select a customer to view their email.';$('selectedEmail').style.color=c&&!c.email?'var(--red)':'var(--muted)';updatePreview()}
-function renderCustomers(){const q=$('tableSearch').value.toLowerCase().trim();const arr=customers.filter(c=>[c.name,c.ip,c.phone,c.email,c.si].some(v=>String(v||'').toLowerCase().includes(q)));$('customerTable').innerHTML=arr.length?arr.map(c=>'<tr><td><div class="cname">'+esc(c.name||'Unnamed Customer')+'</div><div class="sub">'+esc(c.ip||'No IP')+' · SI '+esc(c.si||'—')+'</div></td><td>'+esc(c.phone||'—')+'</td><td>'+esc(c.billingDate||'—')+'</td><td>'+esc(money(c.bill))+'</td><td>'+(c.email?'<span class="tag">'+esc(c.email)+'</span>':'<span class="tag redtag">No email</span>')+'</td><td><button class="actionbtn" data-row="'+esc(c.row)+'" title="Select customer"><i class="fa-solid fa-paper-plane"></i></button></td></tr>').join(''):'<tr><td colspan="6" class="empty">No customers found.</td></tr>';$('customerFooter').textContent=arr.length+' customer record(s)';$('customerTable').querySelectorAll('[data-row]').forEach(b=>b.onclick=()=>{$('customerSearch').value='';renderSelect();$('customerSelect').value=b.dataset.row;updateSelectedEmail();$('sendInvoice').scrollIntoView({behavior:'smooth'})})}
-function renderHistory(){const arr=historyData.slice().reverse();$('historyTable').innerHTML=arr.length?arr.map(h=>{const st=String(h.status??h.Status??h.result??h.Result??'Recorded');const success=/sent|success|ok/i.test(st)&&!/fail|error/i.test(st);const fail=/fail|error/i.test(st);return '<tr><td>'+esc(h.date??h.timestamp??h.time??h.Date??'—')+'</td><td>'+esc(h.customerName??h.name??h.customer??'—')+'</td><td>'+esc(h.email??h.recipient??h.to??'—')+'</td><td>'+esc(h.subject??h.details??h.message??'—')+'</td><td><span class="tag '+(fail?'redtag':'')+'">'+esc(st)+'</span></td></tr>'}).join(''):'<tr><td colspan="5" class="empty">No history returned by the backend.</td></tr>';$('historyFooter').textContent=arr.length+' history record(s)'}
-function renderAll(){renderStats();renderSelect();renderCustomers();renderHistory()}
-async function loadCustomers(){const d=await api('getCustomers');if(!d||d.success===false)throw Error(d?.message||'Could not load customers');const arr=Array.isArray(d)?d:d.customers||d.data||d.records||[];customers=arr.map(normalize).filter(c=>c.row>0);renderAll()}
-async function loadSettings(){try{const d=await api('getSettings');settings=d?.settings||d?.data||d||{};$('adminEmail').value=settings.adminEmail||settings.targetEmail||settings.reportEmail||'';$('senderEmail').value=settings.senderEmail||'';if(settings.autoReminder!==undefined)$('autoReminder').checked=String(settings.autoReminder)==='true';if(settings.monthlySummary!==undefined)$('monthlyToggle').checked=String(settings.monthlySummary)==='true'}catch(e){console.warn(e)}}
-async function loadHistory(){try{const d=await api('getEmailHistory');historyData=Array.isArray(d)?d:d?.history||d?.records||d?.data||[]}catch(e){historyData=[];console.warn(e)}renderAll()}
-async function refreshAll(){ $('apiStatus').textContent='Connecting...';$('apiDot').classList.remove('ok');$('refreshBtn').disabled=true;try{await loadCustomers();await Promise.all([loadSettings(),loadHistory()]);$('apiStatus').textContent='Apps Script connected';$('apiDot').classList.add('ok')}catch(e){$('apiStatus').textContent='Connection issue';toast(e.message||'Connection failed.','error');$('customerTable').innerHTML='<tr><td colspan="6" class="empty">'+esc(e.message)+'</td></tr>'}finally{$('refreshBtn').disabled=false}}
-$('refreshBtn').onclick=refreshAll;$('reloadCustomersBtn').onclick=async()=>{try{await loadCustomers();toast('Customers refreshed.')}catch(e){toast(e.message,'error')}};$('reloadHistoryBtn').onclick=async()=>{await loadHistory();toast('Email history refreshed.')};$('customerSearch').oninput=renderSelect;$('customerSelect').onchange=updateSelectedEmail;$('tableSearch').oninput=renderCustomers;
+const $ = id => document.getElementById(id);
 
-function lockButton(btn,html){btn.disabled=true;btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Sending...';return()=>{btn.disabled=false;btn.innerHTML=html}}
-$('sendTestBtn').onclick=async()=>{const email=$('testRecipient').value.trim();if(!email||!email.includes('@'))return toast('Enter a valid test recipient email.','error');const t=readEditor();if(!t.subject.trim())return toast('Email subject is required.','error');const btn=$('sendTestBtn'),unlock=lockButton(btn,'<i class="fa-solid fa-paper-plane"></i> Send Test Email');try{const htmlBody=buildHtml(t,null);const d=await api('testEmail',{email,to:email,subject:t.subject,body:t.body,message:t.body,greeting:t.greeting,footer:t.footer,htmlBody,html:htmlBody});if(!ok(d))throw Error(d?.message||d?.error||'Backend did not confirm sending.');toast(d.message||'Test email request completed. Check the recipient inbox.');await loadHistory()}catch(e){toast('Test email failed: '+e.message,'error')}finally{unlock()}};
+function escapeHTML(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
+}
 
-$('sendInvoiceBtn').onclick=async()=>{const c=currentCustomer();if(!c)return toast('Choose a customer first.','error');if(!c.email||!String(c.email).includes('@'))return toast('This customer has no valid email. Update column P in CUSTOMERS.','error');const t=readEditor();if(!t.subject.trim())return toast('Invoice subject is required.','error');const btn=$('sendInvoiceBtn'),unlock=lockButton(btn,'<i class="fa-solid fa-paper-plane"></i> Send Invoice PDF');try{const htmlBody=buildHtml(t,c);const params={row:String(c.row),email:c.email,to:c.email,subject:replaceVars(t.subject,c),body:replaceVars(t.body,c),message:replaceVars(t.body,c),greeting:replaceVars(t.greeting,c),footer:replaceVars(t.footer,c),htmlBody,html:htmlBody,templateType:'invoice'};const d=await api('sendInvoice',params);if(!ok(d))throw Error(d?.message||d?.error||'Backend did not confirm invoice sending.');toast(d.message||'Invoice send request completed.');await loadHistory()}catch(e){toast('Invoice sending failed: '+e.message,'error')}finally{unlock()}};
+function money(value) {
+  const n = Number(String(value || 0).replace(/[৳,\s]/g,'')) || 0;
+  return n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
 
-$('saveSettingsBtn').onclick=async()=>{const adminEmail=$('adminEmail').value.trim(),senderEmail=$('senderEmail').value.trim();if(adminEmail&&!adminEmail.includes('@'))return toast('Enter a valid admin email.','error');if(senderEmail&&!senderEmail.includes('@'))return toast('Enter a valid sender Gmail.','error');try{const r=await Promise.all([api('saveSetting',{key:'adminEmail',value:adminEmail}),api('saveSetting',{key:'senderEmail',value:senderEmail})]);if(r.some(x=>!ok(x)))throw Error('Backend did not confirm saving settings.');toast('Settings saved.')}catch(e){toast('Save failed: '+e.message,'error')}};
-$('saveAutomationBtn').onclick=async()=>{try{const r=await Promise.all([api('saveSetting',{key:'autoReminder',value:String($('autoReminder').checked)}),api('saveSetting',{key:'monthlySummary',value:String($('monthlyToggle').checked)})]);if(r.some(x=>!ok(x)))throw Error('Backend did not confirm saving.');toast('Preferences saved. Confirm scheduled triggers in Apps Script.')}catch(e){toast('Save failed: '+e.message,'error')}};
-$('monthlySummaryBtn').onclick=async()=>{try{const d=await api('monthlySummary');if(!ok(d))throw Error(d?.message||d?.error||'Request not confirmed');toast(d.message||'Monthly summary request completed.');await loadHistory()}catch(e){toast('Summary failed: '+e.message,'error')}};
+function toast(message) {
+  const el = $('toast');
+  el.textContent = message;
+  el.classList.add('show');
+  clearTimeout(toast.timer);
+  toast.timer = setTimeout(() => el.classList.remove('show'), 3200);
+}
 
-loadEditor('test');
-refreshAll();
-})();
+function loading(show, message='Please wait...') {
+  $('loadingText').textContent = message;
+  $('loading').classList.toggle('show', !!show);
+}
+
+function normalizeSettings(raw) {
+  const s = raw || {};
+  return {
+    adminEmail: s['Admin Email'] || s.adminEmail || s.senderEmail || '',
+    senderName: s['Sender Name'] || s.senderName || 'RS NETWORK',
+    autoReminder: String(s['Auto Reminder'] || s.autoReminder || 'OFF').toUpperCase() === 'ON',
+    monthlySummary: String(s['Monthly Summary'] || s.monthlySummary || 'OFF').toUpperCase() === 'ON',
+    testSubject: s['Test Email Subject'] || DEFAULTS.testSubject,
+    testGreeting: s['Test Email Greeting'] || DEFAULTS.testGreeting,
+    testBody: s['Test Email Body'] || DEFAULTS.testBody,
+    testFooter: s['Test Email Footer'] || DEFAULTS.testFooter,
+    invoiceSubject: s['Invoice Email Subject'] || DEFAULTS.invoiceSubject,
+    invoiceFooter: s['Invoice Footer'] || DEFAULTS.invoiceFooter,
+    paymentNote: s['Payment Note'] || DEFAULTS.paymentNote
+  };
+}
+
+function api(action, params={}) {
+  return new Promise((resolve,reject) => {
+    const callback = 'rsCallback_' + Date.now() + '_' + Math.floor(Math.random()*100000);
+    const query = new URLSearchParams({...params,action,callback});
+    const script = document.createElement('script');
+    let finished = false;
+
+    const cleanup = () => {
+      try { delete window[callback]; } catch(e) { window[callback] = undefined; }
+      if (script.parentNode) script.parentNode.removeChild(script);
+    };
+
+    const timer = setTimeout(() => {
+      if (finished) return;
+      finished = true;
+      cleanup();
+      reject(new Error('API request timed out. Check Apps Script deployment and connection.'));
+    },30000);
+
+    window[callback] = data => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      cleanup();
+
+      if (data && data.success === false) {
+        reject(new Error(data.message || 'Request failed'));
+      } else {
+        resolve(data || {});
+      }
+    };
+
+    script.onerror = () => {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      cleanup();
+      reject(new Error('Could not connect to Apps Script API.'));
+    };
+
+    script.src = API_URL + '?' + query.toString();
+    document.body.appendChild(script);
+  });
+}
+
+async function saveSetting(key,value) {
+  return api('saveSetting',{key,value:String(value ?? '')});
+}
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+const pageInfo = {
+  dashboard:['Dashboard','Email invoice management overview'],
+  customers:['Customer Directory','View customer billing information'],
+  invoice:['Gmail Invoice','Send customer invoice PDF and manage templates'],
+  settings:['Email Settings','Configure email and automation'],
+  history:['Email History','Review sent email records']
+};
+
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn[data-page]').forEach(b => b.classList.remove('active'));
+
+  $('page-' + page).classList.add('active');
+  document.querySelector('[data-page="' + page + '"]').classList.add('active');
+
+  $('pageTitle').textContent = pageInfo[page][0];
+  $('pageSubtitle').textContent = pageInfo[page][1];
+  $('sidebar').classList.remove('open');
+
+  if (page === 'customers') renderCustomers();
+  if (page === 'history') renderHistory();
+}
+
+document.querySelectorAll('.nav-btn[data-page]').forEach(btn => {
+  btn.addEventListener('click',() => navigate(btn.dataset.page));
+});
+
+$('menuBtn').addEventListener('click',() => $('sidebar').classList.toggle('open'));
+
+/* =====================================================
+   THEME
+===================================================== */
+
+function setTheme(dark) {
+  document.body.classList.toggle('dark',dark);
+  localStorage.setItem('rs-network-theme',dark ? 'dark' : 'light');
+}
+
+function toggleTheme() {
+  setTheme(!document.body.classList.contains('dark'));
+}
+
+$('themeBtn').addEventListener('click',toggleTheme);
+$('sidebarTheme').addEventListener('click',toggleTheme);
+setTheme(localStorage.getItem('rs-network-theme') === 'dark');
+
+/* =====================================================
+   LOAD DATA
+===================================================== */
+
+async function loadCustomers() {
+  const result = await api('getCustomers');
+  customers = Array.isArray(result.customers) ? result.customers : [];
+  renderCustomers();
+  populateCustomerSelect();
+  updateStats();
+}
+
+async function loadSettings() {
+  const result = await api('getSettings');
+  settings = normalizeSettings(result.settings || {});
+
+  $('adminEmail').value = settings.adminEmail;
+  $('senderName').value = settings.senderName;
+  $('autoReminder').checked = settings.autoReminder;
+  $('monthlySummary').checked = settings.monthlySummary;
+
+  $('testSubject').value = settings.testSubject;
+  $('testGreeting').value = settings.testGreeting;
+  $('testBody').value = settings.testBody;
+  $('testFooter').value = settings.testFooter;
+  $('invoiceSubject').value = settings.invoiceSubject;
+  $('invoiceFooter').value = settings.invoiceFooter;
+  $('paymentNote').value = settings.paymentNote;
+
+  $('testEmailTo').value = settings.adminEmail;
+
+  $('dashAdmin').textContent = settings.adminEmail || 'Not configured';
+  setStatus('dashReminder',settings.autoReminder);
+  setStatus('dashMonthly',settings.monthlySummary);
+
+  updateTestPreview();
+}
+
+async function loadHistory() {
+  const result = await api('getEmailHistory',{limit:300});
+  historyData = Array.isArray(result.history) ? result.history : [];
+  renderHistory();
+  updateStats();
+}
+
+async function refreshAll() {
+  loading(true,'Loading Google Sheet data...');
+  try {
+    await Promise.all([loadCustomers(),loadSettings(),loadHistory()]);
+    toast('Data refreshed successfully');
+  } catch(err) {
+    toast(err.message);
+  } finally {
+    loading(false);
+  }
+}
+
+function setStatus(id,on) {
+  const el = $(id);
+  el.textContent = on ? 'ON' : 'OFF';
+  el.className = 'status ' + (on ? 'success' : 'pending');
+}
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+function updateStats() {
+  $('statCustomers').textContent = customers.length;
+
+  const total = customers.reduce((sum,c) => {
+    return sum + (Number(String(c.customerBill || 0).replace(/[৳,\s]/g,'')) || 0)
+      + (Number(String(c.ipBill || 0).replace(/[৳,\s]/g,'')) || 0);
+  },0);
+
+  $('statBill').textContent = '৳ ' + money(total);
+
+  const sent = historyData.filter(h => String(h.status).toUpperCase() === 'SUCCESS').length;
+  const failed = historyData.filter(h => String(h.status).toUpperCase() === 'FAILED').length;
+
+  $('statSent').textContent = sent;
+  $('statFailed').textContent = failed;
+
+  const recent = historyData.slice(0,7);
+  $('recentHistory').innerHTML = recent.length ? recent.map(h => `
+    <tr>
+      <td>${escapeHTML(h.date)}</td>
+      <td>${escapeHTML(h.type)}</td>
+      <td>${escapeHTML(h.recipient)}</td>
+      <td>${escapeHTML(h.subject)}</td>
+      <td>${statusHTML(h.status)}</td>
+    </tr>`).join('') : '<tr><td colspan="5" class="empty">No email history yet</td></tr>';
+}
+
+function statusHTML(status) {
+  const s = String(status || '').toUpperCase();
+  const cls = s === 'SUCCESS' ? 'success' : s === 'FAILED' ? 'failed' : 'pending';
+  return `<span class="status ${cls}">${escapeHTML(s || 'UNKNOWN')}</span>`;
+}
+
+/* =====================================================
+   CUSTOMER DIRECTORY
+===================================================== */
+
+function renderCustomers() {
+  const query = ($('customerSearch').value || '').toLowerCase();
+
+  const filtered = customers.filter(c =>
+    [c.si,c.name,c.ip,c.phone,c.email,c.address]
+      .some(v => String(v || '').toLowerCase().includes(query))
+  );
+
+  $('customerCount').textContent = filtered.length + ' customers';
+
+  $('customerTable').innerHTML = filtered.length ? filtered.map(c => `
+    <tr>
+      <td>${escapeHTML(c.si)}</td>
+      <td><strong>${escapeHTML(c.name)}</strong></td>
+      <td>${escapeHTML(c.ip)}</td>
+      <td>${escapeHTML(c.phone)}</td>
+      <td>${escapeHTML(c.billDate)}</td>
+      <td>৳ ${money((Number(c.customerBill)||0)+(Number(c.ipBill)||0))}</td>
+      <td>${escapeHTML(c.email)}</td>
+      <td><button class="btn btn-primary" onclick="selectCustomer(${Number(c.row)})">Invoice</button></td>
+    </tr>`).join('') : '<tr><td colspan="8" class="empty">No customers found</td></tr>';
+}
+
+$('customerSearch').addEventListener('input',renderCustomers);
+
+function populateCustomerSelect() {
+  $('invoiceCustomer').innerHTML =
+    '<option value="">Select a customer</option>' +
+    customers.map(c => `
+      <option value="${Number(c.row)}">${escapeHTML(c.name || 'Unnamed')} — ${escapeHTML(c.ip || c.si || '')}</option>
+    `).join('');
+}
+
+function selectCustomer(row) {
+  const customer = customers.find(c => Number(c.row) === Number(row));
+  if (!customer) return;
+
+  $('invoiceCustomer').value = String(row);
+  selectedCustomer = customer;
+  $('invoiceEmail').value = customer.email || '';
+  updateSelectedCustomer();
+  navigate('invoice');
+}
+
+$('invoiceCustomer').addEventListener('change',() => {
+  const row = Number($('invoiceCustomer').value);
+  selectedCustomer = customers.find(c => Number(c.row) === row) || null;
+
+  $('invoiceEmail').value = selectedCustomer ? (selectedCustomer.email || '') : '';
+  updateSelectedCustomer();
+});
+
+function updateSelectedCustomer() {
+  const c = selectedCustomer;
+
+  if (!c) {
+    $('selectedCustomerInfo').textContent = 'Select a customer to see their billing information.';
+    return;
+  }
+
+  $('selectedCustomerInfo').innerHTML = `
+    <strong>${escapeHTML(c.name)}</strong><br>
+    IP: ${escapeHTML(c.ip)} &nbsp; | &nbsp; Phone: ${escapeHTML(c.phone)}<br>
+    Billing Date: ${escapeHTML(c.billDate)}<br>
+    Internet Bill: ৳ ${money(c.customerBill)} &nbsp; | &nbsp;
+    IP Bill: ৳ ${money(c.ipBill)}<br>
+    Total: <strong>৳ ${money((Number(c.customerBill)||0)+(Number(c.ipBill)||0))}</strong>`;
+}
+
+$('clearInvoiceBtn').addEventListener('click',() => {
+  $('invoiceCustomer').value = '';
+  $('invoiceEmail').value = '';
+  selectedCustomer = null;
+  updateSelectedCustomer();
+});
+
+/* =====================================================
+   INVOICE SENDING
+===================================================== */
+
+$('sendInvoiceBtn').addEventListener('click',sendInvoice);
+
+async function sendInvoice() {
+  const row = Number($('invoiceCustomer').value);
+  const to = $('invoiceEmail').value.trim();
+
+  if (!row) return toast('Please select a customer');
+  if (!to || !to.includes('@')) return toast('Enter a valid recipient email');
+
+  const subject = $('invoiceSubject').value.trim() || DEFAULTS.invoiceSubject;
+
+  if (!confirm('Send invoice PDF to ' + to + '?')) return;
+
+  loading(true,'Generating invoice PDF and sending email...');
+  $('sendInvoiceBtn').disabled = true;
+
+  try {
+    const result = await api('sendInvoice',{row,to,subject});
+    toast(result.message || 'Invoice sent successfully');
+    await loadHistory();
+  } catch(err) {
+    toast(err.message);
+  } finally {
+    loading(false);
+    $('sendInvoiceBtn').disabled = false;
+  }
+}
+
+/* =====================================================
+   TEST EMAIL TEMPLATE
+===================================================== */
+
+function getTestTemplate() {
+  return {
+    subject: $('testSubject').value.trim(),
+    greeting: $('testGreeting').value,
+    body: $('testBody').value,
+    footer: $('testFooter').value
+  };
+}
+
+function updateTestPreview() {
+  const t = getTestTemplate();
+
+  $('testPreview').innerHTML = `
+    <div class="preview-brand">RS NETWORK</div>
+    <h2>${escapeHTML(t.greeting)}</h2>
+    <div style="white-space:pre-wrap;line-height:1.7;color:#34443a">${escapeHTML(t.body)}</div>
+    <hr style="border:0;border-top:1px solid #e5ece8;margin:22px 0">
+    <div style="white-space:pre-wrap;color:#718078;font-size:12px">${escapeHTML(t.footer)}</div>`;
+}
+
+['testSubject','testGreeting','testBody','testFooter'].forEach(id => {
+  $(id).addEventListener('input',updateTestPreview);
+});
+
+async function saveTestTemplate() {
+  const t = getTestTemplate();
+
+  const values = {
+    'Test Email Subject':t.subject,
+    'Test Email Greeting':t.greeting,
+    'Test Email Body':t.body,
+    'Test Email Footer':t.footer
+  };
+
+  loading(true,'Saving test email template...');
+  try {
+    for (const [key,value] of Object.entries(values)) {
+      await saveSetting(key,value);
+    }
+    toast('Test email template saved to Google Sheet');
+    await loadSettings();
+  } catch(err) {
+    toast(err.message);
+  } finally {
+    loading(false);
+  }
+}
+
+$('saveTestTemplate').addEventListener('click',saveTestTemplate);
+
+$('resetTestTemplate').addEventListener('click',async () => {
+  if (!confirm('Restore default test email template?')) return;
+
+  $('testSubject').value = DEFAULTS.testSubject;
+  $('testGreeting').value = DEFAULTS.testGreeting;
+  $('testBody').value = DEFAULTS.testBody;
+  $('testFooter').value = DEFAULTS.testFooter;
+
+  updateTestPreview();
+  await saveTestTemplate();
+});
+
+$('sendTestBtn').addEventListener('click',sendTestQuick);
+
+async function sendTestQuick() {
+  const t = getTestTemplate();
+  const email = $('testEmailTo').value.trim() || $('adminEmail').value.trim();
+
+  if (!email || !email.includes('@')) {
+    toast('Enter a valid test recipient email');
+    navigate('invoice');
+    return;
+  }
+
+  loading(true,'Sending test email...');
+  try {
+    const result = await api('testEmail',{
+      email,
+      subject:t.subject,
+      greeting:t.greeting,
+      body:t.body,
+      footer:t.footer
+    });
+
+    toast(result.message || 'Test email sent');
+    await loadHistory();
+  } catch(err) {
+    toast(err.message);
+  } finally {
+    loading(false);
+  }
+}
+
+/* =====================================================
+   INVOICE DESIGN SETTINGS
+===================================================== */
+
+$('saveInvoiceDesign').addEventListener('click',async () => {
+  loading(true,'Saving invoice design...');
+  try {
+    await saveSetting('Payment Note',$('paymentNote').value);
+    await saveSetting('Invoice Footer',$('invoiceFooter').value);
+    await saveSetting('Invoice Email Subject',$('invoiceSubject').value);
+    toast('Invoice design settings saved');
+    await loadSettings();
+  } catch(err) {
+    toast(err.message);
+  } finally {
+    loading(false);
+  }
+});
+
+/* =====================================================
+   EMAIL SETTINGS
+===================================================== */
+
+$('saveEmailSettings').addEventListener('click',async () => {
+  const email = $('adminEmail').value.trim();
+  const name = $('senderName').value.trim();
+
+  if (email && !email.includes('@')) return toast('Enter a valid admin email');
+
+  loading(true,'Saving email settings...');
+  try {
+    await saveSetting('Admin Email',email);
+    await saveSetting('Sender Name',name || 'RS NETWORK');
+    toast('Email settings saved');
+    await loadSettings();
+  } catch(err) {
+    toast(err.message);
+  } finally {
+    loading(false);
+  }
+});
+
+$('saveAutomation').addEventListener('click',async () => {
+  loading(true,'Saving automation settings...');
+  try {
+    await saveSetting('Auto Reminder',$('autoReminder').checked ? 'ON' : 'OFF');
+    await saveSetting('Monthly Summary',$('monthlySummary').checked ? 'ON' : 'OFF');
+    toast('Automation settings saved');
+    await loadSettings();
+  } catch(err) {
+    toast(err.message);
+  } finally {
+    loading(false);
+  }
+});
+
+$('runReminder').addEventListener('click',async () => {
+  if (!confirm('Run automatic reminder process now?')) return;
+
+  loading(true,'Running reminder process...');
+  try {
+    const result = await api('runAutoReminders');
+    toast(result.message + ' | Sent: ' + (result.sent || 0));
+    await loadHistory();
+  } catch(err) {
+    toast(err.message);
+  } finally {
+    loading(false);
+  }
+});
+
+/* =====================================================
+   MONTHLY SUMMARY
+===================================================== */
+
+function initSummaryDate() {
+  const now = new Date();
+  const previous = new Date(now.getFullYear(),now.getMonth()-1,1);
+  $('summaryYear').value = previous.getFullYear();
+  $('summaryMonth').value = previous.getMonth()+1;
+}
+
+async function sendMonthly() {
+  const year = Number($('summaryYear').value);
+  const month = Number($('summaryMonth').value);
+
+  if (!year || month < 1 || month > 12) {
+    toast('Select a valid year and month');
+    navigate('settings');
+    return;
+  }
+
+  if (!confirm('Send monthly summary to admin email?')) return;
+
+  loading(true,'Generating monthly summary PDF...');
+  try {
+    const result = await api('monthlySummary',{year,month});
+    toast(result.message || 'Monthly summary sent');
+    await loadHistory();
+  } catch(err) {
+    toast(err.message);
+  } finally {
+    loading(false);
+  }
+}
+
+$('sendMonthlyBtn').addEventListener('click',sendMonthly);
+
+/* =====================================================
+   HISTORY
+===================================================== */
+
+function renderHistory() {
+  const query = ($('historySearch').value || '').toLowerCase();
+  const filter = $('historyFilter').value;
+
+  const filtered = historyData.filter(h => {
+    const matchesText = [
+      h.date,h.time,h.type,h.recipient,h.customer,h.subject,h.status,h.details
+    ].some(v => String(v || '').toLowerCase().includes(query));
+
+    const matchesType = !filter || String(h.type).toUpperCase() === filter;
+
+    return matchesText && matchesType;
+  });
+
+  $('historyTable').innerHTML = filtered.length ? filtered.map(h => `
+    <tr>
+      <td>${escapeHTML(h.date)}</td>
+      <td>${escapeHTML(h.time)}</td>
+      <td>${escapeHTML(h.type)}</td>
+      <td>${escapeHTML(h.recipient)}</td>
+      <td>${escapeHTML(h.customer)}</td>
+      <td>${escapeHTML(h.subject)}</td>
+      <td>${statusHTML(h.status)}</td>
+      <td>${escapeHTML(h.details)}</td>
+    </tr>`).join('') : '<tr><td colspan="8" class="empty">No matching email history</td></tr>';
+}
+
+$('historySearch').addEventListener('input',renderHistory);
+$('historyFilter').addEventListener('change',renderHistory);
+
+/* =====================================================
+   REFRESH + INITIALIZATION
+===================================================== */
+
+$('refreshBtn').addEventListener('click',refreshAll);
+
+async function init() {
+  initSummaryDate();
+  $('summaryMonth').value = String(new Date().getMonth() || 12);
+
+  loading(true,'Connecting to RS NETWORK...');
+  try {
+    await refreshAll();
+    toast('RS NETWORK system connected');
+  } catch(err) {
+    toast('Connection error: ' + err.message);
+  } finally {
+    loading(false);
+  }
+}
+
+init();
 </script>
 </body>
 </html>
