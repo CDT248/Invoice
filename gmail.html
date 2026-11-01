@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="icon" href="https://cdn-icons-png.flaticon.com/128/2818/2818765.png">
+
 <style>
 :root{
  --primary:#087f5b;--primary2:#12a879;--bg:#f4f7f8;
@@ -139,8 +140,8 @@ body.dark .preview{background:#111b16}
 @media(max-width:390px){.stats{grid-template-columns:1fr 1fr}.stat-number{font-size:19px}}
 </style>
 </head>
-<body>
 
+<body>
 <div class="app">
 <aside class="sidebar" id="sidebar">
   <div class="brand">
@@ -345,10 +346,26 @@ body.dark .preview{background:#111b16}
 
 <script>
 /* =====================================================
-   API CONFIGURATION
+   CENTRAL SETTINGS + API CONFIGURATION
 ===================================================== */
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbyioEIFcRitWzLOpr_6YolutiNN0uiUb4pqpb_awVf_bFZoOTlCFPIx5cPnKR3t_4o_kw/exec';
+const CENTRAL_SETTINGS_KEY = 'RS_NETWORK_CENTRAL_SETTINGS_V1';
+
+const DEFAULT_API_URL =
+'https://script.google.com/macros/s/AKfycbyioEIFcRitWzLOpr_6YolutiNN0uiUb4pqpb_awVf_bFZoOTlCFPIx5cPnKR3t_4o_kw/exec';
+
+function getCentralSettings(){
+  try{
+    return JSON.parse(localStorage.getItem(CENTRAL_SETTINGS_KEY) || '{}');
+  }catch(e){
+    return {};
+  }
+}
+
+function getGmailApiUrl(){
+  const central = getCentralSettings();
+  return String(central.gmailApi || DEFAULT_API_URL).trim();
+}
 
 const DEFAULTS = {
   testSubject: 'RS NETWORK - Test Email',
@@ -371,7 +388,7 @@ let selectedCustomer = null;
 
 const $ = id => document.getElementById(id);
 
-function escapeHTML(value) {
+function escapeHTML(value){
   return String(value == null ? '' : value)
     .replace(/&/g,'&amp;')
     .replace(/</g,'&lt;')
@@ -380,29 +397,31 @@ function escapeHTML(value) {
     .replace(/'/g,'&#039;');
 }
 
-function money(value) {
+function money(value){
   const n = Number(String(value || 0).replace(/[৳,\s]/g,'')) || 0;
   return n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
 }
 
-function toast(message) {
+function toast(message){
   const el = $('toast');
   el.textContent = message;
   el.classList.add('show');
   clearTimeout(toast.timer);
-  toast.timer = setTimeout(() => el.classList.remove('show'), 3200);
+  toast.timer = setTimeout(() => el.classList.remove('show'),3200);
 }
 
-function loading(show, message='Please wait...') {
+function loading(show,message='Please wait...'){
   $('loadingText').textContent = message;
-  $('loading').classList.toggle('show', !!show);
+  $('loading').classList.toggle('show',!!show);
 }
 
-function normalizeSettings(raw) {
+function normalizeSettings(raw){
   const s = raw || {};
+  const central = getCentralSettings();
+
   return {
-    adminEmail: s['Admin Email'] || s.adminEmail || s.senderEmail || '',
-    senderName: s['Sender Name'] || s.senderName || 'RS NETWORK',
+    adminEmail: s['Admin Email'] || s.adminEmail || s.senderEmail || central.adminEmail || '',
+    senderName: s['Sender Name'] || s.senderName || central.senderName || 'RS NETWORK',
     autoReminder: String(s['Auto Reminder'] || s.autoReminder || 'OFF').toUpperCase() === 'ON',
     monthlySummary: String(s['Monthly Summary'] || s.monthlySummary || 'OFF').toUpperCase() === 'ON',
     testSubject: s['Test Email Subject'] || DEFAULTS.testSubject,
@@ -415,52 +434,62 @@ function normalizeSettings(raw) {
   };
 }
 
-function api(action, params={}) {
-  return new Promise((resolve,reject) => {
+/* JSONP API */
+function api(action,params={}){
+  return new Promise((resolve,reject)=>{
+    const API_URL = getGmailApiUrl();
+
+    if(!API_URL){
+      reject(new Error('Gmail API URL পাওয়া যায়নি। Main Dashboard → Central Settings-এ URL দিন।'));
+      return;
+    }
+
     const callback = 'rsCallback_' + Date.now() + '_' + Math.floor(Math.random()*100000);
     const query = new URLSearchParams({...params,action,callback});
     const script = document.createElement('script');
     let finished = false;
+    let timer;
 
-    const cleanup = () => {
-      try { delete window[callback]; } catch(e) { window[callback] = undefined; }
-      if (script.parentNode) script.parentNode.removeChild(script);
+    const cleanup = ()=>{
+      try{delete window[callback];}
+      catch(e){window[callback]=undefined;}
+      if(script.parentNode) script.parentNode.removeChild(script);
     };
 
-    const timer = setTimeout(() => {
-      if (finished) return;
+    timer = setTimeout(()=>{
+      if(finished) return;
       finished = true;
       cleanup();
       reject(new Error('API request timed out. Check Apps Script deployment and connection.'));
     },30000);
 
-    window[callback] = data => {
-      if (finished) return;
+    window[callback] = data=>{
+      if(finished) return;
       finished = true;
       clearTimeout(timer);
       cleanup();
 
-      if (data && data.success === false) {
-        reject(new Error(data.message || 'Request failed'));
-      } else {
+      if(data && (data.success === false || data.ok === false)){
+        reject(new Error(data.message || data.error || 'Request failed'));
+      }else{
         resolve(data || {});
       }
     };
 
-    script.onerror = () => {
-      if (finished) return;
+    script.onerror = ()=>{
+      if(finished) return;
       finished = true;
       clearTimeout(timer);
       cleanup();
-      reject(new Error('Could not connect to Apps Script API.'));
+      reject(new Error('Could not connect to Gmail Apps Script API.'));
     };
 
-    script.src = API_URL + '?' + query.toString();
+    script.src = API_URL + (API_URL.includes('?') ? '&' : '?') + query.toString();
     document.body.appendChild(script);
   });
 }
 
-async function saveSetting(key,value) {
+async function saveSetting(key,value){
   return api('saveSetting',{key,value:String(value ?? '')});
 }
 
@@ -476,49 +505,50 @@ const pageInfo = {
   history:['Email History','Review sent email records']
 };
 
-function navigate(page) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn[data-page]').forEach(b => b.classList.remove('active'));
+function navigate(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn[data-page]').forEach(b=>b.classList.remove('active'));
 
-  $('page-' + page).classList.add('active');
-  document.querySelector('[data-page="' + page + '"]').classList.add('active');
+  $('page-'+page).classList.add('active');
+  const nav = document.querySelector('[data-page="'+page+'"]');
+  if(nav) nav.classList.add('active');
 
   $('pageTitle').textContent = pageInfo[page][0];
   $('pageSubtitle').textContent = pageInfo[page][1];
   $('sidebar').classList.remove('open');
 
-  if (page === 'customers') renderCustomers();
-  if (page === 'history') renderHistory();
+  if(page==='customers') renderCustomers();
+  if(page==='history') renderHistory();
 }
 
-document.querySelectorAll('.nav-btn[data-page]').forEach(btn => {
-  btn.addEventListener('click',() => navigate(btn.dataset.page));
+document.querySelectorAll('.nav-btn[data-page]').forEach(btn=>{
+  btn.addEventListener('click',()=>navigate(btn.dataset.page));
 });
 
-$('menuBtn').addEventListener('click',() => $('sidebar').classList.toggle('open'));
+$('menuBtn').addEventListener('click',()=>$('sidebar').classList.toggle('open'));
 
 /* =====================================================
    THEME
 ===================================================== */
 
-function setTheme(dark) {
+function setTheme(dark){
   document.body.classList.toggle('dark',dark);
-  localStorage.setItem('rs-network-theme',dark ? 'dark' : 'light');
+  localStorage.setItem('rs-network-theme',dark?'dark':'light');
 }
 
-function toggleTheme() {
+function toggleTheme(){
   setTheme(!document.body.classList.contains('dark'));
 }
 
 $('themeBtn').addEventListener('click',toggleTheme);
 $('sidebarTheme').addEventListener('click',toggleTheme);
-setTheme(localStorage.getItem('rs-network-theme') === 'dark');
+setTheme(localStorage.getItem('rs-network-theme')==='dark');
 
 /* =====================================================
    LOAD DATA
 ===================================================== */
 
-async function loadCustomers() {
+async function loadCustomers(){
   const result = await api('getCustomers');
   customers = Array.isArray(result.customers) ? result.customers : [];
   renderCustomers();
@@ -526,7 +556,7 @@ async function loadCustomers() {
   updateStats();
 }
 
-async function loadSettings() {
+async function loadSettings(){
   const result = await api('getSettings');
   settings = normalizeSettings(result.settings || {});
 
@@ -542,7 +572,6 @@ async function loadSettings() {
   $('invoiceSubject').value = settings.invoiceSubject;
   $('invoiceFooter').value = settings.invoiceFooter;
   $('paymentNote').value = settings.paymentNote;
-
   $('testEmailTo').value = settings.adminEmail;
 
   $('dashAdmin').textContent = settings.adminEmail || 'Not configured';
@@ -552,83 +581,85 @@ async function loadSettings() {
   updateTestPreview();
 }
 
-async function loadHistory() {
+async function loadHistory(){
   const result = await api('getEmailHistory',{limit:300});
   historyData = Array.isArray(result.history) ? result.history : [];
   renderHistory();
   updateStats();
 }
 
-async function refreshAll() {
+async function refreshAll(){
   loading(true,'Loading Google Sheet data...');
-  try {
+  try{
     await Promise.all([loadCustomers(),loadSettings(),loadHistory()]);
     toast('Data refreshed successfully');
-  } catch(err) {
+  }catch(err){
     toast(err.message);
-  } finally {
+  }finally{
     loading(false);
   }
 }
 
-function setStatus(id,on) {
+function setStatus(id,on){
   const el = $(id);
-  el.textContent = on ? 'ON' : 'OFF';
-  el.className = 'status ' + (on ? 'success' : 'pending');
+  el.textContent = on?'ON':'OFF';
+  el.className = 'status '+(on?'success':'pending');
 }
 
 /* =====================================================
    DASHBOARD
 ===================================================== */
 
-function updateStats() {
+function updateStats(){
   $('statCustomers').textContent = customers.length;
 
-  const total = customers.reduce((sum,c) => {
-    return sum + (Number(String(c.customerBill || 0).replace(/[৳,\s]/g,'')) || 0)
-      + (Number(String(c.ipBill || 0).replace(/[৳,\s]/g,'')) || 0);
+  const total = customers.reduce((sum,c)=>{
+    return sum+
+      (Number(String(c.customerBill||0).replace(/[৳,\s]/g,''))||0)+
+      (Number(String(c.ipBill||0).replace(/[৳,\s]/g,''))||0);
   },0);
 
-  $('statBill').textContent = '৳ ' + money(total);
+  $('statBill').textContent = '৳ '+money(total);
 
-  const sent = historyData.filter(h => String(h.status).toUpperCase() === 'SUCCESS').length;
-  const failed = historyData.filter(h => String(h.status).toUpperCase() === 'FAILED').length;
+  const sent = historyData.filter(h=>String(h.status).toUpperCase()==='SUCCESS').length;
+  const failed = historyData.filter(h=>String(h.status).toUpperCase()==='FAILED').length;
 
   $('statSent').textContent = sent;
   $('statFailed').textContent = failed;
 
   const recent = historyData.slice(0,7);
-  $('recentHistory').innerHTML = recent.length ? recent.map(h => `
+  $('recentHistory').innerHTML = recent.length ? recent.map(h=>`
     <tr>
       <td>${escapeHTML(h.date)}</td>
       <td>${escapeHTML(h.type)}</td>
       <td>${escapeHTML(h.recipient)}</td>
       <td>${escapeHTML(h.subject)}</td>
       <td>${statusHTML(h.status)}</td>
-    </tr>`).join('') : '<tr><td colspan="5" class="empty">No email history yet</td></tr>';
+    </tr>`).join('') :
+    '<tr><td colspan="5" class="empty">No email history yet</td></tr>';
 }
 
-function statusHTML(status) {
-  const s = String(status || '').toUpperCase();
-  const cls = s === 'SUCCESS' ? 'success' : s === 'FAILED' ? 'failed' : 'pending';
-  return `<span class="status ${cls}">${escapeHTML(s || 'UNKNOWN')}</span>`;
+function statusHTML(status){
+  const s = String(status||'').toUpperCase();
+  const cls = s==='SUCCESS'?'success':s==='FAILED'?'failed':'pending';
+  return `<span class="status ${cls}">${escapeHTML(s||'UNKNOWN')}</span>`;
 }
 
 /* =====================================================
    CUSTOMER DIRECTORY
 ===================================================== */
 
-function renderCustomers() {
-  const query = ($('customerSearch').value || '').toLowerCase();
+function renderCustomers(){
+  const query = ($('customerSearch').value||'').toLowerCase();
 
-  const filtered = customers.filter(c =>
+  const filtered = customers.filter(c=>
     [c.si,c.name,c.ip,c.phone,c.email,c.address]
-      .some(v => String(v || '').toLowerCase().includes(query))
+      .some(v=>String(v||'').toLowerCase().includes(query))
   );
 
-  $('customerCount').textContent = filtered.length + ' customers';
+  $('customerCount').textContent = filtered.length+' customers';
 
-  $('customerTable').innerHTML = filtered.length ? filtered.map(c => `
+  $('customerTable').innerHTML = filtered.length ? filtered.map(c=>`
     <tr>
       <td>${escapeHTML(c.si)}</td>
       <td><strong>${escapeHTML(c.name)}</strong></td>
@@ -638,42 +669,43 @@ function renderCustomers() {
       <td>৳ ${money((Number(c.customerBill)||0)+(Number(c.ipBill)||0))}</td>
       <td>${escapeHTML(c.email)}</td>
       <td><button class="btn btn-primary" onclick="selectCustomer(${Number(c.row)})">Invoice</button></td>
-    </tr>`).join('') : '<tr><td colspan="8" class="empty">No customers found</td></tr>';
+    </tr>`).join('') :
+    '<tr><td colspan="8" class="empty">No customers found</td></tr>';
 }
 
 $('customerSearch').addEventListener('input',renderCustomers);
 
-function populateCustomerSelect() {
+function populateCustomerSelect(){
   $('invoiceCustomer').innerHTML =
-    '<option value="">Select a customer</option>' +
-    customers.map(c => `
-      <option value="${Number(c.row)}">${escapeHTML(c.name || 'Unnamed')} — ${escapeHTML(c.ip || c.si || '')}</option>
+    '<option value="">Select a customer</option>'+
+    customers.map(c=>`
+      <option value="${Number(c.row)}">${escapeHTML(c.name||'Unnamed')} — ${escapeHTML(c.ip||c.si||'')}</option>
     `).join('');
 }
 
-function selectCustomer(row) {
-  const customer = customers.find(c => Number(c.row) === Number(row));
-  if (!customer) return;
+function selectCustomer(row){
+  const customer = customers.find(c=>Number(c.row)===Number(row));
+  if(!customer) return;
 
   $('invoiceCustomer').value = String(row);
   selectedCustomer = customer;
-  $('invoiceEmail').value = customer.email || '';
+  $('invoiceEmail').value = customer.email||'';
   updateSelectedCustomer();
   navigate('invoice');
 }
 
-$('invoiceCustomer').addEventListener('change',() => {
+$('invoiceCustomer').addEventListener('change',()=>{
   const row = Number($('invoiceCustomer').value);
-  selectedCustomer = customers.find(c => Number(c.row) === row) || null;
+  selectedCustomer = customers.find(c=>Number(c.row)===row)||null;
 
-  $('invoiceEmail').value = selectedCustomer ? (selectedCustomer.email || '') : '';
+  $('invoiceEmail').value = selectedCustomer ? (selectedCustomer.email||'') : '';
   updateSelectedCustomer();
 });
 
-function updateSelectedCustomer() {
+function updateSelectedCustomer(){
   const c = selectedCustomer;
 
-  if (!c) {
+  if(!c){
     $('selectedCustomerInfo').textContent = 'Select a customer to see their billing information.';
     return;
   }
@@ -687,7 +719,7 @@ function updateSelectedCustomer() {
     Total: <strong>৳ ${money((Number(c.customerBill)||0)+(Number(c.ipBill)||0))}</strong>`;
 }
 
-$('clearInvoiceBtn').addEventListener('click',() => {
+$('clearInvoiceBtn').addEventListener('click',()=>{
   $('invoiceCustomer').value = '';
   $('invoiceEmail').value = '';
   selectedCustomer = null;
@@ -700,27 +732,27 @@ $('clearInvoiceBtn').addEventListener('click',() => {
 
 $('sendInvoiceBtn').addEventListener('click',sendInvoice);
 
-async function sendInvoice() {
+async function sendInvoice(){
   const row = Number($('invoiceCustomer').value);
   const to = $('invoiceEmail').value.trim();
 
-  if (!row) return toast('Please select a customer');
-  if (!to || !to.includes('@')) return toast('Enter a valid recipient email');
+  if(!row) return toast('Please select a customer');
+  if(!to||!to.includes('@')) return toast('Enter a valid recipient email');
 
-  const subject = $('invoiceSubject').value.trim() || DEFAULTS.invoiceSubject;
+  const subject = $('invoiceSubject').value.trim()||DEFAULTS.invoiceSubject;
 
-  if (!confirm('Send invoice PDF to ' + to + '?')) return;
+  if(!confirm('Send invoice PDF to '+to+'?')) return;
 
   loading(true,'Generating invoice PDF and sending email...');
   $('sendInvoiceBtn').disabled = true;
 
-  try {
+  try{
     const result = await api('sendInvoice',{row,to,subject});
-    toast(result.message || 'Invoice sent successfully');
+    toast(result.message||'Invoice sent successfully');
     await loadHistory();
-  } catch(err) {
+  }catch(err){
     toast(err.message);
-  } finally {
+  }finally{
     loading(false);
     $('sendInvoiceBtn').disabled = false;
   }
@@ -730,16 +762,16 @@ async function sendInvoice() {
    TEST EMAIL TEMPLATE
 ===================================================== */
 
-function getTestTemplate() {
+function getTestTemplate(){
   return {
-    subject: $('testSubject').value.trim(),
-    greeting: $('testGreeting').value,
-    body: $('testBody').value,
-    footer: $('testFooter').value
+    subject:$('testSubject').value.trim(),
+    greeting:$('testGreeting').value,
+    body:$('testBody').value,
+    footer:$('testFooter').value
   };
 }
 
-function updateTestPreview() {
+function updateTestPreview(){
   const t = getTestTemplate();
 
   $('testPreview').innerHTML = `
@@ -750,11 +782,11 @@ function updateTestPreview() {
     <div style="white-space:pre-wrap;color:#718078;font-size:12px">${escapeHTML(t.footer)}</div>`;
 }
 
-['testSubject','testGreeting','testBody','testFooter'].forEach(id => {
+['testSubject','testGreeting','testBody','testFooter'].forEach(id=>{
   $(id).addEventListener('input',updateTestPreview);
 });
 
-async function saveTestTemplate() {
+async function saveTestTemplate(){
   const t = getTestTemplate();
 
   const values = {
@@ -765,23 +797,23 @@ async function saveTestTemplate() {
   };
 
   loading(true,'Saving test email template...');
-  try {
-    for (const [key,value] of Object.entries(values)) {
+  try{
+    for(const [key,value] of Object.entries(values)){
       await saveSetting(key,value);
     }
     toast('Test email template saved to Google Sheet');
     await loadSettings();
-  } catch(err) {
+  }catch(err){
     toast(err.message);
-  } finally {
+  }finally{
     loading(false);
   }
 }
 
 $('saveTestTemplate').addEventListener('click',saveTestTemplate);
 
-$('resetTestTemplate').addEventListener('click',async () => {
-  if (!confirm('Restore default test email template?')) return;
+$('resetTestTemplate').addEventListener('click',async()=>{
+  if(!confirm('Restore default test email template?')) return;
 
   $('testSubject').value = DEFAULTS.testSubject;
   $('testGreeting').value = DEFAULTS.testGreeting;
@@ -794,18 +826,18 @@ $('resetTestTemplate').addEventListener('click',async () => {
 
 $('sendTestBtn').addEventListener('click',sendTestQuick);
 
-async function sendTestQuick() {
+async function sendTestQuick(){
   const t = getTestTemplate();
-  const email = $('testEmailTo').value.trim() || $('adminEmail').value.trim();
+  const email = $('testEmailTo').value.trim()||$('adminEmail').value.trim();
 
-  if (!email || !email.includes('@')) {
+  if(!email||!email.includes('@')){
     toast('Enter a valid test recipient email');
     navigate('invoice');
     return;
   }
 
   loading(true,'Sending test email...');
-  try {
+  try{
     const result = await api('testEmail',{
       email,
       subject:t.subject,
@@ -814,11 +846,11 @@ async function sendTestQuick() {
       footer:t.footer
     });
 
-    toast(result.message || 'Test email sent');
+    toast(result.message||'Test email sent');
     await loadHistory();
-  } catch(err) {
+  }catch(err){
     toast(err.message);
-  } finally {
+  }finally{
     loading(false);
   }
 }
@@ -827,17 +859,17 @@ async function sendTestQuick() {
    INVOICE DESIGN SETTINGS
 ===================================================== */
 
-$('saveInvoiceDesign').addEventListener('click',async () => {
+$('saveInvoiceDesign').addEventListener('click',async()=>{
   loading(true,'Saving invoice design...');
-  try {
+  try{
     await saveSetting('Payment Note',$('paymentNote').value);
     await saveSetting('Invoice Footer',$('invoiceFooter').value);
     await saveSetting('Invoice Email Subject',$('invoiceSubject').value);
     toast('Invoice design settings saved');
     await loadSettings();
-  } catch(err) {
+  }catch(err){
     toast(err.message);
-  } finally {
+  }finally{
     loading(false);
   }
 });
@@ -846,50 +878,57 @@ $('saveInvoiceDesign').addEventListener('click',async () => {
    EMAIL SETTINGS
 ===================================================== */
 
-$('saveEmailSettings').addEventListener('click',async () => {
+$('saveEmailSettings').addEventListener('click',async()=>{
   const email = $('adminEmail').value.trim();
   const name = $('senderName').value.trim();
 
-  if (email && !email.includes('@')) return toast('Enter a valid admin email');
+  if(email&&!email.includes('@')) return toast('Enter a valid admin email');
 
   loading(true,'Saving email settings...');
-  try {
+  try{
     await saveSetting('Admin Email',email);
-    await saveSetting('Sender Name',name || 'RS NETWORK');
+    await saveSetting('Sender Name',name||'RS NETWORK');
+
+    /* Also update central browser settings */
+    const central = getCentralSettings();
+    central.adminEmail = email;
+    central.senderName = name||'RS NETWORK';
+    localStorage.setItem(CENTRAL_SETTINGS_KEY,JSON.stringify(central));
+
     toast('Email settings saved');
     await loadSettings();
-  } catch(err) {
+  }catch(err){
     toast(err.message);
-  } finally {
+  }finally{
     loading(false);
   }
 });
 
-$('saveAutomation').addEventListener('click',async () => {
+$('saveAutomation').addEventListener('click',async()=>{
   loading(true,'Saving automation settings...');
-  try {
-    await saveSetting('Auto Reminder',$('autoReminder').checked ? 'ON' : 'OFF');
-    await saveSetting('Monthly Summary',$('monthlySummary').checked ? 'ON' : 'OFF');
+  try{
+    await saveSetting('Auto Reminder',$('autoReminder').checked?'ON':'OFF');
+    await saveSetting('Monthly Summary',$('monthlySummary').checked?'ON':'OFF');
     toast('Automation settings saved');
     await loadSettings();
-  } catch(err) {
+  }catch(err){
     toast(err.message);
-  } finally {
+  }finally{
     loading(false);
   }
 });
 
-$('runReminder').addEventListener('click',async () => {
-  if (!confirm('Run automatic reminder process now?')) return;
+$('runReminder').addEventListener('click',async()=>{
+  if(!confirm('Run automatic reminder process now?')) return;
 
   loading(true,'Running reminder process...');
-  try {
+  try{
     const result = await api('runAutoReminders');
-    toast(result.message + ' | Sent: ' + (result.sent || 0));
+    toast((result.message||'Reminder process completed')+' | Sent: '+(result.sent||0));
     await loadHistory();
-  } catch(err) {
+  }catch(err){
     toast(err.message);
-  } finally {
+  }finally{
     loading(false);
   }
 });
@@ -898,33 +937,33 @@ $('runReminder').addEventListener('click',async () => {
    MONTHLY SUMMARY
 ===================================================== */
 
-function initSummaryDate() {
+function initSummaryDate(){
   const now = new Date();
   const previous = new Date(now.getFullYear(),now.getMonth()-1,1);
   $('summaryYear').value = previous.getFullYear();
   $('summaryMonth').value = previous.getMonth()+1;
 }
 
-async function sendMonthly() {
+async function sendMonthly(){
   const year = Number($('summaryYear').value);
   const month = Number($('summaryMonth').value);
 
-  if (!year || month < 1 || month > 12) {
+  if(!year||month<1||month>12){
     toast('Select a valid year and month');
     navigate('settings');
     return;
   }
 
-  if (!confirm('Send monthly summary to admin email?')) return;
+  if(!confirm('Send monthly summary to admin email?')) return;
 
   loading(true,'Generating monthly summary PDF...');
-  try {
+  try{
     const result = await api('monthlySummary',{year,month});
-    toast(result.message || 'Monthly summary sent');
+    toast(result.message||'Monthly summary sent');
     await loadHistory();
-  } catch(err) {
+  }catch(err){
     toast(err.message);
-  } finally {
+  }finally{
     loading(false);
   }
 }
@@ -935,21 +974,20 @@ $('sendMonthlyBtn').addEventListener('click',sendMonthly);
    HISTORY
 ===================================================== */
 
-function renderHistory() {
-  const query = ($('historySearch').value || '').toLowerCase();
+function renderHistory(){
+  const query = ($('historySearch').value||'').toLowerCase();
   const filter = $('historyFilter').value;
 
-  const filtered = historyData.filter(h => {
+  const filtered = historyData.filter(h=>{
     const matchesText = [
       h.date,h.time,h.type,h.recipient,h.customer,h.subject,h.status,h.details
-    ].some(v => String(v || '').toLowerCase().includes(query));
+    ].some(v=>String(v||'').toLowerCase().includes(query));
 
-    const matchesType = !filter || String(h.type).toUpperCase() === filter;
-
-    return matchesText && matchesType;
+    const matchesType = !filter||String(h.type).toUpperCase()===filter;
+    return matchesText&&matchesType;
   });
 
-  $('historyTable').innerHTML = filtered.length ? filtered.map(h => `
+  $('historyTable').innerHTML = filtered.length ? filtered.map(h=>`
     <tr>
       <td>${escapeHTML(h.date)}</td>
       <td>${escapeHTML(h.time)}</td>
@@ -959,11 +997,34 @@ function renderHistory() {
       <td>${escapeHTML(h.subject)}</td>
       <td>${statusHTML(h.status)}</td>
       <td>${escapeHTML(h.details)}</td>
-    </tr>`).join('') : '<tr><td colspan="8" class="empty">No matching email history</td></tr>';
+    </tr>`).join('') :
+    '<tr><td colspan="8" class="empty">No matching email history</td></tr>';
 }
 
 $('historySearch').addEventListener('input',renderHistory);
 $('historyFilter').addEventListener('change',renderHistory);
+
+/* =====================================================
+   CENTRAL SETTINGS SYNC
+===================================================== */
+
+window.addEventListener('storage',event=>{
+  if(event.key===CENTRAL_SETTINGS_KEY){
+    const central = getCentralSettings();
+
+    if(central.adminEmail){
+      $('adminEmail').value = central.adminEmail;
+      $('testEmailTo').value = central.adminEmail;
+      $('dashAdmin').textContent = central.adminEmail;
+    }
+
+    if(central.senderName){
+      $('senderName').value = central.senderName;
+    }
+
+    refreshAll();
+  }
+});
 
 /* =====================================================
    REFRESH + INITIALIZATION
@@ -971,17 +1032,16 @@ $('historyFilter').addEventListener('change',renderHistory);
 
 $('refreshBtn').addEventListener('click',refreshAll);
 
-async function init() {
+async function init(){
   initSummaryDate();
-  $('summaryMonth').value = String(new Date().getMonth() || 12);
 
   loading(true,'Connecting to RS NETWORK...');
-  try {
+  try{
     await refreshAll();
     toast('RS NETWORK system connected');
-  } catch(err) {
-    toast('Connection error: ' + err.message);
-  } finally {
+  }catch(err){
+    toast('Connection error: '+err.message);
+  }finally{
     loading(false);
   }
 }
