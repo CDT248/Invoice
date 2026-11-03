@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#111827">
 <title>RS NETWORK | Customer Management</title>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -312,7 +311,6 @@ td{font-weight:500}
   </section>
 </main>
 
-<!-- CUSTOMER MODAL -->
 <div class="modal-backdrop" id="customerModal" onclick="backdropClose(event)">
   <div class="modal">
     <div class="modal-head">
@@ -373,17 +371,13 @@ td{font-weight:500}
 <div class="toast" id="toast"></div>
 
 <script>
-// ======================================================
-// RS NETWORK CUSTOMER PAGE
-// Use the NEW Customer Code.gs deployment URL here.
-// ======================================================
-
 const CUSTOMER_API = 'https://script.google.com/macros/s/AKfycbycatfsekwA_msgRFw9OImeSIWHy49k1yHpb38_dd-T_rFv8I3TshAOo1vu-v48If3B/exec';
 
 let customers = [];
 let currentPage = 1;
 const pageSize = 10;
 let busy = false;
+let actionBusy = false;
 
 const $ = id => document.getElementById(id);
 
@@ -422,7 +416,6 @@ function money(value){
   return '৳'+Number(value||0).toLocaleString('en-US');
 }
 
-// JSONP: Apps Script GET supports callback responses.
 function api(action,params={}){
   return new Promise((resolve,reject)=>{
     if(!CUSTOMER_API || CUSTOMER_API.startsWith('PASTE_')){
@@ -432,7 +425,7 @@ function api(action,params={}){
 
     const callback='rsCallback_'+Date.now()+'_'+Math.floor(Math.random()*100000);
     const script=document.createElement('script');
-    const query=new URLSearchParams({action,...params,callback});
+    const query=new URLSearchParams({...params,action,callback});
 
     const timeout=setTimeout(()=>{
       cleanup();
@@ -447,8 +440,8 @@ function api(action,params={}){
 
     window[callback]=data=>{
       cleanup();
-      if(data && data.success===false){
-        reject(new Error(data.error||'Request failed'));
+      if(!data || data.success===false){
+        reject(new Error(data?.error||'Server থেকে সঠিক response পাওয়া যায়নি'));
       }else resolve(data);
     };
 
@@ -469,7 +462,7 @@ async function loadCustomers(){
 
   try{
     const result=await api('list');
-    customers=result.customers||[];
+    customers=Array.isArray(result.customers)?result.customers:[];
     currentPage=1;
     updateStats();
     renderCustomers();
@@ -511,8 +504,8 @@ function filteredCustomers(){
   });
 
   if(sort==='name')list.sort((a,b)=>String(a.name).localeCompare(String(b.name)));
-  else if(sort==='oldest')list.sort((a,b)=>a.row-b.row);
-  else list.sort((a,b)=>b.row-a.row);
+  else if(sort==='oldest')list.sort((a,b)=>Number(a.row)-Number(b.row));
+  else list.sort((a,b)=>Number(b.row)-Number(a.row));
 
   return list;
 }
@@ -612,11 +605,11 @@ function editCustomer(row){
 
 async function saveCustomer(event){
   event.preventDefault();
+  if(actionBusy)return;
 
   const row=$('f_row').value;
 
   const data={
-    action:row?'updatecustomer':'addcustomer',
     row:row,
     name:$('f_name').value.trim(),
     phone:$('f_phone').value.trim(),
@@ -642,14 +635,13 @@ async function saveCustomer(event){
     return;
   }
 
+  actionBusy=true;
   const button=$('saveBtn');
   button.disabled=true;
   button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
 
   try{
-    // The Customer Code.gs API must accept these fields in its GET router.
-    const result=await api(data.action,data);
-
+    const result=await api(row?'updatecustomer':'addcustomer',data);
     if(result.success===false)throw new Error(result.error||'Save failed');
 
     closeModal();
@@ -659,6 +651,7 @@ async function saveCustomer(event){
   }catch(error){
     showToast('Save failed: '+error.message);
   }finally{
+    actionBusy=false;
     button.disabled=false;
     button.innerHTML=row?
       '<i class="fa-solid fa-floppy-disk"></i> Update Customer':
@@ -667,39 +660,51 @@ async function saveCustomer(event){
 }
 
 async function deleteCustomer(row){
+  if(actionBusy)return;
   const c=customers.find(x=>Number(x.row)===Number(row));
   if(!confirm('Delete '+(c?.name||'this customer')+'? This cannot be undone.'))return;
 
+  actionBusy=true;
   try{
     await api('deletecustomer',{row});
     showToast('Customer deleted');
     await loadCustomers();
   }catch(error){
     showToast('Delete failed: '+error.message);
+  }finally{
+    actionBusy=false;
   }
 }
 
 async function collectCustomer(row){
+  if(actionBusy)return;
   if(!confirm('Mark this customer as collected?'))return;
 
+  actionBusy=true;
   try{
     await api('collect',{row});
     showToast('Collection status updated');
     await loadCustomers();
   }catch(error){
     showToast('Collect failed: '+error.message);
+  }finally{
+    actionBusy=false;
   }
 }
 
 async function renewCustomer(row){
+  if(actionBusy)return;
   if(!confirm('Mark this customer as renewed?'))return;
 
+  actionBusy=true;
   try{
     await api('renew',{row});
     showToast('Renew status updated');
     await loadCustomers();
   }catch(error){
     showToast('Renew failed: '+error.message);
+  }finally{
+    actionBusy=false;
   }
 }
 
