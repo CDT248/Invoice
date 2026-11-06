@@ -1,1252 +1,631 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#101a2d">
-<title>One Online | Admin Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/lucide@latest"></script>
-
+<meta name="theme-color" content="#0b1220">
+<title>One Online | Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 :root{
- --bg:#f4f7fb;--white:#fff;--ink:#172033;--muted:#7b879b;
- --line:#e8edf4;--nav:#101a2d;--nav2:#17243b;
- --primary:#635bff;--green:#13a879;--red:#e05260;
- --orange:#e99a35;--blue:#3984e8;
- --shadow:0 12px 35px rgba(20,35,65,.07);
- --radius:16px
+--bg:#0b1220;--panel:#111c2e;--panel2:#162338;
+--line:#26364e;--text:#e8eef8;--muted:#91a1b8;
+--primary:#5b8cff;--cyan:#22d3ee;
+--green:#22c58b;--red:#fb7185;--amber:#fbbf24;
+--shadow:0 18px 50px #0004;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"DM Sans",sans-serif}
+body{
+margin:0;background:radial-gradient(circle at 80% -10%,#1b3762 0,transparent 34%),var(--bg);
+color:var(--text);font-family:Inter,Arial,sans-serif;min-height:100vh
+}
 button,input,select,textarea{font:inherit}
-button{cursor:pointer}
+button{cursor:pointer;border:0}
 .app{display:flex;min-height:100vh}
 .sidebar{
- width:250px;background:var(--nav);color:#dce5f5;
- padding:24px 16px;position:fixed;inset:0 auto 0 0;
- z-index:20;display:flex;flex-direction:column;transition:.25s
+width:250px;background:#0b1424;border-right:1px solid var(--line);
+padding:24px 16px;position:fixed;inset:0 auto 0 0;z-index:10;
+display:flex;flex-direction:column
 }
-.brand{display:flex;align-items:center;gap:12px;padding:2px 10px 28px}
-.brand-mark{
- width:42px;height:42px;border-radius:13px;
- background:linear-gradient(135deg,#7a72ff,#36b7d8);
- display:grid;place-items:center;color:white;font-weight:900;font-size:20px
+.brand{display:flex;align-items:center;gap:12px;padding:4px 10px 28px}
+.brand-icon{
+width:42px;height:42px;border-radius:14px;
+background:linear-gradient(135deg,#5b8cff,#22d3ee);
+display:grid;place-items:center;font-weight:900;color:white;font-size:19px;
+box-shadow:0 8px 24px #3975ff55
 }
-.brand strong{font:800 17px Manrope;display:block;color:#fff}
-.brand small{color:#8291aa;font-size:10px;letter-spacing:1.5px}
-.nav-label{font-size:10px;color:#71809a;letter-spacing:1.5px;font-weight:800;padding:14px 12px 8px}
-.nav{display:grid;gap:5px}
-.nav button{
- border:0;background:transparent;color:#aebbd0;text-align:left;
- padding:12px 13px;border-radius:11px;display:flex;
- align-items:center;gap:12px;font-weight:600;font-size:13px
+.brand b{font-size:17px;letter-spacing:.3px}
+.brand small{display:block;color:var(--muted);font-size:11px;margin-top:4px}
+.nav-label{font-size:10px;letter-spacing:1.5px;color:#65758d;padding:12px 12px 8px;font-weight:800}
+.nav a{
+display:flex;align-items:center;gap:12px;padding:12px;border-radius:11px;
+color:#9eacc0;text-decoration:none;font-size:13px;font-weight:600;margin:3px 0;
+transition:.2s
 }
-.nav button:hover,.nav button.active{background:var(--nav2);color:#fff}
-.nav button.active{box-shadow:inset 3px 0 #827bff}
-.nav i{width:18px;height:18px}
-.sidebar-bottom{margin-top:auto;padding:14px 10px;color:#71809a;font-size:11px;line-height:1.7;border-top:1px solid #26334a}
-.main{margin-left:250px;width:calc(100% - 250px);min-width:0}
-.topbar{
- height:72px;background:#ffffffed;border-bottom:1px solid var(--line);
- display:flex;align-items:center;justify-content:space-between;
- padding:0 30px;position:sticky;top:0;z-index:10
+.nav a:hover,.nav a.active{background:linear-gradient(90deg,#244c8c66,#1d315066);color:white}
+.nav a.active{box-shadow:inset 3px 0 var(--primary)}
+.nav .ico{width:20px;text-align:center;font-size:16px}
+.side-bottom{margin-top:auto;padding:14px 10px;color:#718198;font-size:11px;line-height:1.7}
+.main{margin-left:250px;width:calc(100% - 250px);padding:28px 32px 50px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px}
+.eyebrow{color:var(--cyan);font-size:11px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase}
+.topbar h1{font-size:27px;margin:7px 0 0;letter-spacing:-.8px}
+.top-actions{display:flex;gap:10px;align-items:center}
+.pill{border:1px solid var(--line);background:#142136;color:var(--text);padding:10px 13px;border-radius:11px;font-size:12px}
+.btn{
+padding:11px 15px;border-radius:10px;color:white;
+background:linear-gradient(135deg,#477cf3,#2860d6);
+font-size:12px;font-weight:700;box-shadow:0 8px 20px #326ce533
 }
-.top-left{display:flex;align-items:center;gap:14px}
-.menu-btn{display:none;border:0;background:#eef1ff;color:var(--primary);width:38px;height:38px;border-radius:11px}
-.page-title{font:800 18px Manrope}
-.page-sub{font-size:11px;color:var(--muted);margin-top:3px}
-.top-actions{display:flex;align-items:center;gap:12px}
-.status-pill{display:flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;padding:8px 12px;border-radius:30px;color:#68758a;font-size:11px;font-weight:700}
-.dot{width:7px;height:7px;border-radius:50%;background:#13b981}
-.avatar{width:36px;height:36px;border-radius:12px;background:#e9e8ff;color:var(--primary);display:grid;place-items:center;font-weight:800}
-.content{padding:28px 30px 50px;max-width:1600px;margin:auto}
+.btn.secondary{background:#1b2a40;border:1px solid var(--line);box-shadow:none}
+.btn.danger{background:#7f2639}
+.btn.green{background:linear-gradient(135deg,#18a879,#0d8c69)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.grid{display:grid;gap:16px}
+.stats{grid-template-columns:repeat(5,minmax(0,1fr));margin-bottom:20px}
+.stat{
+background:linear-gradient(145deg,#15243a,#101b2c);
+border:1px solid var(--line);border-radius:16px;padding:18px;
+box-shadow:var(--shadow);position:relative;overflow:hidden
+}
+.stat:after{
+content:"";position:absolute;width:90px;height:90px;border-radius:50%;
+right:-30px;top:-35px;background:var(--glow,#5b8cff);
+opacity:.12;filter:blur(3px)
+}
+.stat-head{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;font-weight:700}
+.stat-icon{font-size:18px}
+.stat-value{font-size:25px;font-weight:800;margin:16px 0 5px;letter-spacing:-.7px}
+.stat-foot{font-size:10px;color:#74869e}
+.two-col{grid-template-columns:1.35fr 1fr;margin-bottom:18px}
+.panel{
+background:linear-gradient(145deg,#121f32,#101a2b);
+border:1px solid var(--line);border-radius:16px;padding:20px;
+box-shadow:var(--shadow);min-width:0
+}
+.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:17px}
+.panel h2{font-size:14px;margin:0}
+.muted{color:var(--muted)}
+.small{font-size:11px}
+.chart-wrap{height:240px;position:relative}
+.quick-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.quick{
+border:1px solid var(--line);background:#17263b;border-radius:12px;
+padding:14px;text-align:left;color:var(--text);transition:.2s
+}
+.quick:hover{border-color:#5b8cff;transform:translateY(-2px)}
+.quick strong{display:block;font-size:12px;margin-bottom:6px}
+.quick span{font-size:10px;color:var(--muted)}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:620px}
+th,td{text-align:left;padding:12px 10px;border-bottom:1px solid #25344a;font-size:11px;white-space:nowrap}
+th{color:#8495ad;font-size:10px;text-transform:uppercase;letter-spacing:.8px}
+td{color:#dce6f4}
+.status{display:inline-block;padding:5px 8px;border-radius:20px;font-size:9px;font-weight:800}
+.status.due{background:#542331;color:#ff9aad}
+.status.ok{background:#123d35;color:#70e2bb}
+.status.up{background:#493b19;color:#ffdb79}
+.status.over{background:#542331;color:#ff9aad}
+.empty{text-align:center;padding:25px;color:var(--muted);font-size:12px}
 .section{display:none}
 .section.active{display:block}
-.welcome{display:flex;align-items:flex-end;justify-content:space-between;gap:15px;margin-bottom:23px}
-.welcome h1{font:800 24px Manrope;margin:0 0 6px}
-.welcome p{margin:0;color:var(--muted);font-size:13px}
-.btn{
- border:0;border-radius:10px;padding:10px 15px;font-size:12px;
- font-weight:800;display:inline-flex;align-items:center;
- justify-content:center;gap:8px;transition:.2s
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.field{
+background:#0d192a;border:1px solid #2a3b53;border-radius:9px;
+padding:10px 12px;color:var(--text);outline:none;font-size:12px
 }
-.btn-primary{background:var(--primary);color:white;box-shadow:0 7px 16px #635bff30}
-.btn-primary:hover{background:#5148e5}
-.btn-light{background:#f1f3f8;color:#526078}
-.btn-danger{background:#fff0f1;color:var(--red)}
-.btn-success{background:#e8f8f1;color:#10966a}
-.btn-sm{padding:7px 10px;font-size:11px}
-.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:22px}
-.stat{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
-.stat-top{display:flex;justify-content:space-between;align-items:center}
-.stat-label{font-size:11px;color:var(--muted);font-weight:700}
-.stat-icon{width:36px;height:36px;border-radius:11px;display:grid;place-items:center}
-.stat-value{font:800 25px Manrope;margin:14px 0 5px}
-.stat-note{font-size:10px;color:var(--muted)}
-.stat:nth-child(1) .stat-icon{background:#fff0e6;color:#e68a37}
-.stat:nth-child(2) .stat-icon{background:#e7f8f1;color:#0da678}
-.stat:nth-child(3) .stat-icon{background:#ffedef;color:#e05260}
-.stat:nth-child(4) .stat-icon{background:#eaf1ff;color:#3984e8}
-.grid-main{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(270px,.85fr);gap:18px}
-.panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);min-width:0}
-.panel-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--line);gap:10px}
-.panel-head h3{font:800 14px Manrope;margin:0}
-.panel-head p{font-size:10px;color:var(--muted);margin:4px 0 0}
-.panel-body{padding:18px 20px}
-.section-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px}
-.section-heading h2{font:800 20px Manrope;margin:0 0 5px}
-.section-heading p{font-size:12px;color:var(--muted);margin:0}
-.toolbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-.search{position:relative;min-width:220px}
-.search svg{position:absolute;left:12px;top:11px;width:15px;color:#98a3b5}
-.search input{padding-left:36px}
-.filters{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
-.filters select{width:auto;min-width:130px}
-input,select,textarea{
- width:100%;border:1px solid #e2e7ef;background:#fff;
- border-radius:9px;padding:10px 11px;font-size:12px;color:#263247;outline:none
+.field:focus{border-color:var(--primary)}
+.toast{
+position:fixed;right:22px;bottom:22px;background:#14243a;
+border:1px solid #385276;color:white;padding:13px 17px;
+border-radius:11px;box-shadow:var(--shadow);z-index:50;
+opacity:0;transform:translateY(12px);transition:.25s;pointer-events:none;font-size:12px
 }
-input:focus,select:focus,textarea:focus{border-color:#918cff;box-shadow:0 0 0 3px #635bff15}
-.table-wrap{overflow:auto;width:100%}
-table{width:100%;border-collapse:collapse;white-space:nowrap}
-th{font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:#8b96a8;text-align:left;background:#fafbfe;padding:12px 15px;font-weight:800}
-td{padding:13px 15px;border-top:1px solid #eef1f5;font-size:11px;color:#47546a}
-tbody tr:hover{background:#fafbff}
-.customer-name{font-weight:800;color:#253149}
-.subtext{font-size:10px;color:#9aa4b4;margin-top:3px}
-.badge{display:inline-flex;align-items:center;padding:5px 8px;border-radius:20px;font-size:9px;font-weight:800}
-.badge-green{background:#e8f8f1;color:#0c9a6d}
-.badge-red{background:#fff0f1;color:#dc5260}
-.badge-orange{background:#fff5e7;color:#d48b2c}
-.badge-blue{background:#eaf1ff;color:#397bdb}
-.actions{display:flex;gap:5px}
-.icon-btn{width:29px;height:29px;border:0;border-radius:8px;background:#f1f3f8;color:#63718a;display:grid;place-items:center}
-.icon-btn:hover{background:#e7e9ff;color:var(--primary)}
-.icon-btn svg{width:14px}
-.empty{padding:35px;text-align:center;color:#98a3b5;font-size:12px}
-.activity{display:grid;gap:15px}
-.activity-item{display:flex;gap:10px}
-.activity-icon{width:30px;height:30px;border-radius:9px;background:#edf8f4;color:#0ba477;display:grid;place-items:center;flex:none}
-.activity-item strong{font-size:11px;display:block}
-.activity-item small{font-size:10px;color:var(--muted)}
-.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
-.form-group label{display:block;font-size:10px;font-weight:800;color:#68758a;margin-bottom:6px}
-.form-group.full{grid-column:1/-1}
-.form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
-.report-filters{display:flex;gap:10px;align-items:end;flex-wrap:wrap}
-.report-filters .form-group{min-width:160px}
-.report-result{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
-.report-tile{background:#f8f9fd;border:1px solid var(--line);border-radius:12px;padding:16px}
-.report-tile span{font-size:10px;color:var(--muted)}
-.report-tile strong{display:block;font:800 20px Manrope;margin-top:7px}
-.overlay{position:fixed;inset:0;background:#101a2d88;z-index:50;display:none;align-items:center;justify-content:center;padding:18px}
-.overlay.show{display:flex}
-.modal{background:#fff;border-radius:18px;width:min(760px,100%);max-height:92vh;overflow:auto;box-shadow:0 25px 80px #07112455}
-.modal-head{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
-.modal-head h3{font:800 15px Manrope;margin:0}
-.modal-body{padding:20px 22px}
-.close{border:0;background:#f1f3f8;width:30px;height:30px;border-radius:9px;color:#6b7890}
-.toast{position:fixed;right:22px;bottom:22px;background:#17243b;color:#fff;padding:12px 17px;border-radius:11px;font-size:12px;z-index:100;opacity:0;transform:translateY(12px);pointer-events:none;transition:.25s}
 .toast.show{opacity:1;transform:translateY(0)}
-.loader{display:none;position:fixed;inset:0;background:#f4f7fbbd;z-index:90;align-items:center;justify-content:center}
-.loader.show{display:flex}
-.spinner{width:38px;height:38px;border:3px solid #dfe2ff;border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.mobile-overlay{display:none}
-@media(max-width:1100px){
- .cards{grid-template-columns:repeat(2,1fr)}
- .grid-main{grid-template-columns:1fr}
- .form-grid{grid-template-columns:repeat(2,1fr)}
+.modal-back{
+display:none;position:fixed;inset:0;background:#020817bb;z-index:30;
+align-items:center;justify-content:center;padding:18px
 }
-@media(max-width:760px){
- .sidebar{transform:translateX(-100%)}
- .sidebar.open{transform:translateX(0)}
- .main{margin-left:0;width:100%}
- .topbar{height:65px;padding:0 15px}
- .menu-btn{display:grid;place-items:center}
- .content{padding:20px 14px 35px}
- .welcome{align-items:flex-start;flex-direction:column}
- .welcome h1{font-size:21px}
- .cards{gap:9px}
- .stat{padding:13px}
- .stat-value{font-size:20px}
- .section-heading{align-items:flex-start;flex-direction:column}
- .toolbar,.search{width:100%;min-width:0}
- .filters{width:100%}
- .filters select{flex:1;min-width:0}
- .form-grid{grid-template-columns:1fr}
- .form-group.full{grid-column:auto}
- .report-result{grid-template-columns:1fr}
- .top-actions .status-pill{display:none}
- .modal-body{padding:16px}
- .modal-head{padding:15px}
- .page-title{font-size:15px}
- .mobile-overlay.show{display:block;position:fixed;inset:0;background:#0b142866;z-index:15}
+.modal-back.show{display:flex}
+.modal{
+width:min(520px,100%);background:#142238;border:1px solid #344967;
+border-radius:17px;padding:22px;box-shadow:var(--shadow)
+}
+.modal h3{margin:0 0 10px;font-size:17px}
+.modal p{color:var(--muted);font-size:12px;line-height:1.6}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.form-row .field{width:100%}
+.modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:16px}
+.hamb{display:none}
+.report-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:15px 0}
+.report-kpi{background:#17263b;border:1px solid var(--line);padding:14px;border-radius:12px}
+.report-kpi small{color:var(--muted);font-size:10px}
+.report-kpi b{display:block;font-size:18px;margin-top:7px}
+@media(max-width:1100px){.stats{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:800px){
+.sidebar{transform:translateX(-100%);transition:.25s}
+.sidebar.open{transform:translateX(0)}
+.main{margin-left:0;width:100%;padding:20px 16px 40px}
+.hamb{display:inline-block}.two-col{grid-template-columns:1fr}
+.stats{grid-template-columns:repeat(2,1fr)}
+.topbar h1{font-size:22px}.top-actions .pill{display:none}
+}
+@media(max-width:480px){
+.stats{gap:9px}.stat{padding:13px}.stat-value{font-size:21px}
+.panel{padding:15px}.form-row{grid-template-columns:1fr}
+.report-kpis{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
-
 <body>
 <div class="app">
 
 <aside class="sidebar" id="sidebar">
- <div class="brand">
-  <div class="brand-mark">O</div>
-  <div><strong>One Online</strong><small>ISP MANAGEMENT</small></div>
- </div>
+  <div class="brand">
+    <div class="brand-icon">O</div>
+    <div><b>ONE ONLINE</b><small>ISP MANAGEMENT</small></div>
+  </div>
 
- <div class="nav-label">WORKSPACE</div>
- <nav class="nav">
-  <button class="active" data-section="dashboard"><i data-lucide="layout-dashboard"></i> Dashboard</button>
-  <button data-section="customers"><i data-lucide="users"></i> Customers</button>
-  <button data-section="expenses"><i data-lucide="wallet"></i> Expenses</button>
-  <button data-section="reports"><i data-lucide="chart-no-axes-combined"></i> Reports</button>
-  <button data-section="history"><i data-lucide="history"></i> History</button>
- </nav>
+  <div class="nav-label">WORKSPACE</div>
+  <nav class="nav">
+    <a href="#" class="active" data-section="dashboard"><span class="ico">▦</span>Dashboard</a>
+    <a href="customer.html"><span class="ico">♙</span>Customers</a>
+    <a href="#" data-section="expenses"><span class="ico">↗</span>Expenses</a>
+    <a href="#" data-section="reports"><span class="ico">▤</span>Reports</a>
+    <a href="#" data-section="history"><span class="ico">◷</span>History</a>
+  </nav>
 
- <div class="nav-label">SYSTEM</div>
- <nav class="nav">
-  <button data-section="settings"><i data-lucide="settings"></i> Settings</button>
- </nav>
+  <div class="nav-label">COMMUNICATION</div>
+  <nav class="nav">
+    <a href="gmail.html"><span class="ico">✉</span>Gmail Dashboard</a>
+    <a href="gmail.html#send"><span class="ico">➤</span>Send Email</a>
+    <a href="gmail.html#settings"><span class="ico">⚙</span>Automatic Email Settings</a>
+    <a href="gmail.html#templates"><span class="ico">▧</span>Email Templates</a>
+    <a href="gmail.html#design"><span class="ico">◈</span>Email Design & Colors</a>
+    <a href="gmail.html#history"><span class="ico">☷</span>Email Send History</a>
+  </nav>
 
- <div class="sidebar-bottom">One Online Admin Panel<br>Customer & Billing Management</div>
+  <div class="side-bottom">
+    One Online<br>Customer & Billing Management<br>
+    <span id="apiState">Connecting to database…</span>
+  </div>
 </aside>
-
-<div class="mobile-overlay" id="mobileOverlay"></div>
 
 <main class="main">
 <header class="topbar">
- <div class="top-left">
-  <button class="menu-btn" id="menuBtn"><i data-lucide="menu"></i></button>
-  <div>
-   <div class="page-title" id="pageTitle">Dashboard</div>
-   <div class="page-sub">One Online / Management Panel</div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <button class="pill hamb" id="hamb">☰</button>
+    <div>
+      <div class="eyebrow">ONE ONLINE / MANAGEMENT</div>
+      <h1 id="pageTitle">Dashboard Overview</h1>
+    </div>
   </div>
- </div>
- <div class="top-actions">
-  <div class="status-pill"><span class="dot"></span> System connected</div>
-  <div class="avatar">OO</div>
- </div>
+  <div class="top-actions">
+    <span class="pill" id="todayText">Loading date…</span>
+    <button class="btn secondary" id="refreshBtn">↻ Refresh</button>
+    <a class="btn" href="customer.html" style="text-decoration:none">＋ Add Customer</a>
+  </div>
 </header>
 
-<div class="content">
-
-<!-- DASHBOARD -->
-<section class="section active" id="section-dashboard">
- <div class="welcome">
-  <div>
-   <h1>Good day, Admin 👋</h1>
-   <p>Here's what's happening with your internet business today.</p>
-  </div>
-  <button class="btn btn-primary" onclick="openCustomerModal()"><i data-lucide="plus"></i> Add Customer</button>
- </div>
-
- <div class="cards">
-  <div class="stat">
-   <div class="stat-top"><span class="stat-label">TOTAL DUE</span><span class="stat-icon"><i data-lucide="badge-dollar-sign"></i></span></div>
-   <div class="stat-value" id="cardDue">৳0</div>
-   <div class="stat-note">Outstanding customer balance</div>
-  </div>
-  <div class="stat">
-   <div class="stat-top"><span class="stat-label">COLLECTED</span><span class="stat-icon"><i data-lucide="wallet"></i></span></div>
-   <div class="stat-value" id="cardCollected">৳0</div>
-   <div class="stat-note">Collected this month</div>
-  </div>
-  <div class="stat">
-   <div class="stat-top"><span class="stat-label">UNPAID CUSTOMERS</span><span class="stat-icon"><i data-lucide="users"></i></span></div>
-   <div class="stat-value" id="cardUnpaid">0</div>
-   <div class="stat-note">Customers with pending due</div>
-  </div>
-  <div class="stat">
-   <div class="stat-top"><span class="stat-label">UPCOMING BILL</span><span class="stat-icon"><i data-lucide="calendar-clock"></i></span></div>
-   <div class="stat-value" id="cardUpcoming">0</div>
-   <div class="stat-note">Billing within next 7 days</div>
-  </div>
- </div>
-
- <div class="grid-main">
-  <div class="panel">
-   <div class="panel-head">
-    <div><h3>Customer Overview</h3><p>Latest customer billing status</p></div>
-    <button class="btn btn-light btn-sm" onclick="showSection('customers')">View all</button>
-   </div>
-   <div class="table-wrap">
-    <table>
-     <thead><tr><th>Customer</th><th>Package</th><th>Bill</th><th>Due</th><th>Billing Date</th><th>Status</th></tr></thead>
-     <tbody id="overviewRows"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody>
-    </table>
-   </div>
-  </div>
-
-  <div class="panel">
-   <div class="panel-head"><div><h3>Recent Activity</h3><p>Latest collection and updates</p></div></div>
-   <div class="panel-body"><div class="activity" id="recentActivity"><div class="empty">Loading...</div></div></div>
-  </div>
- </div>
-</section>
-
-<!-- CUSTOMERS -->
-<section class="section" id="section-customers">
- <div class="section-heading">
-  <div><h2>Customers</h2><p>Add, edit, collect payment, renew and manage customer accounts.</p></div>
-  <button class="btn btn-primary" onclick="openCustomerModal()"><i data-lucide="plus"></i> Add Customer</button>
- </div>
-
- <div class="panel">
-  <div class="panel-head">
-   <div class="toolbar" style="width:100%">
-    <div class="search"><i data-lucide="search"></i><input id="customerSearch" placeholder="Search name, IP, phone..." oninput="renderCustomers()"></div>
-    <div class="filters">
-     <select id="customerFilter" onchange="renderCustomers()">
-      <option value="all">All customers</option>
-      <option value="due">Has due</option>
-      <option value="paid">No due</option>
-      <option value="upcoming">Upcoming</option>
-      <option value="overdue">Overdue</option>
-     </select>
+<section class="section active" id="dashboard">
+  <div class="grid stats">
+    <div class="stat" style="--glow:#fb7185">
+      <div class="stat-head">TOTAL DUE <span class="stat-icon">৳</span></div>
+      <div class="stat-value" id="totalDue">৳0</div>
+      <div class="stat-foot">Outstanding customer balance</div>
     </div>
-   </div>
+    <div class="stat" style="--glow:#22c58b">
+      <div class="stat-head">COLLECTED <span class="stat-icon">↗</span></div>
+      <div class="stat-value" id="totalCollected">৳0</div>
+      <div class="stat-foot">All recorded collections</div>
+    </div>
+    <div class="stat" style="--glow:#fbbf24">
+      <div class="stat-head">UNPAID <span class="stat-icon">◷</span></div>
+      <div class="stat-value" id="unpaid">0</div>
+      <div class="stat-foot">Customers with due</div>
+    </div>
+    <div class="stat" style="--glow:#22d3ee">
+      <div class="stat-head">UPCOMING <span class="stat-icon">⌁</span></div>
+      <div class="stat-value" id="upcoming">0</div>
+      <div class="stat-foot">Due date within 3 days</div>
+    </div>
+    <div class="stat" style="--glow:#a78bfa">
+      <div class="stat-head">EXPENSES <span class="stat-icon">−</span></div>
+      <div class="stat-value" id="totalExpenses">৳0</div>
+      <div class="stat-foot">Recorded business expenses</div>
+    </div>
   </div>
-  <div class="table-wrap">
-   <table>
-    <thead><tr><th>Customer</th><th>IP / Phone</th><th>Package</th><th>Monthly Bill</th><th>Due</th><th>Billing Date</th><th>Status</th><th>Actions</th></tr></thead>
-    <tbody id="customerRows"><tr><td colspan="8" class="empty">Loading...</td></tr></tbody>
-   </table>
+
+  <div class="grid two-col">
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Collection & Expense Overview</h2>
+        <span class="small muted">All time</span>
+      </div>
+      <div class="chart-wrap"><canvas id="overviewChart"></canvas></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h2>Quick Actions</h2><span class="small muted">Shortcuts</span></div>
+      <div class="quick-grid">
+        <button class="quick" onclick="location.href='customer.html'">
+          <strong>＋ Add Customer</strong><span>Create a new customer profile</span>
+        </button>
+        <button class="quick" onclick="showSection('expenses')">
+          <strong>↗ Add Expense</strong><span>Record a business cost</span>
+        </button>
+        <button class="quick" onclick="showSection('reports')">
+          <strong>▤ View Reports</strong><span>Filter collection and expenses</span>
+        </button>
+        <button class="quick" onclick="location.href='gmail.html'">
+          <strong>✉ Gmail Settings</strong><span>Manage customer emails</span>
+        </button>
+      </div>
+      <div style="margin-top:15px;padding:13px;background:#17263b;border-radius:11px">
+        <div class="small muted">NET COLLECTION</div>
+        <div style="font-size:23px;font-weight:800;margin-top:5px" id="netAmount">৳0</div>
+        <div class="small muted">Total collected minus recorded expenses</div>
+      </div>
+    </div>
   </div>
- </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h2>Recent Customers</h2>
+      <a href="customer.html" class="small" style="color:#79a6ff;text-decoration:none">View all →</a>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Customer</th><th>IP</th><th>Phone</th><th>Package</th><th>Billing Date</th><th>Due</th><th>Status</th></tr></thead>
+        <tbody id="recentCustomers"><tr><td colspan="7" class="empty">Loading customers…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
 </section>
 
-<!-- EXPENSES -->
-<section class="section" id="section-expenses">
- <div class="section-heading">
-  <div><h2>Expenses</h2><p>Record line renewal, new line work and other business costs.</p></div>
-  <button class="btn btn-primary" onclick="openExpenseModal()"><i data-lucide="plus"></i> Add Expense</button>
- </div>
-
- <div class="cards" style="grid-template-columns:repeat(2,minmax(0,1fr))">
-  <div class="stat">
-   <div class="stat-top"><span class="stat-label">TOTAL EXPENSES</span><span class="stat-icon"><i data-lucide="receipt"></i></span></div>
-   <div class="stat-value" id="expenseTotal">৳0</div><div class="stat-note">All recorded expenses</div>
+<section class="section" id="expenses">
+  <div class="panel">
+    <div class="panel-head">
+      <div><h2>Business Expenses</h2>
+      <div class="small muted" style="margin-top:5px">Track line renewal, new line work, equipment and other costs.</div></div>
+      <button class="btn" id="addExpenseBtn">＋ Add Expense</button>
+    </div>
+    <div class="toolbar" style="margin-bottom:14px">
+      <input class="field" id="expenseSearch" placeholder="Search expenses…" style="flex:1;min-width:180px">
+      <select class="field" id="expenseCategory">
+        <option value="">All categories</option><option>New Line</option>
+        <option>Line Renewal</option><option>Equipment</option>
+        <option>Transport</option><option>Salary</option><option>Office</option><option>Other</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <table><thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Method</th><th>Amount</th><th>Actions</th></tr></thead>
+      <tbody id="expenseRows"><tr><td colspan="6" class="empty">Loading…</td></tr></tbody></table>
+    </div>
   </div>
-  <div class="stat">
-   <div class="stat-top"><span class="stat-label">THIS MONTH</span><span class="stat-icon"><i data-lucide="calendar-days"></i></span></div>
-   <div class="stat-value" id="expenseMonth">৳0</div><div class="stat-note">Expenses this month</div>
-  </div>
- </div>
-
- <div class="panel">
-  <div class="panel-head">
-   <h3>Expense History</h3>
-   <div class="search"><i data-lucide="search"></i><input id="expenseSearch" placeholder="Search expenses..." oninput="renderExpenses()"></div>
-  </div>
-  <div class="table-wrap">
-   <table>
-    <thead><tr><th>Date</th><th>Expense</th><th>Category</th><th>Description</th><th>Amount</th><th>Actions</th></tr></thead>
-    <tbody id="expenseRows"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody>
-   </table>
-  </div>
- </div>
 </section>
 
-<!-- REPORTS -->
-<section class="section" id="section-reports">
- <div class="section-heading"><div><h2>Reports</h2><p>Choose a date range to calculate collections and expenses.</p></div></div>
- <div class="panel">
-  <div class="panel-head"><h3>Date Range Report</h3></div>
-  <div class="panel-body">
-   <div class="report-filters">
-    <div class="form-group"><label>From date</label><input type="date" id="reportFrom"></div>
-    <div class="form-group"><label>To date</label><input type="date" id="reportTo"></div>
-    <button class="btn btn-primary" onclick="loadReport()">Generate Report</button>
-    <button class="btn btn-light" onclick="downloadReport()">PDF Download</button>
-   </div>
-   <div id="reportOutput"><div class="empty">Select a date range and generate your report.</div></div>
+<section class="section" id="reports">
+  <div class="panel">
+    <div class="panel-head">
+      <div><h2>Financial Reports</h2><div class="small muted" style="margin-top:5px">Choose a date range to calculate collections and expenses.</div></div>
+    </div>
+    <div class="toolbar">
+      <label class="small muted">From <input type="date" class="field" id="reportFrom"></label>
+      <label class="small muted">To <input type="date" class="field" id="reportTo"></label>
+      <button class="btn" id="runReport">Generate Report</button>
+      <button class="btn secondary" id="pdfReport">Download PDF</button>
+    </div>
+    <div class="report-kpis">
+      <div class="report-kpi"><small>Total Collection</small><b id="reportCollect">৳0</b></div>
+      <div class="report-kpi"><small>Total Expenses</small><b id="reportExpense">৳0</b></div>
+      <div class="report-kpi"><small>Net Amount</small><b id="reportNet">৳0</b></div>
+    </div>
+    <div class="panel-head"><h2>Collections</h2></div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Date</th><th>Customer</th><th>IP</th><th>Method</th><th>Amount</th><th>Remaining Due</th></tr></thead>
+      <tbody id="reportCollections"><tr><td colspan="6" class="empty">Generate a report.</td></tr></tbody>
+    </table></div>
+    <div class="panel-head" style="margin-top:25px"><h2>Expenses</h2></div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Method</th><th>Amount</th></tr></thead>
+      <tbody id="reportExpenses"><tr><td colspan="5" class="empty">Generate a report.</td></tr></tbody>
+    </table></div>
   </div>
- </div>
 </section>
 
-<!-- HISTORY -->
-<section class="section" id="section-history">
- <div class="section-heading"><div><h2>History</h2><p>Review customer, collection, renewal and expense records.</p></div></div>
- <div class="panel">
-  <div class="panel-head">
-   <div class="toolbar">
-    <select id="historyType" onchange="loadHistory()">
-     <option value="collect">Collection History</option>
-     <option value="customer">Customer History</option>
-     <option value="renew">Renew History</option>
-     <option value="expense">Expense History</option>
-     <option value="activity">Activity Logs</option>
-    </select>
-   </div>
-   <button class="btn btn-light btn-sm" onclick="loadHistory()">Refresh</button>
+<section class="section" id="history">
+  <div class="panel">
+    <div class="panel-head">
+      <div><h2>Activity History</h2><div class="small muted" style="margin-top:5px">Customer, collection, renewal, expense and system activity.</div></div>
+      <button class="btn secondary" id="historyRefresh">↻ Reload</button>
+    </div>
+    <div class="toolbar" style="margin-bottom:14px">
+      <select class="field" id="historyType">
+        <option value="all">All activity</option><option value="collect">Collections</option>
+        <option value="renew">Renewals</option><option value="customer">Customer changes</option>
+        <option value="expense">Expenses</option><option value="activity">System logs</option>
+      </select>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Type</th><th>Timestamp</th><th>Details</th></tr></thead>
+      <tbody id="historyRows"><tr><td colspan="3" class="empty">Loading history…</td></tr></tbody>
+    </table></div>
   </div>
-  <div class="table-wrap">
-   <table><thead id="historyHead"></thead><tbody id="historyRows"><tr><td class="empty">Select history type.</td></tr></tbody></table>
-  </div>
- </div>
 </section>
-
-<!-- SETTINGS -->
-<section class="section" id="section-settings">
- <div class="section-heading"><div><h2>Settings</h2><p>Connection details for the One Online customer database.</p></div></div>
- <div class="panel">
-  <div class="panel-head"><h3>API Connection</h3></div>
-  <div class="panel-body">
-   <div class="form-group"><label>Customer API URL</label><input id="apiUrlInput" readonly></div>
-   <div style="display:flex;gap:9px;margin-top:14px;flex-wrap:wrap">
-    <button class="btn btn-light" onclick="copyApi()">Copy API URL</button>
-    <button class="btn btn-primary" onclick="refreshAll()">Refresh Data</button>
-   </div>
-   <p style="font-size:11px;color:#7b879b;line-height:1.7;margin-top:18px">
-    Gmail automation settings will be connected separately.
-   </p>
-  </div>
- </div>
-</section>
-
-</div>
 </main>
 </div>
 
-<!-- CUSTOMER MODAL -->
-<div class="overlay" id="customerModal">
- <div class="modal">
-  <div class="modal-head"><h3 id="customerModalTitle">Add New Customer</h3><button class="close" onclick="closeModal('customerModal')">✕</button></div>
-  <div class="modal-body">
-   <form id="customerForm">
-    <input type="hidden" name="customerId">
-    <div class="form-grid">
-     <div class="form-group"><label>Customer Name *</label><input name="name" required></div>
-     <div class="form-group"><label>IP Address</label><input name="ip"></div>
-     <div class="form-group"><label>Phone Number</label><input name="phone"></div>
-     <div class="form-group"><label>Reason</label><input name="reason"></div>
-     <div class="form-group"><label>Package</label><input name="package"></div>
-     <div class="form-group"><label>Customer Bill (৳)</label><input name="customerBill" type="number" min="0" step="0.01"></div>
-     <div class="form-group"><label>Bill Trigger</label><input name="billTrigger"></div>
-     <div class="form-group"><label>Internet Bill (৳)</label><input name="internetBill" type="number" min="0" step="0.01"></div>
-     <div class="form-group"><label>Billing Date</label><input name="billingDate" type="date"></div>
-     <div class="form-group"><label>Bill Trigger 2</label><input name="billTrigger2"></div>
-     <div class="form-group"><label>Renew</label><input name="renew"></div>
-     <div class="form-group"><label>Area</label><input name="area"></div>
-     <div class="form-group"><label>Address</label><input name="address"></div>
-     <div class="form-group"><label>Location</label><input name="location"></div>
-     <div class="form-group"><label>ONU</label><input name="onu"></div>
-     <div class="form-group"><label>Faibar</label><input name="fiber"></div>
-     <div class="form-group"><label>Customer Gmail</label><input name="gmail" type="email"></div>
-     <div class="form-group"><label>Due (৳)</label><input name="due" type="number" min="0" step="0.01"></div>
-    </div>
-    <div class="form-actions">
-     <button type="button" class="btn btn-light" onclick="closeModal('customerModal')">Cancel</button>
-     <button class="btn btn-primary" type="submit" id="customerSaveBtn">Save Customer</button>
-    </div>
-   </form>
+<div class="modal-back" id="expenseModal">
+<div class="modal">
+  <h3 id="expenseModalTitle">Add Expense</h3>
+  <p>Enter the expense details. This will be saved in your Expense History.</p>
+  <input type="hidden" id="expenseId">
+  <div class="form-row">
+    <input class="field" type="date" id="expenseDate">
+    <select class="field" id="expenseMethod"><option>Cash</option><option>bKash</option><option>Nagad</option><option>Bank</option><option>Other</option></select>
   </div>
- </div>
+  <div class="form-row">
+    <select class="field" id="expenseCat"><option>New Line</option><option>Line Renewal</option><option>Equipment</option><option>Transport</option><option>Salary</option><option>Office</option><option>Other</option></select>
+    <input class="field" type="number" min="0.01" step="0.01" id="expenseAmount" placeholder="Amount (৳)">
+  </div>
+  <input class="field" style="width:100%;margin-bottom:10px" id="expenseDesc" placeholder="Description (e.g. Fiber cable purchase)">
+  <textarea class="field" style="width:100%;min-height:75px" id="expenseNote" placeholder="Note (optional)"></textarea>
+  <div class="modal-actions">
+    <button class="btn secondary" onclick="closeExpenseModal()">Cancel</button>
+    <button class="btn" id="saveExpense">Save Expense</button>
+  </div>
+</div>
 </div>
 
-<!-- COLLECT MODAL -->
-<div class="overlay" id="collectModal">
- <div class="modal" style="max-width:480px">
-  <div class="modal-head"><h3>Collect Payment</h3><button class="close" onclick="closeModal('collectModal')">✕</button></div>
-  <div class="modal-body">
-   <form id="collectForm">
-    <input type="hidden" name="customerId">
-    <div class="form-grid" style="grid-template-columns:1fr">
-     <div class="form-group"><label>Customer</label><input name="customerName" readonly></div>
-     <div class="form-group"><label>Collection Amount (৳) *</label><input name="amount" type="number" min="0" step="0.01" required></div>
-     <div class="form-group"><label>Payment Method</label><select name="paymentMethod"><option>Cash</option><option>bKash</option><option>Nagad</option><option>Bank</option><option>Other</option></select></div>
-     <div class="form-group"><label>Note</label><textarea name="note" rows="2"></textarea></div>
-    </div>
-    <div class="form-actions"><button type="button" class="btn btn-light" onclick="closeModal('collectModal')">Cancel</button><button class="btn btn-success" type="submit">Confirm Collect</button></div>
-   </form>
-  </div>
- </div>
-</div>
-
-<!-- EXPENSE MODAL -->
-<div class="overlay" id="expenseModal">
- <div class="modal" style="max-width:550px">
-  <div class="modal-head"><h3 id="expenseModalTitle">Add Expense</h3><button class="close" onclick="closeModal('expenseModal')">✕</button></div>
-  <div class="modal-body">
-   <form id="expenseForm">
-    <input type="hidden" name="expenseId">
-    <div class="form-grid" style="grid-template-columns:1fr 1fr">
-     <div class="form-group"><label>Expense Title *</label><input name="title" required placeholder="New line work"></div>
-     <div class="form-group"><label>Category</label><select name="category"><option>Line Renewal</option><option>New Line</option><option>Equipment</option><option>Transport</option><option>Office</option><option>Other</option></select></div>
-     <div class="form-group"><label>Amount (৳) *</label><input name="amount" type="number" min="0" step="0.01" required></div>
-     <div class="form-group"><label>Description</label><input name="description"></div>
-    </div>
-    <div class="form-actions"><button type="button" class="btn btn-light" onclick="closeModal('expenseModal')">Cancel</button><button class="btn btn-primary" type="submit">Save Expense</button></div>
-   </form>
-  </div>
- </div>
-</div>
-
-<div class="loader" id="loader"><div class="spinner"></div></div>
 <div class="toast" id="toast"></div>
 
 <script>
-/* ================= API CONFIGURATION ================= */
+const CUSTOMER_API='https://script.google.com/macros/s/AKfycbweR6IZ0sR2xoxfOUIAxSlKb3clXrKtXY7a4g9WpjxItag9jAUcLH8dW12n_5EtHljE/exec';
+const GMAIL_API='https://script.google.com/macros/s/AKfycbyioEIFcRitWzLOpr_6YolutiNN0uiUb4pqpb_awVf_bFZoOTlCFPIx5cPnKR3t_4o_kw/exec';
 
-const API_URL = "https://script.google.com/macros/s/AKfycbweR6IZ0sR2xoxfOUIAxSlKb3clXrKtXY7a4g9WpjxItag9jAUcLH8dW12n_5EtHljE/exec";
+let customers=[],expenses=[],chart;
+const $=id=>document.getElementById(id);
+const money=n=>'৳'+Number(n||0).toLocaleString('en-BD',{maximumFractionDigits:2});
 
-let customers = [];
-let expenses = [];
-let dashboardData = {};
-let reportData = null;
-let historyData = [];
-
-const $ = id => document.getElementById(id);
-
-const money = value =>
- "৳" + Number(value || 0).toLocaleString("en-BD",{maximumFractionDigits:2});
-
-const esc = value =>
- String(value ?? "").replace(/[&<>"']/g,c=>({
-  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
- }[c]));
-
-function showLoader(show){
- $("loader").classList.toggle("show",!!show);
+function toast(msg){
+ const t=$('toast');t.textContent=msg;t.classList.add('show');
+ setTimeout(()=>t.classList.remove('show'),3000);
 }
 
-function toast(message){
- const t=$("toast");
- t.textContent=message;
- t.classList.add("show");
- setTimeout(()=>t.classList.remove("show"),3000);
+async function getApi(base,action,params={}){
+ const u=new URL(base);
+ u.searchParams.set('action',action);
+ Object.entries(params).forEach(([k,v])=>u.searchParams.set(k,v));
+ const r=await fetch(u.toString(),{method:'GET',redirect:'follow'});
+ const j=await r.json();
+ if(!j.success)throw Error(j.message||'Request failed');
+ return j;
 }
 
-function apiGet(action,params={}){
- const url=new URL(API_URL);
- url.searchParams.set("action",action);
- Object.entries(params).forEach(([key,value])=>{
-  url.searchParams.set(key,value ?? "");
+async function postApi(base,data){
+ const r=await fetch(base,{
+  method:'POST',
+  headers:{'Content-Type':'text/plain;charset=utf-8'},
+  body:JSON.stringify(data),
+  redirect:'follow'
  });
- return fetch(url.toString(),{method:"GET",redirect:"follow"})
-  .then(response=>response.json());
+ const j=await r.json();
+ if(!j.success)throw Error(j.message||'Request failed');
+ return j;
 }
 
-function apiPost(payload){
- return fetch(API_URL,{
-  method:"POST",
-  redirect:"follow",
-  headers:{"Content-Type":"text/plain;charset=utf-8"},
-  body:JSON.stringify(payload)
- }).then(response=>response.json());
-}
-
-function ensureOk(result){
- if(!result || result.success===false){
-  throw new Error(result?.message || result?.error || "Request failed");
- }
- return result;
-}
-
-function unwrapArray(result,keys){
- if(Array.isArray(result))return result;
- for(const key of keys){
-  if(Array.isArray(result?.[key]))return result[key];
- }
- if(result?.data){
-  if(Array.isArray(result.data))return result.data;
-  for(const key of keys){
-   if(Array.isArray(result.data[key]))return result.data[key];
-  }
- }
- return [];
-}
-
-function val(obj,...keys){
- for(const key of keys){
-  if(obj && obj[key]!==undefined && obj[key]!==null && obj[key]!==""){
-   return obj[key];
-  }
- }
- return "";
-}
-
-function dateText(value){
- if(!value)return "—";
- const d=new Date(value);
- if(isNaN(d))return String(value);
- return d.toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"});
-}
-
-function dateInput(value){
- if(!value)return "";
- const d=new Date(value);
- if(isNaN(d))return String(value).slice(0,10);
- return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
-}
-
-function getDue(c){
- return Number(val(c,"due","Due")||0);
-}
-
-function getBill(c){
- return Number(val(c,"customerBill","Customer Bill","customarBill","bill")||0);
-}
-
-function getName(c){
- return val(c,"name","Name")||"Unnamed";
-}
-
-function getId(c){
- return val(c,"customerId","Customer ID","id");
-}
-
-function getBilling(c){
- return val(c,"billingDate","Biling date","Billing Date","billing_date");
+function fmtDate(v){
+ if(!v)return '—';
+ const d=new Date(v+'T00:00:00');
+ return isNaN(d)?v:d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
 }
 
 function statusFor(c){
- const due=getDue(c);
- const billing=getBilling(c);
+ const due=Number(c.due||0);
+ const d=c.billingDate?Math.round((new Date(c.billingDate+'T00:00:00')-new Date(new Date().toDateString()))/86400000):999;
+ if(due<=0)return ['Paid','ok'];
+ if(d<0)return ['Overdue','over'];
+ if(d<=3)return ['Upcoming','up'];
+ return ['Due','due'];
+}
 
- if(due>0)return "Due";
+function showSection(id){
+ document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active',s.id===id));
+ document.querySelectorAll('.nav a[data-section]').forEach(a=>a.classList.toggle('active',a.dataset.section===id));
+ const names={dashboard:'Dashboard Overview',expenses:'Business Expenses',reports:'Financial Reports',history:'Activity History'};
+ $('pageTitle').textContent=names[id]||'Dashboard';
+ $('sidebar').classList.remove('open');
+ if(id==='expenses')loadExpenses();
+ if(id==='history')loadHistory();
+}
+document.querySelectorAll('[data-section]').forEach(a=>a.addEventListener('click',e=>{
+ e.preventDefault();showSection(a.dataset.section);
+}));
+$('hamb').onclick=()=>$('sidebar').classList.toggle('open');
+$('todayText').textContent=new Date().toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});
 
- if(billing){
-  const d=new Date(billing);
-  const now=new Date();
-  now.setHours(0,0,0,0);
+async function loadDashboard(){
+ try{
+  const d=await getApi(CUSTOMER_API,'dashboard');
+  customers=d.customers||[];
+  $('apiState').textContent='Customer database connected';
+  $('apiState').style.color='#22c58b';
+  $('totalDue').textContent=money(d.totalDue);
+  $('totalCollected').textContent=money(d.totalCollected);
+  $('unpaid').textContent=d.unpaid||0;
+  $('upcoming').textContent=d.upcoming||0;
+  $('totalExpenses').textContent=money(d.totalExpenses);
+  $('netAmount').textContent=money((d.totalCollected||0)-(d.totalExpenses||0));
+  renderRecent();
+  renderChart(d.totalCollected||0,d.totalExpenses||0);
+ }catch(e){
+  $('apiState').textContent='API connection error';
+  $('apiState').style.color='#fb7185';
+  toast('Dashboard error: '+e.message);
+ }
+}
 
-  if(!isNaN(d)){
-   d.setHours(0,0,0,0);
-   if(d<now)return "Overdue";
-   const diff=Math.ceil((d-now)/86400000);
-   if(diff<=7)return "Upcoming";
+function renderRecent(){
+ const list=[...customers].sort((a,b)=>String(b.updatedAt||'').localeCompare(String(a.updatedAt||''))).slice(0,8);
+ $('recentCustomers').innerHTML=list.length?list.map(c=>{
+  const [s,cl]=statusFor(c);
+  return `<tr>
+   <td><b>${esc(c.name||'Unnamed')}</b></td>
+   <td>${esc(c.ip)}</td><td>${esc(c.phone)}</td>
+   <td>${esc(c.package)}</td><td>${fmtDate(c.billingDate)}</td>
+   <td>${money(c.due)}</td><td><span class="status ${cl}">${s}</span></td>
+  </tr>`;
+ }).join(''):'<tr><td colspan="7" class="empty">No customers found.</td></tr>';
+}
+
+function renderChart(col,exp){
+ const ctx=$('overviewChart');
+ if(chart)chart.destroy();
+ chart=new Chart(ctx,{
+  type:'bar',
+  data:{labels:['Collection','Expenses'],datasets:[{
+   data:[col,exp],backgroundColor:['#22c58b','#fb7185'],
+   borderRadius:9,maxBarThickness:65
+  }]},
+  options:{
+   responsive:true,maintainAspectRatio:false,
+   plugins:{legend:{display:false}},
+   scales:{
+    x:{ticks:{color:'#91a1b8'},grid:{display:false}},
+    y:{ticks:{color:'#91a1b8'},grid:{color:'#26364e'}}
+   }
   }
- }
- return "Paid";
+ });
 }
 
-function statusBadge(status){
- const css={
-  Paid:"badge-green",
-  Due:"badge-blue",
-  Overdue:"badge-red",
-  Upcoming:"badge-orange"
- };
- return `<span class="badge ${css[status]||"badge-blue"}">${esc(status)}</span>`;
-}
-
-/* ================= LOAD DATA ================= */
-
-async function refreshAll(){
- showLoader(true);
-
+async function loadExpenses(){
  try{
-  const [dashboard,customerResult,expenseResult]=await Promise.all([
-   apiGet("dashboard"),
-   apiGet("customers"),
-   apiGet("expenses")
-  ]);
-
-  dashboardData=ensureOk(dashboard);
-  customers=unwrapArray(ensureOk(customerResult),["customers","rows"]);
-  expenses=unwrapArray(ensureOk(expenseResult),["expenses","rows"]);
-
-  renderDashboard();
-  renderCustomers();
+  const d=await getApi(CUSTOMER_API,'expenses');
+  expenses=d.expenses||[];
   renderExpenses();
-
- }catch(error){
-  console.error(error);
-  toast("Load failed: "+error.message);
- }finally{
-  showLoader(false);
- }
+ }catch(e){toast(e.message)}
 }
-
-/* ================= DASHBOARD ================= */
-
-function renderDashboard(){
- const d=dashboardData.dashboard || dashboardData.summary || dashboardData;
-
- const totalDue=val(d,"totalDue","total_due","dueTotal")
-  ||customers.reduce((sum,c)=>sum+getDue(c),0);
-
- const collected=val(d,"collected","totalCollected","collectedThisMonth")||0;
-
- const unpaid=val(d,"unpaid","unpaidCustomers")
-  ||customers.filter(c=>getDue(c)>0).length;
-
- const upcoming=val(d,"upcoming","upcomingCustomers")
-  ||customers.filter(c=>statusFor(c)==="Upcoming").length;
-
- $("cardDue").textContent=money(totalDue);
- $("cardCollected").textContent=money(collected);
- $("cardUnpaid").textContent=unpaid;
- $("cardUpcoming").textContent=upcoming;
-
- const latest=[...customers].slice(-7).reverse();
-
- $("overviewRows").innerHTML=latest.length
- ?latest.map(c=>`
-  <tr>
-   <td><div class="customer-name">${esc(getName(c))}</div><div class="subtext">${esc(val(c,"phone","Phone"))}</div></td>
-   <td>${esc(val(c,"package","Package")||"—")}</td>
-   <td>${money(getBill(c))}</td>
-   <td>${money(getDue(c))}</td>
-   <td>${dateText(getBilling(c))}</td>
-   <td>${statusBadge(statusFor(c))}</td>
-  </tr>
- `).join("")
- :'<tr><td colspan="6" class="empty">No customers found.</td></tr>';
-
- const recent=unwrapArray(dashboardData,["recentActivity","activity","recent"]);
-
- $("recentActivity").innerHTML=recent.length
- ?recent.slice(0,6).map(x=>`
-  <div class="activity-item">
-   <div class="activity-icon"><i data-lucide="activity"></i></div>
-   <div>
-    <strong>${esc(val(x,"action","type","title")||"Activity")}</strong>
-    <small>${esc(val(x,"customerName","name","details")||"")} · ${dateText(val(x,"date","timestamp"))}</small>
-   </div>
-  </div>
- `).join("")
- :'<div class="empty">No recent activity.</div>';
-
- icons();
-}
-
-/* ================= CUSTOMER MANAGEMENT ================= */
-
-function renderCustomers(){
- const query=($("customerSearch")?.value||"").toLowerCase();
- const filter=$("customerFilter")?.value||"all";
-
- let list=customers.filter(c=>{
-  const text=[
-   getName(c),
-   val(c,"ip","IP"),
-   val(c,"phone","Phone"),
-   val(c,"package","Package")
-  ].join(" ").toLowerCase();
-
-  return text.includes(query);
- });
-
- if(filter==="due")list=list.filter(c=>getDue(c)>0);
- if(filter==="paid")list=list.filter(c=>getDue(c)<=0);
- if(filter==="upcoming")list=list.filter(c=>statusFor(c)==="Upcoming");
- if(filter==="overdue")list=list.filter(c=>statusFor(c)==="Overdue");
-
- $("customerRows").innerHTML=list.length
- ?list.map(c=>`
-  <tr>
-   <td>
-    <div class="customer-name">${esc(getName(c))}</div>
-    <div class="subtext">${esc(val(c,"gmail","Gmail's"))}</div>
-   </td>
-   <td>
-    ${esc(val(c,"ip","IP")||"—")}
-    <div class="subtext">${esc(val(c,"phone","Phone")||"")}</div>
-   </td>
-   <td>${esc(val(c,"package","Package")||"—")}</td>
-   <td>${money(getBill(c))}</td>
-   <td><b>${money(getDue(c))}</b></td>
-   <td>${dateText(getBilling(c))}</td>
-   <td>${statusBadge(statusFor(c))}</td>
-   <td>
-    <div class="actions">
-     <button class="icon-btn" title="Edit" onclick="editCustomer('${esc(getId(c))}')"><i data-lucide="pencil"></i></button>
-     <button class="icon-btn" title="Collect" onclick="openCollect('${esc(getId(c))}')"><i data-lucide="wallet"></i></button>
-     <button class="icon-btn" title="Renew" onclick="renewCustomer('${esc(getId(c))}')"><i data-lucide="refresh-cw"></i></button>
-     <button class="icon-btn" title="Delete" onclick="deleteCustomer('${esc(getId(c))}')"><i data-lucide="trash-2"></i></button>
-    </div>
-   </td>
-  </tr>
- `).join("")
- :'<tr><td colspan="8" class="empty">No matching customers.</td></tr>';
-
- icons();
-}
-
-function openCustomerModal(customer=null){
- const form=$("customerForm");
- form.reset();
-
- form.elements.customerId.value=customer?getId(customer):"";
- $("customerModalTitle").textContent=customer?"Edit Customer":"Add New Customer";
- $("customerSaveBtn").textContent=customer?"Update Customer":"Save Customer";
-
- if(customer){
-  const fields={
-   name:["name","Name"],
-   ip:["ip","IP"],
-   phone:["phone","Phone"],
-   reason:["reason","Reason"],
-   package:["package","Package"],
-   customerBill:["customerBill","Customar Bill","customer bill"],
-   billTrigger:["billTrigger","Bill Triger"],
-   internetBill:["internetBill","Internet bill"],
-   billingDate:["billingDate","Biling date"],
-   billTrigger2:["billTrigger2","Bill triger"],
-   renew:["renew","Renew"],
-   area:["area","Ariya"],
-   address:["address","Address"],
-   location:["location","Location"],
-   onu:["onu","Onu"],
-   fiber:["fiber","Faibar"],
-   gmail:["gmail","Gmail's"],
-   due:["due","Due"]
-  };
-
-  Object.entries(fields).forEach(([field,keys])=>{
-   form.elements[field].value=val(customer,...keys);
-  });
-
-  form.elements.billingDate.value=dateInput(getBilling(customer));
- }
-
- $("customerModal").classList.add("show");
-}
-
-function closeModal(id){
- $(id).classList.remove("show");
-}
-
-function editCustomer(id){
- const customer=customers.find(c=>String(getId(c))===String(id));
- if(customer)openCustomerModal(customer);
-}
-
-$("customerForm").addEventListener("submit",async event=>{
- event.preventDefault();
-
- const form=event.currentTarget;
- const payload=Object.fromEntries(new FormData(form).entries());
-
- payload.action=payload.customerId?"updateCustomer":"addCustomer";
-
- ["customerBill","internetBill","due"].forEach(k=>{
-  payload[k]=Number(payload[k]||0);
- });
-
- if(!payload.name&&!payload.phone){
-  toast("Enter customer name or phone number.");
-  return;
- }
-
- showLoader(true);
-
- try{
-  ensureOk(await apiPost(payload));
-  closeModal("customerModal");
-  toast(payload.action==="addCustomer"?"Customer added successfully.":"Customer updated successfully.");
-  await refreshAll();
- }catch(error){
-  toast("Save failed: "+error.message);
- }finally{
-  showLoader(false);
- }
-});
-
-/* ================= COLLECT PAYMENT ================= */
-
-function openCollect(id){
- const customer=customers.find(c=>String(getId(c))===String(id));
- if(!customer)return;
-
- const form=$("collectForm");
- form.reset();
- form.elements.customerId.value=getId(customer);
- form.elements.customerName.value=getName(customer);
- form.elements.amount.value=getDue(customer)>0?getDue(customer):getBill(customer);
-
- $("collectModal").classList.add("show");
-}
-
-$("collectForm").addEventListener("submit",async event=>{
- event.preventDefault();
-
- const form=event.currentTarget;
- const payload=Object.fromEntries(new FormData(form).entries());
-
- payload.action="collect";
- payload.amount=Number(payload.amount||0);
-
- if(payload.amount<=0){
-  toast("Enter a valid collection amount.");
-  return;
- }
-
- showLoader(true);
-
- try{
-  ensureOk(await apiPost(payload));
-  closeModal("collectModal");
-  toast("Payment collected.");
-  await refreshAll();
- }catch(error){
-  toast("Collect failed: "+error.message);
- }finally{
-  showLoader(false);
- }
-});
-
-/* ================= RENEW / DELETE CUSTOMER ================= */
-
-async function renewCustomer(id){
- const customer=customers.find(c=>String(getId(c))===String(id));
- if(!customer)return;
-
- if(!confirm("Renew "+getName(customer)+" for one month?"))return;
-
- showLoader(true);
-
- try{
-  ensureOk(await apiPost({
-   action:"renew",
-   customerId:id,
-   note:"Renewed from dashboard"
-  }));
-
-  toast("Customer renewed.");
-  await refreshAll();
-
- }catch(error){
-  toast("Renew failed: "+error.message);
- }finally{
-  showLoader(false);
- }
-}
-
-async function deleteCustomer(id){
- const customer=customers.find(c=>String(getId(c))===String(id));
- if(!customer)return;
-
- if(!confirm("Delete "+getName(customer)+"? This action cannot be undone."))return;
-
- showLoader(true);
-
- try{
-  ensureOk(await apiPost({
-   action:"deleteCustomer",
-   customerId:id
-  }));
-
-  toast("Customer deleted.");
-  await refreshAll();
-
- }catch(error){
-  toast("Delete failed: "+error.message);
- }finally{
-  showLoader(false);
- }
-}
-
-/* ================= EXPENSES ================= */
 
 function renderExpenses(){
- const query=($("expenseSearch")?.value||"").toLowerCase();
-
- const list=expenses.filter(x=>{
-  return [
-   val(x,"title","Title"),
-   val(x,"category","Category"),
-   val(x,"description","Description")
-  ].join(" ").toLowerCase().includes(query);
- });
-
- const total=expenses.reduce((sum,x)=>sum+Number(val(x,"amount","Amount")||0),0);
-
- const now=new Date();
-
- const month=expenses.filter(x=>{
-  const d=new Date(val(x,"date","Date","createdAt"));
-  return !isNaN(d)&&d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();
- }).reduce((sum,x)=>sum+Number(val(x,"amount","Amount")||0),0);
-
- $("expenseTotal").textContent=money(total);
- $("expenseMonth").textContent=money(month);
-
- $("expenseRows").innerHTML=list.length
- ?list.map(x=>`
+ const q=$('expenseSearch').value.toLowerCase();
+ const cat=$('expenseCategory').value;
+ const list=expenses.filter(x=>(!cat||x.category===cat)&&[x.category,x.description,x.note].join(' ').toLowerCase().includes(q));
+ $('expenseRows').innerHTML=list.length?list.map(x=>`
   <tr>
-   <td>${dateText(val(x,"date","Date","createdAt"))}</td>
-   <td><b>${esc(val(x,"title","Title"))}</b></td>
-   <td>${esc(val(x,"category","Category"))}</td>
-   <td>${esc(val(x,"description","Description")||"—")}</td>
-   <td><b>${money(val(x,"amount","Amount"))}</b></td>
-   <td>
-    <div class="actions">
-     <button class="icon-btn" onclick="editExpense('${esc(val(x,"expenseId","Expense ID","id"))}')"><i data-lucide="pencil"></i></button>
-     <button class="icon-btn" onclick="deleteExpense('${esc(val(x,"expenseId","Expense ID","id"))}')"><i data-lucide="trash-2"></i></button>
-    </div>
-   </td>
-  </tr>
- `).join("")
- :'<tr><td colspan="6" class="empty">No expenses recorded.</td></tr>';
-
- icons();
+   <td>${fmtDate(x.date)}</td><td>${esc(x.category)}</td>
+   <td>${esc(x.description)}</td><td>${esc(x.method)}</td>
+   <td><b>${money(x.amount)}</b></td>
+   <td><button class="btn secondary" onclick="editExpense('${x.expenseId}')">Edit</button>
+   <button class="btn danger" onclick="removeExpense('${x.expenseId}')">Delete</button></td>
+  </tr>`).join(''):'<tr><td colspan="6" class="empty">No expenses found.</td></tr>';
 }
+$('expenseSearch').oninput=renderExpenses;
+$('expenseCategory').onchange=renderExpenses;
 
-function openExpenseModal(expense=null){
- const form=$("expenseForm");
- form.reset();
-
- form.elements.expenseId.value=expense?val(expense,"expenseId","Expense ID","id"):"";
- $("expenseModalTitle").textContent=expense?"Edit Expense":"Add Expense";
-
- if(expense){
-  form.elements.title.value=val(expense,"title","Title");
-  form.elements.category.value=val(expense,"category","Category");
-  form.elements.amount.value=val(expense,"amount","Amount");
-  form.elements.description.value=val(expense,"description","Description");
- }
-
- $("expenseModal").classList.add("show");
+function openExpenseModal(x){
+ $('expenseModal').classList.add('show');
+ $('expenseId').value=x?.expenseId||'';
+ $('expenseModalTitle').textContent=x?'Edit Expense':'Add Expense';
+ $('expenseDate').value=x?.date||new Date().toISOString().slice(0,10);
+ $('expenseMethod').value=x?.method||'Cash';
+ $('expenseCat').value=x?.category||'New Line';
+ $('expenseAmount').value=x?.amount||'';
+ $('expenseDesc').value=x?.description||'';
+ $('expenseNote').value=x?.note||'';
 }
+function closeExpenseModal(){$('expenseModal').classList.remove('show')}
+window.closeExpenseModal=closeExpenseModal;
+$('addExpenseBtn').onclick=()=>openExpenseModal();
 
-function editExpense(id){
- const expense=expenses.find(x=>String(val(x,"expenseId","Expense ID","id"))===String(id));
- if(expense)openExpenseModal(expense);
-}
+window.editExpense=id=>{
+ const x=expenses.find(e=>e.expenseId===id);
+ if(x)openExpenseModal(x);
+};
 
-$("expenseForm").addEventListener("submit",async event=>{
- event.preventDefault();
-
- const payload=Object.fromEntries(new FormData(event.currentTarget).entries());
- payload.action=payload.expenseId?"updateExpense":"addExpense";
- payload.amount=Number(payload.amount||0);
-
- showLoader(true);
-
+window.removeExpense=async id=>{
+ if(!confirm('Delete this expense record?'))return;
  try{
-  ensureOk(await apiPost(payload));
-  closeModal("expenseModal");
-  toast("Expense saved.");
-  await refreshAll();
- }catch(error){
-  toast("Expense save failed: "+error.message);
- }finally{
-  showLoader(false);
- }
-});
+  await postApi(CUSTOMER_API,{action:'deleteExpense',expenseId:id});
+  toast('Expense deleted');
+  await loadExpenses();await loadDashboard();
+ }catch(e){toast(e.message)}
+};
 
-async function deleteExpense(id){
- if(!confirm("Delete this expense?"))return;
-
- showLoader(true);
-
+$('saveExpense').onclick=async()=>{
+ const id=$('expenseId').value;
+ const expense={
+  date:$('expenseDate').value,
+  method:$('expenseMethod').value,
+  category:$('expenseCat').value,
+  amount:$('expenseAmount').value,
+  description:$('expenseDesc').value,
+  note:$('expenseNote').value
+ };
+ if(!expense.amount||Number(expense.amount)<=0){toast('Enter a valid amount');return}
  try{
-  ensureOk(await apiPost({
-   action:"deleteExpense",
-   expenseId:id
-  }));
+  await postApi(CUSTOMER_API,{action:id?'updateExpense':'addExpense',expenseId:id,expense});
+  closeExpenseModal();
+  toast(id?'Expense updated':'Expense added');
+  await loadExpenses();await loadDashboard();
+ }catch(e){toast(e.message)}
+};
 
-  toast("Expense deleted.");
-  await refreshAll();
+function dateParams(){return {from:$('reportFrom').value,to:$('reportTo').value}}
 
- }catch(error){
-  toast("Delete failed: "+error.message);
- }finally{
-  showLoader(false);
- }
-}
-
-/* ================= REPORTS ================= */
-
-function setDefaultDates(){
- const now=new Date();
- const first=new Date(now.getFullYear(),now.getMonth(),1);
-
- $("reportFrom").value=dateInput(first);
- $("reportTo").value=dateInput(now);
-}
-
-async function loadReport(){
- const from=$("reportFrom").value;
- const to=$("reportTo").value;
-
- if(!from||!to){
-  toast("Choose both dates.");
-  return;
- }
-
- if(from>to){
-  toast("From date must be before To date.");
-  return;
- }
-
- showLoader(true);
-
+async function runReport(){
  try{
-  reportData=ensureOk(await apiGet("summary",{from,to}));
-
-  const d=reportData.summary||reportData;
-
-  const collected=val(d,"collected","totalCollected","totalCollection")||0;
-  const expense=val(d,"expenses","totalExpenses","expenseTotal")||0;
-  const due=val(d,"due","totalDue")||0;
-  const net=Number(collected)-Number(expense);
-
-  $("reportOutput").innerHTML=`
-   <div class="report-result">
-    <div class="report-tile"><span>Total Collection</span><strong>${money(collected)}</strong></div>
-    <div class="report-tile"><span>Total Expenses</span><strong>${money(expense)}</strong></div>
-    <div class="report-tile"><span>Net Amount</span><strong>${money(net)}</strong></div>
-   </div>
-   <div class="report-result">
-    <div class="report-tile"><span>Outstanding Due</span><strong>${money(due)}</strong></div>
-    <div class="report-tile"><span>From Date</span><strong style="font-size:14px">${dateText(from)}</strong></div>
-    <div class="report-tile"><span>To Date</span><strong style="font-size:14px">${dateText(to)}</strong></div>
-   </div>
-  `;
-
- }catch(error){
-  toast("Report failed: "+error.message);
- }finally{
-  showLoader(false);
- }
+  const d=await getApi(CUSTOMER_API,'summary',dateParams());
+  $('reportCollect').textContent=money(d.collected);
+  $('reportExpense').textContent=money(d.expenses);
+  $('reportNet').textContent=money(d.net);
+  $('reportCollections').innerHTML=(d.collections||[]).map(x=>`
+   <tr><td>${esc(x.date)}</td><td>${esc(x.name)}</td><td>${esc(x.ip)}</td>
+   <td>${esc(x.method)}</td><td>${money(x.amount)}</td><td>${money(x.remainingDue)}</td></tr>
+  `).join('')||'<tr><td colspan="6" class="empty">No collection in this period.</td></tr>';
+  $('reportExpenses').innerHTML=(d.expenseItems||[]).map(x=>`
+   <tr><td>${fmtDate(x.date)}</td><td>${esc(x.category)}</td>
+   <td>${esc(x.description)}</td><td>${esc(x.method)}</td><td>${money(x.amount)}</td></tr>
+  `).join('')||'<tr><td colspan="5" class="empty">No expenses in this period.</td></tr>';
+ }catch(e){toast(e.message)}
 }
+$('runReport').onclick=runReport;
 
-async function downloadReport(){
- const from=$("reportFrom").value;
- const to=$("reportTo").value;
-
- if(!from||!to){
-  toast("Choose report dates first.");
-  return;
- }
-
- showLoader(true);
-
+$('pdfReport').onclick=async()=>{
  try{
-  const result=ensureOk(await apiPost({
-   action:"pdfsummary",
-   from,
-   to
-  }));
-
-  const url=val(result,"pdfUrl","url","downloadUrl");
-
-  if(url)window.open(url,"_blank");
-  else toast("PDF created, but no PDF URL was returned.");
-
- }catch(error){
-  toast("PDF failed: "+error.message);
- }finally{
-  showLoader(false);
- }
-}
-
-/* ================= HISTORY ================= */
+  const d=await getApi(CUSTOMER_API,'pdfsummary',dateParams());
+  window.open(d.downloadUrl||d.pdfUrl,'_blank');
+  toast('PDF report created');
+ }catch(e){toast(e.message)}
+};
 
 async function loadHistory(){
- const type=$("historyType").value;
-
- showLoader(true);
-
  try{
-  const result=ensureOk(await apiGet("history",{type}));
-  historyData=unwrapArray(result,["history","rows","records"]);
-  renderHistory();
+  const d=await getApi(CUSTOMER_API,'history',{type:$('historyType').value,limit:250});
+  $('historyRows').innerHTML=(d.history||[]).map(x=>`
+   <tr><td><span class="status up">${esc(x.type)}</span></td>
+   <td>${esc(x.values?.[0]||'')}</td>
+   <td>${esc((x.values||[]).slice(1).filter(Boolean).join(' · '))}</td></tr>
+  `).join('')||'<tr><td colspan="3" class="empty">No history records.</td></tr>';
+ }catch(e){toast(e.message)}
+}
+$('historyRefresh').onclick=loadHistory;
+$('historyType').onchange=loadHistory;
 
- }catch(error){
-  $("historyRows").innerHTML=`<tr><td class="empty">${esc(error.message)}</td></tr>`;
-  toast("History load failed.");
- }finally{
-  showLoader(false);
- }
+function esc(v){
+ return String(v??'').replace(/[&<>"']/g,c=>({
+  '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+ }[c]));
 }
 
-function renderHistory(){
- const rows=historyData;
+$('refreshBtn').onclick=async()=>{
+ await loadDashboard();
+ toast('Dashboard refreshed');
+};
 
- if(!rows.length){
-  $("historyHead").innerHTML="";
-  $("historyRows").innerHTML='<tr><td class="empty">No history records found.</td></tr>';
-  return;
- }
-
- const keys=Object.keys(rows[0]).filter(k=>!/^id$/i.test(k)).slice(0,8);
-
- $("historyHead").innerHTML="<tr>"+keys.map(k=>
-  `<th>${esc(k.replace(/([A-Z])/g," $1"))}</th>`
- ).join("")+"</tr>";
-
- $("historyRows").innerHTML=rows.slice(0,300).map(row=>
-  "<tr>"+keys.map(k=>
-   `<td>${esc(typeof row[k]==="object"?JSON.stringify(row[k]):row[k]??"—")}</td>`
-  ).join("")+"</tr>"
- ).join("");
-}
-
-/* ================= NAVIGATION ================= */
-
-function showSection(name){
- document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
- $("section-"+name).classList.add("active");
-
- document.querySelectorAll(".nav button").forEach(b=>{
-  b.classList.toggle("active",b.dataset.section===name);
- });
-
- const titles={
-  dashboard:"Dashboard",
-  customers:"Customers",
-  expenses:"Expenses",
-  reports:"Reports",
-  history:"History",
-  settings:"Settings"
- };
-
- $("pageTitle").textContent=titles[name]||name;
-
- $("sidebar").classList.remove("open");
- $("mobileOverlay").classList.remove("show");
-
- if(name==="history")loadHistory();
- if(name==="expenses")renderExpenses();
-
- icons();
-}
-
-document.querySelectorAll(".nav button").forEach(button=>{
- button.addEventListener("click",()=>showSection(button.dataset.section));
-});
-
-$("menuBtn").addEventListener("click",()=>{
- $("sidebar").classList.toggle("open");
- $("mobileOverlay").classList.toggle("show");
-});
-
-$("mobileOverlay").addEventListener("click",()=>{
- $("sidebar").classList.remove("open");
- $("mobileOverlay").classList.remove("show");
-});
-
-/* ================= SETTINGS ================= */
-
-function copyApi(){
- if(!navigator.clipboard){
-  toast("Clipboard is not available.");
-  return;
- }
-
- navigator.clipboard.writeText(API_URL)
-  .then(()=>toast("API URL copied."))
-  .catch(()=>toast("Copy failed."));
-}
-
-function icons(){
- if(window.lucide)lucide.createIcons();
-}
-
-/* ================= START ================= */
-
-$("apiUrlInput").value=API_URL;
-setDefaultDates();
-icons();
-refreshAll();
-
+(async()=>{await loadDashboard()})();
 </script>
 </body>
 </html>
