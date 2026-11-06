@@ -1,1214 +1,804 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#111827">
-<title>RS NETWORK | Customer Management</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<meta name="theme-color" content="#101a2d">
+<title>One Online | Customer Management</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
 
 <style>
 :root{
-  --bg:#f4f6fb;--panel:#fff;--text:#172033;--muted:#8490a5;
-  --border:#e8edf4;--primary:#635bff;--sidebar:#111827;
-  --green:#12b981;--red:#ef5350;--orange:#f59e0b;
-  --shadow:0 8px 28px rgba(25,35,60,.06);
-}
-body.dark{
-  --bg:#0c1220;--panel:#151e2e;--text:#edf2ff;
-  --muted:#9aa7bd;--border:#273248;--shadow:0 8px 28px #0002;
+ --bg:#f4f7fb;--white:#fff;--ink:#172033;--muted:#7b879b;
+ --line:#e8edf4;--nav:#101a2d;--nav2:#17243b;
+ --primary:#635bff;--green:#13a879;--red:#e05260;
+ --orange:#e99a35;--blue:#3984e8;
+ --shadow:0 12px 35px rgba(20,35,65,.07);
+ --radius:16px
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"DM Sans",sans-serif}
 button,input,select,textarea{font:inherit}
 button{cursor:pointer}
-
+.app{display:flex;min-height:100vh}
 .sidebar{
-  position:fixed;inset:0 auto 0 0;width:255px;background:var(--sidebar);
-  color:white;padding:24px 17px;z-index:100;display:flex;flex-direction:column;
-  transition:.25s;
+ width:250px;background:var(--nav);color:#dce5f5;
+ padding:24px 16px;position:fixed;inset:0 auto 0 0;
+ z-index:20;display:flex;flex-direction:column;transition:.25s
 }
-.brand{display:flex;align-items:center;gap:12px;padding:5px 10px 28px}
-.brand-icon{
-  width:43px;height:43px;border-radius:13px;
-  background:linear-gradient(135deg,#7068ff,#a18bff);
-  display:grid;place-items:center;font-size:20px
+.brand{display:flex;align-items:center;gap:12px;padding:2px 10px 28px}
+.brand-mark{
+ width:42px;height:42px;border-radius:13px;
+ background:linear-gradient(135deg,#7a72ff,#36b7d8);
+ display:grid;place-items:center;color:white;font-weight:900;font-size:20px
 }
-.brand h2{font-size:17px;margin:0;font-weight:800}
-.brand small{color:#a4acc0;font-size:10px;letter-spacing:1.5px}
-.nav-label{color:#727e94;font-size:10px;font-weight:700;letter-spacing:1.5px;padding:13px 12px 8px}
-.nav{display:flex;flex-direction:column;gap:5px}
+.brand strong{font:800 17px Manrope;display:block;color:#fff}
+.brand small{color:#8291aa;font-size:10px;letter-spacing:1.5px}
+.nav-label{font-size:10px;color:#71809a;letter-spacing:1.5px;font-weight:800;padding:14px 12px 8px}
+.nav{display:grid;gap:5px}
 .nav a{
-  text-decoration:none;color:#aeb8ca;padding:12px 13px;border-radius:10px;
-  display:flex;align-items:center;gap:13px;font-size:13px;font-weight:600
+ text-decoration:none;border:0;background:transparent;color:#aebbd0;
+ text-align:left;padding:12px 13px;border-radius:11px;
+ display:flex;align-items:center;gap:12px;font-weight:600;font-size:13px
 }
-.nav a i{width:18px;text-align:center}
-.nav a:hover,.nav a.active{background:linear-gradient(100deg,#635bff,#827bff);color:white}
-.sidebar-bottom{margin-top:auto}
-.profile{display:flex;align-items:center;gap:10px;padding:15px 8px 5px;border-top:1px solid #293246}
-.avatar{width:37px;height:37px;border-radius:12px;background:#353d59;display:grid;place-items:center}
-.profile strong{font-size:12px}
-.profile small{display:block;color:#8995aa;font-size:10px;margin-top:4px}
-
-.main{margin-left:255px;min-height:100vh;padding:26px 30px}
-.topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:24px}
-.heading h1{font-size:23px;margin:0;font-weight:800}
-.heading p{font-size:12px;color:var(--muted);margin:7px 0 0}
-.actions{display:flex;align-items:center;gap:9px}
-.icon-btn{
-  border:1px solid var(--border);background:var(--panel);color:var(--text);
-  border-radius:10px;width:40px;height:40px;display:grid;place-items:center
+.nav a:hover,.nav a.active{background:var(--nav2);color:#fff}
+.nav a.active{box-shadow:inset 3px 0 #827bff}
+.nav i{width:18px;height:18px}
+.sidebar-bottom{margin-top:auto;padding:14px 10px;color:#71809a;font-size:11px;line-height:1.7;border-top:1px solid #26334a}
+.main{margin-left:250px;width:calc(100% - 250px);min-width:0}
+.topbar{
+ height:72px;background:#ffffffed;border-bottom:1px solid var(--line);
+ display:flex;align-items:center;justify-content:space-between;
+ padding:0 30px;position:sticky;top:0;z-index:10
 }
-.menu-btn{display:none}
+.top-left{display:flex;align-items:center;gap:14px}
+.menu-btn{display:none;border:0;background:#eef1ff;color:var(--primary);width:38px;height:38px;border-radius:11px}
+.page-title{font:800 18px Manrope}
+.page-sub{font-size:11px;color:var(--muted);margin-top:3px}
+.top-actions{display:flex;align-items:center;gap:12px}
+.status-pill{display:flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;padding:8px 12px;border-radius:30px;color:#68758a;font-size:11px;font-weight:700}
+.dot{width:7px;height:7px;border-radius:50%;background:#13b981}
+.avatar{width:36px;height:36px;border-radius:12px;background:#e9e8ff;color:var(--primary);display:grid;place-items:center;font-weight:800}
+.content{padding:28px 30px 50px;max-width:1600px;margin:auto}
+.welcome{display:flex;align-items:flex-end;justify-content:space-between;gap:15px;margin-bottom:23px}
+.welcome h1{font:800 24px Manrope;margin:0 0 6px}
+.welcome p{margin:0;color:var(--muted);font-size:13px}
 .btn{
-  border:0;border-radius:10px;padding:11px 15px;background:var(--primary);
-  color:white;font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:8px
+ border:0;border-radius:10px;padding:10px 15px;font-size:12px;
+ font-weight:800;display:inline-flex;align-items:center;
+ justify-content:center;gap:8px;transition:.2s
 }
-.btn.secondary{background:var(--panel);color:var(--text);border:1px solid var(--border)}
-.btn.danger{background:#ef5350}
-.btn.success{background:#12b981}
-.btn.small{padding:8px 10px;font-size:10px}
-
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
-.card{background:var(--panel);border:1px solid var(--border);border-radius:15px;padding:18px;box-shadow:var(--shadow)}
-.stat-icon{width:38px;height:38px;border-radius:11px;display:grid;place-items:center}
-.purple{background:#eeecff;color:#635bff}
-.green{background:#e2fbf0;color:#0ba66d}
-.orange{background:#fff4df;color:#e99b10}
-.red{background:#ffe9e9;color:#e74c4c}
-.stat-label{font-size:10px;color:var(--muted);font-weight:700;margin-top:13px}
-.stat-value{font-size:24px;font-weight:800;margin-top:5px}
-
-.toolbar{
-  display:flex;justify-content:space-between;align-items:center;gap:12px;
-  margin-bottom:15px;flex-wrap:wrap
+.btn-primary{background:var(--primary);color:white;box-shadow:0 7px 16px #635bff30}
+.btn-primary:hover{background:#5148e5}
+.btn-light{background:#f1f3f8;color:#526078}
+.btn-danger{background:#fff0f1;color:var(--red)}
+.btn-success{background:#e8f8f1;color:#10966a}
+.btn-sm{padding:7px 10px;font-size:11px}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:22px}
+.stat{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.stat-top{display:flex;justify-content:space-between;align-items:center}
+.stat-label{font-size:11px;color:var(--muted);font-weight:700}
+.stat-icon{width:36px;height:36px;border-radius:11px;display:grid;place-items:center}
+.stat-value{font:800 25px Manrope;margin:14px 0 5px}
+.stat-note{font-size:10px;color:var(--muted)}
+.stat:nth-child(1) .stat-icon{background:#fff0e6;color:#e68a37}
+.stat:nth-child(2) .stat-icon{background:#e7f8f1;color:#0da678}
+.stat:nth-child(3) .stat-icon{background:#ffedef;color:#e05260}
+.stat:nth-child(4) .stat-icon{background:#eaf1ff;color:#3984e8}
+.panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);min-width:0}
+.panel-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--line);gap:10px;flex-wrap:wrap}
+.panel-head h3{font:800 14px Manrope;margin:0}
+.panel-body{padding:18px 20px}
+.toolbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;width:100%}
+.search{position:relative;min-width:220px;flex:1}
+.search svg{position:absolute;left:12px;top:11px;width:15px;color:#98a3b5}
+.search input{padding-left:36px}
+.filters{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.filters select{width:auto;min-width:140px}
+input,select,textarea{
+ width:100%;border:1px solid #e2e7ef;background:#fff;
+ border-radius:9px;padding:10px 11px;font-size:12px;color:#263247;outline:none
 }
-.search{position:relative;flex:1;min-width:210px;max-width:380px}
-.search i{position:absolute;left:13px;top:13px;color:var(--muted);font-size:13px}
-.search input{
-  width:100%;height:40px;padding:0 13px 0 37px;border:1px solid var(--border);
-  border-radius:10px;background:var(--panel);color:var(--text);outline:none;font-size:12px
-}
-.search input:focus,.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--primary)}
-.filters{display:flex;gap:8px;flex-wrap:wrap}
-.filters select{
-  height:40px;padding:0 12px;border:1px solid var(--border);border-radius:10px;
-  background:var(--panel);color:var(--text);font-size:11px;outline:none
-}
-
-.table-card{padding:0;overflow:hidden}
-.table-head{padding:18px 19px;display:flex;justify-content:space-between;align-items:center}
-.table-head h3{font-size:14px;margin:0}
-.table-head span{font-size:11px;color:var(--muted)}
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:900px}
-th,td{padding:13px 14px;border-top:1px solid var(--border);text-align:left;font-size:11px;white-space:nowrap}
-th{color:var(--muted);font-weight:700;background:var(--bg)}
-td{font-weight:500}
-.customer-name{font-weight:700}
-.subtext{font-size:10px;color:var(--muted);margin-top:4px}
-.pill{display:inline-block;padding:5px 8px;border-radius:20px;font-size:9px;font-weight:700}
-.pill.green{background:#e2fbf0;color:#0ba66d}
-.pill.orange{background:#fff4df;color:#c78306}
-.pill.gray{background:var(--bg);color:var(--muted)}
-.row-actions{display:flex;gap:5px}
-.action-btn{
-  width:29px;height:29px;border:1px solid var(--border);border-radius:8px;
-  background:var(--panel);color:var(--text);font-size:11px
-}
-.action-btn:hover{border-color:var(--primary);color:var(--primary)}
-.action-btn.del:hover{border-color:var(--red);color:var(--red)}
-.empty{text-align:center;padding:35px;color:var(--muted);font-size:12px}
-.pagination{padding:13px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px}
-.pagination span{font-size:10px;color:var(--muted)}
-.page-buttons{display:flex;gap:6px}
-.page-buttons button{
-  width:30px;height:30px;border:1px solid var(--border);border-radius:8px;
-  background:var(--panel);color:var(--text);font-size:11px
-}
-.page-buttons button.active{background:var(--primary);color:white;border-color:var(--primary)}
-
-.modal-backdrop{
-  display:none;position:fixed;inset:0;background:#080d19a8;z-index:200;
-  align-items:center;justify-content:center;padding:15px
-}
-.modal-backdrop.show{display:flex}
-.modal{
-  width:100%;max-width:850px;max-height:92vh;overflow:auto;
-  background:var(--panel);border:1px solid var(--border);border-radius:17px;
-  box-shadow:0 25px 80px #0004
-}
-.modal-head{
-  position:sticky;top:0;background:var(--panel);z-index:2;
-  padding:18px 21px;border-bottom:1px solid var(--border);
-  display:flex;justify-content:space-between;align-items:center
-}
-.modal-head h2{font-size:16px;margin:0}
-.close-btn{border:0;background:var(--bg);color:var(--text);width:32px;height:32px;border-radius:9px}
-.modal-body{padding:20px}
-.form-section{font-size:11px;font-weight:800;color:var(--primary);margin:4px 0 13px}
-.form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:20px}
-.field label{display:block;font-size:10px;font-weight:700;color:var(--muted);margin-bottom:7px}
-.field input,.field select,.field textarea{
-  width:100%;height:39px;border:1px solid var(--border);border-radius:9px;
-  padding:0 11px;background:var(--bg);color:var(--text);outline:none;font-size:11px
-}
-.field textarea{height:65px;padding:10px;resize:vertical}
-.modal-foot{
-  position:sticky;bottom:0;background:var(--panel);padding:14px 20px;
-  border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px
-}
-.toast{
-  position:fixed;bottom:22px;right:22px;background:#172033;color:white;
-  padding:13px 18px;border-radius:10px;font-size:12px;z-index:400;
-  opacity:0;transform:translateY(12px);transition:.25s;pointer-events:none
-}
+input:focus,select:focus,textarea:focus{border-color:#918cff;box-shadow:0 0 0 3px #635bff15}
+.table-wrap{overflow:auto;width:100%}
+table{width:100%;border-collapse:collapse;white-space:nowrap}
+th{font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:#8b96a8;text-align:left;background:#fafbfe;padding:12px 15px;font-weight:800}
+td{padding:13px 15px;border-top:1px solid #eef1f5;font-size:11px;color:#47546a}
+tbody tr:hover{background:#fafbff}
+.customer-name{font-weight:800;color:#253149}
+.subtext{font-size:10px;color:#9aa4b4;margin-top:3px}
+.badge{display:inline-flex;align-items:center;padding:5px 8px;border-radius:20px;font-size:9px;font-weight:800}
+.badge-green{background:#e8f8f1;color:#0c9a6d}
+.badge-red{background:#fff0f1;color:#dc5260}
+.badge-orange{background:#fff5e7;color:#d48b2c}
+.badge-blue{background:#eaf1ff;color:#397bdb}
+.actions{display:flex;gap:5px}
+.icon-btn{width:29px;height:29px;border:0;border-radius:8px;background:#f1f3f8;color:#63718a;display:grid;place-items:center}
+.icon-btn:hover{background:#e7e9ff;color:var(--primary)}
+.icon-btn svg{width:14px}
+.empty{padding:35px;text-align:center;color:#98a3b5;font-size:12px}
+.overlay{position:fixed;inset:0;background:#101a2d88;z-index:50;display:none;align-items:center;justify-content:center;padding:18px}
+.overlay.show{display:flex}
+.modal{background:#fff;border-radius:18px;width:min(850px,100%);max-height:92vh;overflow:auto;box-shadow:0 25px 80px #07112455}
+.modal-head{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:white;z-index:2}
+.modal-head h3{font:800 15px Manrope;margin:0}
+.modal-body{padding:20px 22px}
+.close{border:0;background:#f1f3f8;width:30px;height:30px;border-radius:9px;color:#6b7890}
+.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.form-group label{display:block;font-size:10px;font-weight:800;color:#68758a;margin-bottom:6px}
+.form-group.full{grid-column:1/-1}
+.form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.detail{padding:12px;background:#f8f9fd;border:1px solid var(--line);border-radius:10px}
+.detail span{font-size:10px;color:var(--muted);display:block;margin-bottom:5px}
+.detail strong{font-size:12px;overflow-wrap:anywhere}
+.toast{position:fixed;right:22px;bottom:22px;background:#17243b;color:#fff;padding:12px 17px;border-radius:11px;font-size:12px;z-index:100;opacity:0;transform:translateY(12px);pointer-events:none;transition:.25s}
 .toast.show{opacity:1;transform:translateY(0)}
-.loading{opacity:.6;pointer-events:none}
-.overlay{display:none;position:fixed;inset:0;background:#0008;z-index:90}
-
-@media(max-width:1100px){.stats{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:800px){
-  .sidebar{transform:translateX(-100%)}
-  .sidebar.open{transform:translateX(0)}
-  .overlay.show{display:block}
-  .main{margin-left:0;padding:19px 14px}
-  .menu-btn{display:grid}
-  .heading h1{font-size:19px}
-  .form-grid{grid-template-columns:repeat(2,1fr)}
+.loader{display:none;position:fixed;inset:0;background:#f4f7fbbd;z-index:90;align-items:center;justify-content:center}
+.loader.show{display:flex}
+.spinner{width:38px;height:38px;border:3px solid #dfe2ff;border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:1100px){.cards{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){
+ .sidebar{transform:translateX(-100%)}
+ .sidebar.open{transform:translateX(0)}
+ .main{margin-left:0;width:100%}
+ .topbar{height:65px;padding:0 15px}
+ .menu-btn{display:grid;place-items:center}
+ .content{padding:20px 14px 35px}
+ .welcome{align-items:flex-start;flex-direction:column}
+ .welcome h1{font-size:21px}
+ .cards{gap:9px}
+ .stat{padding:13px}
+ .stat-value{font-size:20px}
+ .toolbar,.search{width:100%;min-width:0}
+ .filters{width:100%}
+ .filters select{flex:1;min-width:0}
+ .form-grid,.detail-grid{grid-template-columns:1fr}
+ .form-group.full{grid-column:auto}
+ .top-actions .status-pill{display:none}
+ .modal-body{padding:16px}
+ .modal-head{padding:15px}
+ .page-title{font-size:15px}
+ .mobile-overlay.show{display:block;position:fixed;inset:0;background:#0b142866;z-index:15}
 }
-@media(max-width:500px){
-  .stats{gap:9px}
-  .card{padding:13px}
-  .stat-value{font-size:21px}
-  .toolbar{align-items:stretch}
-  .search{max-width:none}
-  .filters select{flex:1}
-  .form-grid{grid-template-columns:1fr}
-  .actions .btn{padding:10px;font-size:10px}
-}
+.mobile-overlay{display:none}
 </style>
 </head>
 
 <body>
+<div class="app">
 
 <aside class="sidebar" id="sidebar">
-  <div class="brand">
-    <div class="brand-icon"><i class="fa-solid fa-network-wired"></i></div>
-    <div><h2>RS NETWORK</h2><small>MANAGEMENT SYSTEM</small></div>
-  </div>
+ <div class="brand">
+  <div class="brand-mark">O</div>
+  <div><strong>One Online</strong><small>ISP MANAGEMENT</small></div>
+ </div>
 
-  <div class="nav-label">MAIN MENU</div>
-  <nav class="nav">
-    <a href="index.html"><i class="fa-solid fa-house"></i> Dashboard</a>
-    <a href="customer.html" class="active"><i class="fa-solid fa-users"></i> Customers</a>
-    <a href="gmail.html"><i class="fa-solid fa-envelope"></i> Gmail & Email</a>
-  </nav>
+ <div class="nav-label">WORKSPACE</div>
+ <nav class="nav">
+  <a href="index.html"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+  <a href="customer.html" class="active"><i data-lucide="users"></i> Customers</a>
+  <a href="index.html"><i data-lucide="wallet"></i> Expenses</a>
+  <a href="index.html"><i data-lucide="chart-no-axes-combined"></i> Reports</a>
+  <a href="index.html"><i data-lucide="history"></i> History</a>
+ </nav>
 
-  <div class="nav-label">BILLING MANAGEMENT</div>
-  <nav class="nav">
-    <a href="#customers" onclick="setFilter('all')"><i class="fa-solid fa-file-invoice"></i> All Customers</a>
-    <a href="#customers" onclick="setFilter('due')"><i class="fa-solid fa-clock"></i> Due Customers</a>
-    <a href="#customers" onclick="setFilter('upcoming')"><i class="fa-solid fa-calendar"></i> Upcoming</a>
-    <a href="#customers" onclick="setFilter('collected')"><i class="fa-solid fa-circle-check"></i> Collected</a>
-  </nav>
+ <div class="nav-label">SYSTEM</div>
+ <nav class="nav">
+  <a href="index.html"><i data-lucide="settings"></i> Settings</a>
+ </nav>
 
-  <div class="nav-label">SYSTEM</div>
-  <nav class="nav">
-    <a href="gmail.html#history"><i class="fa-solid fa-clock-rotate-left"></i> Email History</a>
-    <a href="gmail.html#settings"><i class="fa-solid fa-gear"></i> Settings</a>
-  </nav>
-
-  <div class="sidebar-bottom">
-    <div class="profile">
-      <div class="avatar"><i class="fa-solid fa-user-shield"></i></div>
-      <div><strong>Administrator</strong><small>RS NETWORK Admin</small></div>
-    </div>
-  </div>
+ <div class="sidebar-bottom">One Online Admin Panel<br>Customer & Billing Management</div>
 </aside>
 
-<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+<div class="mobile-overlay" id="mobileOverlay"></div>
 
 <main class="main">
-  <header class="topbar">
-    <div style="display:flex;align-items:center;gap:12px">
-      <button class="icon-btn menu-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
-      <div class="heading">
-        <h1>Customer Management</h1>
-        <p>Manage all RS NETWORK customer information.</p>
-      </div>
-    </div>
-
-    <div class="actions">
-      <button class="icon-btn" onclick="toggleTheme()" title="Theme">
-        <i class="fa-solid fa-moon" id="themeIcon"></i>
-      </button>
-      <button class="icon-btn" onclick="loadCustomers()" title="Refresh">
-        <i class="fa-solid fa-rotate"></i>
-      </button>
-      <button class="btn" onclick="openAddModal()">
-        <i class="fa-solid fa-plus"></i> Add Customer
-      </button>
-    </div>
-  </header>
-
-  <section class="stats">
-    <div class="card">
-      <div class="stat-icon purple"><i class="fa-solid fa-users"></i></div>
-      <div class="stat-label">TOTAL CUSTOMERS</div>
-      <div class="stat-value" id="totalCount">—</div>
-    </div>
-
-    <div class="card">
-      <div class="stat-icon green"><i class="fa-solid fa-circle-check"></i></div>
-      <div class="stat-label">COLLECTED</div>
-      <div class="stat-value" id="collectedCount">—</div>
-    </div>
-
-    <div class="card">
-      <div class="stat-icon orange"><i class="fa-solid fa-clock"></i></div>
-      <div class="stat-label">DUE CUSTOMERS</div>
-      <div class="stat-value" id="dueCount">—</div>
-    </div>
-
-    <div class="card">
-      <div class="stat-icon red"><i class="fa-solid fa-money-bill-wave"></i></div>
-      <div class="stat-label">TOTAL CUSTOMER BILL</div>
-      <div class="stat-value" id="totalAmount">৳—</div>
-    </div>
-  </section>
-
-  <section id="customers">
-    <div class="toolbar">
-      <div class="search">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input id="searchInput" placeholder="Search name, phone, IP, email..." oninput="renderCustomers()">
-      </div>
-
-      <div class="filters">
-        <select id="statusFilter" onchange="renderCustomers()">
-          <option value="all">All Customers</option>
-          <option value="due">Due / Overdue</option>
-          <option value="upcoming">Upcoming</option>
-          <option value="due-today">Due Today</option>
-          <option value="overdue">Overdue</option>
-          <option value="collected">Collected</option>
-          <option value="no-date">No Billing Date</option>
-        </select>
-
-        <select id="sortFilter" onchange="renderCustomers()">
-          <option value="newest">Newest First</option>
-          <option value="oldest">Oldest First</option>
-          <option value="name">Name A-Z</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="card table-card">
-      <div class="table-head">
-        <h3>Customer List</h3>
-        <span id="resultCount">Loading...</span>
-      </div>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>SI</th>
-              <th>Customer</th>
-              <th>Phone</th>
-              <th>IP Address</th>
-              <th>Bill</th>
-              <th>Billing Date</th>
-              <th>Email</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-
-          <tbody id="customerRows">
-            <tr>
-              <td colspan="9" class="empty">
-                <i class="fa-solid fa-spinner fa-spin"></i>
-                Loading customers...
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="pagination">
-        <span id="pageInfo">0 customers</span>
-        <div class="page-buttons">
-          <button onclick="changePage(-1)"><i class="fa-solid fa-chevron-left"></i></button>
-          <button class="active" id="pageNumber">1</button>
-          <button onclick="changePage(1)"><i class="fa-solid fa-chevron-right"></i></button>
-        </div>
-      </div>
-    </div>
-  </section>
-</main>
-
-<!-- CUSTOMER MODAL -->
-
-<div class="modal-backdrop" id="customerModal" onclick="backdropClose(event)">
-  <div class="modal">
-
-    <div class="modal-head">
-      <h2 id="modalTitle">Add New Customer</h2>
-      <button class="close-btn" onclick="closeModal()">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
-
-    <form id="customerForm" onsubmit="saveCustomer(event)">
-      <div class="modal-body">
-        <input type="hidden" id="f_row">
-
-        <div class="form-section">
-          <i class="fa-solid fa-user"></i> CUSTOMER INFORMATION
-        </div>
-
-        <div class="form-grid">
-          <div class="field">
-            <label>Customer Name *</label>
-            <input id="f_name" required placeholder="Customer name">
-          </div>
-
-          <div class="field">
-            <label>Phone Number</label>
-            <input id="f_phone" placeholder="01XXXXXXXXX">
-          </div>
-
-          <div class="field">
-            <label>IP Address</label>
-            <input id="f_ip" placeholder="192.168.1.1">
-          </div>
-
-          <div class="field">
-            <label>Reason</label>
-            <input id="f_reason" placeholder="Customer details">
-          </div>
-
-          <div class="field">
-            <label>Area</label>
-            <input id="f_area" placeholder="Area">
-          </div>
-
-          <div class="field">
-            <label>Address</label>
-            <input id="f_address" placeholder="Full address">
-          </div>
-
-          <div class="field">
-            <label>Location</label>
-            <input id="f_location" placeholder="Location">
-          </div>
-
-          <div class="field">
-            <label>Customer Gmail</label>
-            <input id="f_email" type="email" placeholder="customer@gmail.com">
-          </div>
-        </div>
-
-        <div class="form-section">
-          <i class="fa-solid fa-money-bill"></i> BILLING INFORMATION
-        </div>
-
-        <div class="form-grid">
-          <div class="field">
-            <label>Customer Bill (৳)</label>
-            <input id="f_bill" type="number" min="0" step="0.01" placeholder="500">
-          </div>
-
-          <div class="field">
-            <label>Billing Date</label>
-            <input id="f_billingDate" type="date">
-          </div>
-
-          <div class="field">
-            <label>Bill Trigger</label>
-            <select id="f_billTrigger">
-              <option value="">Select</option>
-              <option>ON</option>
-              <option>OFF</option>
-              <option>TRUE</option>
-              <option>FALSE</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label>IP Bill (৳)</label>
-            <input id="f_ipBill" type="number" min="0" step="0.01" placeholder="0">
-          </div>
-
-          <div class="field">
-            <label>IP Bill Trigger</label>
-            <select id="f_ipBillTrigger">
-              <option value="">Select</option>
-              <option>ON</option>
-              <option>OFF</option>
-              <option>TRUE</option>
-              <option>FALSE</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label>Collect Status</label>
-            <select id="f_collect">
-              <option value="">Due / Not Collected</option>
-              <option value="Collect">Collect</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label>Renew Status</label>
-            <select id="f_renew">
-              <option value="">Not Renewed</option>
-              <option value="Renew">Renew</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-section">
-          <i class="fa-solid fa-network-wired"></i> CONNECTION INFORMATION
-        </div>
-
-        <div class="form-grid">
-          <div class="field">
-            <label>ONU</label>
-            <input id="f_onu" placeholder="ONU information">
-          </div>
-
-          <div class="field">
-            <label>Fiber</label>
-            <input id="f_fiber" placeholder="Fiber information">
-          </div>
-        </div>
-      </div>
-
-      <div class="modal-foot">
-        <button type="button" class="btn secondary" onclick="closeModal()">Cancel</button>
-        <button type="submit" class="btn" id="saveBtn">
-          <i class="fa-solid fa-floppy-disk"></i> Save Customer
-        </button>
-      </div>
-    </form>
+<header class="topbar">
+ <div class="top-left">
+  <button class="menu-btn" id="menuBtn"><i data-lucide="menu"></i></button>
+  <div>
+   <div class="page-title">Customer Management</div>
+   <div class="page-sub">One Online / Customers</div>
   </div>
+ </div>
+ <div class="top-actions">
+  <div class="status-pill"><span class="dot"></span> Customer Database</div>
+  <div class="avatar">OO</div>
+ </div>
+</header>
+
+<div class="content">
+ <div class="welcome">
+  <div>
+   <h1>Customer Management</h1>
+   <p>Manage customer details, payments, billing dates and renewals.</p>
+  </div>
+  <button class="btn btn-primary" onclick="openCustomerModal()"><i data-lucide="plus"></i> Add Customer</button>
+ </div>
+
+ <div class="cards">
+  <div class="stat">
+   <div class="stat-top"><span class="stat-label">TOTAL CUSTOMERS</span><span class="stat-icon"><i data-lucide="users"></i></span></div>
+   <div class="stat-value" id="cardTotal">0</div><div class="stat-note">Registered customers</div>
+  </div>
+  <div class="stat">
+   <div class="stat-top"><span class="stat-label">TOTAL DUE</span><span class="stat-icon"><i data-lucide="badge-dollar-sign"></i></span></div>
+   <div class="stat-value" id="cardDue">৳0</div><div class="stat-note">Outstanding balance</div>
+  </div>
+  <div class="stat">
+   <div class="stat-top"><span class="stat-label">UNPAID</span><span class="stat-icon"><i data-lucide="alert-circle"></i></span></div>
+   <div class="stat-value" id="cardUnpaid">0</div><div class="stat-note">Customers with due</div>
+  </div>
+  <div class="stat">
+   <div class="stat-top"><span class="stat-label">UPCOMING</span><span class="stat-icon"><i data-lucide="calendar-clock"></i></span></div>
+   <div class="stat-value" id="cardUpcoming">0</div><div class="stat-note">Billing within 7 days</div>
+  </div>
+ </div>
+
+ <div class="panel">
+  <div class="panel-head">
+   <div class="toolbar">
+    <div class="search">
+     <i data-lucide="search"></i>
+     <input id="customerSearch" placeholder="Search name, IP, phone, Gmail..." oninput="renderCustomers()">
+    </div>
+    <div class="filters">
+     <select id="customerFilter" onchange="renderCustomers()">
+      <option value="all">All Customers</option>
+      <option value="due">Has Due</option>
+      <option value="paid">No Due</option>
+      <option value="upcoming">Upcoming</option>
+      <option value="overdue">Overdue</option>
+     </select>
+     <button class="btn btn-light btn-sm" onclick="refreshAll()"><i data-lucide="refresh-cw"></i> Refresh</button>
+    </div>
+   </div>
+  </div>
+  <div class="table-wrap">
+   <table>
+    <thead>
+     <tr>
+      <th>Customer</th>
+      <th>IP / Phone</th>
+      <th>Package</th>
+      <th>Monthly Bill</th>
+      <th>Due</th>
+      <th>Billing Date</th>
+      <th>Status</th>
+      <th>Actions</th>
+     </tr>
+    </thead>
+    <tbody id="customerRows">
+     <tr><td colspan="8" class="empty">Loading customers...</td></tr>
+    </tbody>
+   </table>
+  </div>
+ </div>
+</div>
+</main>
 </div>
 
+<!-- ADD / EDIT CUSTOMER -->
+<div class="overlay" id="customerModal">
+ <div class="modal">
+  <div class="modal-head">
+   <h3 id="customerModalTitle">Add New Customer</h3>
+   <button class="close" onclick="closeModal('customerModal')">✕</button>
+  </div>
+  <div class="modal-body">
+   <form id="customerForm">
+    <input type="hidden" name="customerId">
+
+    <div class="form-grid">
+     <div class="form-group"><label>IP Address</label><input name="ip" placeholder="192.168.1.10"></div>
+     <div class="form-group"><label>Customer Name *</label><input name="name" required placeholder="Customer name"></div>
+     <div class="form-group"><label>Phone Number</label><input name="phone" placeholder="01XXXXXXXXX"></div>
+
+     <div class="form-group"><label>Reason</label><input name="reason"></div>
+     <div class="form-group"><label>Package</label><input name="package" placeholder="20 Mbps"></div>
+     <div class="form-group"><label>Customer Bill (৳)</label><input name="customerBill" type="number" min="0" step="0.01"></div>
+
+     <div class="form-group"><label>Bill Trigger</label><input name="billTrigger"></div>
+     <div class="form-group"><label>Internet Bill (৳)</label><input name="internetBill" type="number" min="0" step="0.01"></div>
+     <div class="form-group"><label>Billing Date</label><input name="billingDate" type="date"></div>
+
+     <div class="form-group"><label>Bill Trigger 2</label><input name="billTrigger2"></div>
+     <div class="form-group"><label>Renew</label><input name="renew"></div>
+     <div class="form-group"><label>Area</label><input name="area"></div>
+
+     <div class="form-group"><label>Address</label><input name="address"></div>
+     <div class="form-group"><label>Location</label><input name="location"></div>
+     <div class="form-group"><label>ONU</label><input name="onu"></div>
+
+     <div class="form-group"><label>Faibar</label><input name="fiber"></div>
+     <div class="form-group"><label>Customer Gmail</label><input name="gmail" type="email"></div>
+     <div class="form-group"><label>Due (৳)</label><input name="due" type="number" min="0" step="0.01"></div>
+    </div>
+
+    <div class="form-actions">
+     <button type="button" class="btn btn-light" onclick="closeModal('customerModal')">Cancel</button>
+     <button type="submit" class="btn btn-primary" id="customerSaveBtn">Save Customer</button>
+    </div>
+   </form>
+  </div>
+ </div>
+</div>
+
+<!-- COLLECT PAYMENT -->
+<div class="overlay" id="collectModal">
+ <div class="modal" style="max-width:480px">
+  <div class="modal-head">
+   <h3>Collect Payment</h3>
+   <button class="close" onclick="closeModal('collectModal')">✕</button>
+  </div>
+  <div class="modal-body">
+   <form id="collectForm">
+    <input type="hidden" name="customerId">
+    <div class="form-grid" style="grid-template-columns:1fr">
+     <div class="form-group"><label>Customer</label><input name="customerName" readonly></div>
+     <div class="form-group"><label>Due Before Collection</label><input name="currentDue" readonly></div>
+     <div class="form-group"><label>Collection Amount (৳) *</label><input name="amount" type="number" min="0.01" step="0.01" required></div>
+     <div class="form-group"><label>Payment Method</label>
+      <select name="paymentMethod">
+       <option>Cash</option><option>bKash</option><option>Nagad</option><option>Bank</option><option>Other</option>
+      </select>
+     </div>
+     <div class="form-group"><label>Note</label><textarea name="note" rows="2"></textarea></div>
+    </div>
+    <div class="form-actions">
+     <button type="button" class="btn btn-light" onclick="closeModal('collectModal')">Cancel</button>
+     <button type="submit" class="btn btn-success">Confirm Collect</button>
+    </div>
+   </form>
+  </div>
+ </div>
+</div>
+
+<!-- CUSTOMER DETAILS -->
+<div class="overlay" id="detailsModal">
+ <div class="modal">
+  <div class="modal-head">
+   <h3>Customer Details</h3>
+   <button class="close" onclick="closeModal('detailsModal')">✕</button>
+  </div>
+  <div class="modal-body">
+   <div class="detail-grid" id="detailsContent"></div>
+   <div class="form-actions">
+    <button class="btn btn-light" onclick="closeModal('detailsModal')">Close</button>
+   </div>
+  </div>
+ </div>
+</div>
+
+<div class="loader" id="loader"><div class="spinner"></div></div>
 <div class="toast" id="toast"></div>
 
 <script>
+/* ================= API CONFIGURATION ================= */
 
-// ================= API CONFIG =================
+const API_URL="https://script.google.com/macros/s/AKfycbweR6IZ0sR2xoxfOUIAxSlKb3clXrKtXY7a4g9WpjxItag9jAUcLH8dW12n_5EtHljE/exec";
 
-const CUSTOMER_API =
-'https://script.google.com/macros/s/AKfycbycatfsekwA_msgRFw9OImeSIWHy49k1yHpb38_dd-T_rFv8I3TshAOo1vu-v48If3B/exec';
+let customers=[];
 
-const TIMEZONE = 'Asia/Dhaka';
+const $=id=>document.getElementById(id);
 
-let customers = [];
-let currentPage = 1;
-const pageSize = 10;
+const money=value=>"৳"+Number(value||0).toLocaleString("en-BD",{maximumFractionDigits:2});
 
-let busy = false;
-let actionBusy = false;
+const esc=value=>String(value??"").replace(/[&<>"']/g,c=>({
+ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+}[c]));
 
-const $ = id => document.getElementById(id);
-
-// ================= DATE HELPERS =================
-
-function getTodayKey() {
-  const parts = new Intl.DateTimeFormat('en-CA', {
-    timeZone: TIMEZONE,
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
-  }).formatToParts(new Date());
-
-  const values = {};
-
-  parts.forEach(p => {
-    values[p.type] = p.value;
-  });
-
-  return `${values.year}-${values.month}-${values.day}`;
+function val(obj,...keys){
+ for(const key of keys){
+  if(obj&&obj[key]!==undefined&&obj[key]!==null&&obj[key]!=="")return obj[key];
+ }
+ return "";
 }
 
-function normalizeDate(value) {
-  if (!value) return '';
+function getId(c){return val(c,"customerId","Customer ID","id");}
+function getName(c){return val(c,"name","Name")||"Unnamed";}
+function getDue(c){return Number(val(c,"due","Due")||0);}
+function getBill(c){return Number(val(c,"customerBill","Customar Bill","customer bill")||0);}
+function getBilling(c){return val(c,"billingDate","Biling date","Billing Date","billing_date");}
 
-  const s = String(value).trim();
+function dateText(value){
+ if(!value)return "—";
+ const d=new Date(value);
+ if(isNaN(d))return String(value);
+ return d.toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"});
+}
 
-  let match = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+function dateInput(value){
+ if(!value)return "";
+ const d=new Date(value);
+ if(isNaN(d))return String(value).slice(0,10);
+ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
 
-  if (match) {
-    return `${match[1]}-${match[2].padStart(2,'0')}-${match[3].padStart(2,'0')}`;
+function showLoader(show){$("loader").classList.toggle("show",!!show);}
+
+function toast(message){
+ const t=$("toast");
+ t.textContent=message;
+ t.classList.add("show");
+ setTimeout(()=>t.classList.remove("show"),3000);
+}
+
+function apiGet(action,params={}){
+ const url=new URL(API_URL);
+ url.searchParams.set("action",action);
+ Object.entries(params).forEach(([key,value])=>url.searchParams.set(key,value??""));
+ return fetch(url.toString(),{method:"GET",redirect:"follow"}).then(r=>r.json());
+}
+
+function apiPost(payload){
+ return fetch(API_URL,{
+  method:"POST",
+  redirect:"follow",
+  headers:{"Content-Type":"text/plain;charset=utf-8"},
+  body:JSON.stringify(payload)
+ }).then(r=>r.json());
+}
+
+function ensureOk(result){
+ if(!result||result.success===false)throw new Error(result?.message||result?.error||"Request failed");
+ return result;
+}
+
+function unwrapArray(result,keys){
+ if(Array.isArray(result))return result;
+ for(const k of keys)if(Array.isArray(result?.[k]))return result[k];
+ if(result?.data){
+  if(Array.isArray(result.data))return result.data;
+  for(const k of keys)if(Array.isArray(result.data[k]))return result.data[k];
+ }
+ return [];
+}
+
+/* ================= CUSTOMER STATUS ================= */
+
+function statusFor(c){
+ const due=getDue(c);
+ const billing=getBilling(c);
+
+ if(due>0)return "Due";
+
+ if(billing){
+  const d=new Date(billing);
+  const today=new Date();
+  today.setHours(0,0,0,0);
+
+  if(!isNaN(d)){
+   d.setHours(0,0,0,0);
+   if(d<today)return "Overdue";
+   if(Math.ceil((d-today)/86400000)<=7)return "Upcoming";
   }
-
-  match = s.match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{4})$/);
-
-  if (match) {
-    return `${match[3]}-${match[2].padStart(2,'0')}-${match[1].padStart(2,'0')}`;
-  }
-
-  match = s.match(/^(\d{1,2})[- ]([A-Za-z]{3})[- ](\d{4})$/);
-
-  if (match) {
-    const months = {
-      jan:'01',feb:'02',mar:'03',apr:'04',
-      may:'05',jun:'06',jul:'07',aug:'08',
-      sep:'09',oct:'10',nov:'11',dec:'12'
-    };
-
-    const month = months[match[2].toLowerCase()];
-
-    if (!month) return '';
-
-    return `${match[3]}-${month}-${match[1].padStart(2,'0')}`;
-  }
-
-  return '';
+ }
+ return "Paid";
 }
 
-function getCustomerStatus(customer) {
-  if (
-    String(customer.collect || '').trim().toLowerCase() === 'collect'
-  ) {
-    return 'collected';
-  }
-
-  const billing = normalizeDate(customer.billingDate);
-
-  if (!billing) return 'no-date';
-
-  const today = getTodayKey();
-
-  if (billing > today) return 'upcoming';
-  if (billing === today) return 'due-today';
-
-  return 'overdue';
+function statusBadge(status){
+ const css={
+  Paid:"badge-green",
+  Due:"badge-blue",
+  Overdue:"badge-red",
+  Upcoming:"badge-orange"
+ };
+ return `<span class="badge ${css[status]||"badge-blue"}">${esc(status)}</span>`;
 }
 
-// ================= COMMON HELPERS =================
+/* ================= LOAD CUSTOMER DATA ================= */
 
-function showToast(message) {
-  const el = $('toast');
+async function refreshAll(){
+ showLoader(true);
 
-  el.textContent = message;
-  el.classList.add('show');
-
-  clearTimeout(window.toastTimer);
-
-  window.toastTimer = setTimeout(
-    () => el.classList.remove('show'),
-    3200
-  );
-}
-
-function toggleMenu() {
-  $('sidebar').classList.toggle('open');
-  $('overlay').classList.toggle('show');
-}
-
-function toggleTheme() {
-  document.body.classList.toggle('dark');
-
-  const dark = document.body.classList.contains('dark');
-
-  localStorage.setItem('rs-theme', dark ? 'dark' : 'light');
-
-  $('themeIcon').className =
-    dark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-}
-
-if (localStorage.getItem('rs-theme') === 'dark') {
-  document.body.classList.add('dark');
-  $('themeIcon').className = 'fa-solid fa-sun';
-}
-
-function escapeHTML(value) {
-  return String(value ?? '').replace(/[&<>"']/g, c => ({
-    '&':'&amp;',
-    '<':'&lt;',
-    '>':'&gt;',
-    '"':'&quot;',
-    "'":'&#39;'
-  })[c]);
-}
-
-function money(value) {
-  return '৳' + Number(value || 0).toLocaleString('en-US');
-}
-
-// ================= API =================
-
-function api(action, params = {}) {
-  return new Promise((resolve, reject) => {
-
-    if (!CUSTOMER_API || CUSTOMER_API.startsWith('PASTE_')) {
-      reject(new Error('Customer API URL বসানো হয়নি'));
-      return;
-    }
-
-    const callback =
-      'rsCallback_' + Date.now() + '_' +
-      Math.floor(Math.random() * 100000);
-
-    const script = document.createElement('script');
-
-    const query = new URLSearchParams({
-      ...params,
-      action,
-      callback
-    });
-
-    const timeout = setTimeout(() => {
-      cleanup();
-      reject(new Error('API response timeout. Deployment পরীক্ষা করো.'));
-    }, 25000);
-
-    function cleanup() {
-      clearTimeout(timeout);
-      delete window[callback];
-      script.remove();
-    }
-
-    window[callback] = data => {
-      cleanup();
-
-      if (!data || data.success === false) {
-        reject(new Error(data?.error || 'Server response error'));
-      } else {
-        resolve(data);
-      }
-    };
-
-    script.onerror = () => {
-      cleanup();
-      reject(new Error('API connection failed.'));
-    };
-
-    script.src = CUSTOMER_API + '?' + query.toString();
-
-    document.body.appendChild(script);
-  });
-}
-
-// ================= LOAD CUSTOMERS =================
-
-async function loadCustomers() {
-  if (busy) return;
-
-  busy = true;
-
-  $('customerRows').innerHTML =
-    '<tr><td colspan="9" class="empty">' +
-    '<i class="fa-solid fa-spinner fa-spin"></i> Loading...</td></tr>';
-
-  try {
-    const result = await api('list');
-
-    customers = Array.isArray(result.customers)
-      ? result.customers
-      : [];
-
-    // Backend status is authoritative.
-    // Fallback is only for older API deployments.
-    customers.forEach(c => {
-      if (!c.status) {
-        c.status = getCustomerStatus(c);
-      }
-    });
-
-    currentPage = 1;
-
-    updateStats();
-    renderCustomers();
-
-  } catch (error) {
-    $('customerRows').innerHTML =
-      `<tr><td colspan="9" class="empty">${escapeHTML(error.message)}</td></tr>`;
-
-    showToast(error.message);
-
-  } finally {
-    busy = false;
-  }
-}
-
-// ================= DASHBOARD STATS =================
-
-function updateStats() {
-
-  const collected = customers.filter(
-    c => c.status === 'collected'
-  );
-
-  const due = customers.filter(
-    c => ['due-today', 'overdue'].includes(c.status)
-  );
-
-  const total = customers.reduce(
-    (sum, c) => sum + Number(c.bill || 0),
-    0
-  );
-
-  $('totalCount').textContent = customers.length;
-  $('collectedCount').textContent = collected.length;
-  $('dueCount').textContent = due.length;
-  $('totalAmount').textContent = money(total);
-}
-
-// ================= FILTER =================
-
-function filteredCustomers() {
-
-  const term = $('searchInput').value.trim().toLowerCase();
-  const status = $('statusFilter').value;
-  const sort = $('sortFilter').value;
-
-  let list = customers.filter(c => {
-
-    const customerStatus = c.status || 'no-date';
-
-    if (status === 'due' &&
-        !['due-today', 'overdue'].includes(customerStatus)) {
-      return false;
-    }
-
-    if (status === 'upcoming' &&
-        customerStatus !== 'upcoming') {
-      return false;
-    }
-
-    if (status === 'due-today' &&
-        customerStatus !== 'due-today') {
-      return false;
-    }
-
-    if (status === 'overdue' &&
-        customerStatus !== 'overdue') {
-      return false;
-    }
-
-    if (status === 'collected' &&
-        customerStatus !== 'collected') {
-      return false;
-    }
-
-    if (status === 'no-date' &&
-        customerStatus !== 'no-date') {
-      return false;
-    }
-
-    const text = [
-      c.si,c.name,c.phone,c.ip,c.email,
-      c.address,c.location,c.area
-    ].join(' ').toLowerCase();
-
-    return !term || text.includes(term);
-  });
-
-  if (sort === 'name') {
-    list.sort((a,b) =>
-      String(a.name).localeCompare(String(b.name))
-    );
-  } else if (sort === 'oldest') {
-    list.sort((a,b) => Number(a.row) - Number(b.row));
-  } else {
-    list.sort((a,b) => Number(b.row) - Number(a.row));
-  }
-
-  return list;
-}
-
-// ================= RENDER CUSTOMERS =================
-
-function renderCustomers() {
-
-  const list = filteredCustomers();
-
-  const totalPages = Math.max(
-    1,
-    Math.ceil(list.length / pageSize)
-  );
-
-  currentPage = Math.min(currentPage, totalPages);
-
-  const start = (currentPage - 1) * pageSize;
-
-  const page = list.slice(start, start + pageSize);
-
-  $('resultCount').textContent = list.length + ' customers';
-
-  $('pageInfo').textContent = list.length
-    ? `Showing ${start + 1}–${Math.min(start + pageSize,list.length)} of ${list.length}`
-    : 'No customers found';
-
-  $('pageNumber').textContent = currentPage;
-
-  if (!page.length) {
-    $('customerRows').innerHTML =
-      '<tr><td colspan="9" class="empty">No customer found.</td></tr>';
-    return;
-  }
-
-  const statusInfo = {
-    collected: ['Collected','green'],
-    upcoming: ['Upcoming','gray'],
-    'due-today': ['Due Today','orange'],
-    overdue: ['Overdue','orange'],
-    'no-date': ['No Date','gray']
-  };
-
-  $('customerRows').innerHTML = page.map(c => {
-
-    const status = c.status || 'no-date';
-
-    const [statusText,statusClass] =
-      statusInfo[status] || statusInfo['no-date'];
-
-    return `
-      <tr>
-        <td>${escapeHTML(c.si || '')}</td>
-
-        <td>
-          <div class="customer-name">${escapeHTML(c.name || '—')}</div>
-          <div class="subtext">${escapeHTML(c.address || c.location || '')}</div>
-        </td>
-
-        <td>${escapeHTML(c.phone || '—')}</td>
-
-        <td>${escapeHTML(c.ip || '—')}</td>
-
-        <td><strong>${money(c.bill)}</strong></td>
-
-        <td>${escapeHTML(c.billingDate || '—')}</td>
-
-        <td>${escapeHTML(c.email || '—')}</td>
-
-        <td>
-          <span class="pill ${statusClass}">
-            ${statusText}
-          </span>
-        </td>
-
-        <td>
-          <div class="row-actions">
-
-            <button class="action-btn"
-              title="Edit"
-              onclick="editCustomer(${Number(c.row)})">
-              <i class="fa-solid fa-pen"></i>
-            </button>
-
-            <button class="action-btn"
-              title="Collect"
-              onclick="collectCustomer(${Number(c.row)})">
-              <i class="fa-solid fa-check"></i>
-            </button>
-
-            <button class="action-btn"
-              title="Renew"
-              onclick="renewCustomer(${Number(c.row)})">
-              <i class="fa-solid fa-rotate"></i>
-            </button>
-
-            <button class="action-btn del"
-              title="Delete"
-              onclick="deleteCustomer(${Number(c.row)})">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-
-          </div>
-        </td>
-      </tr>
-    `;
-  }).join('');
-}
-
-// ================= PAGINATION =================
-
-function changePage(direction) {
-  const totalPages = Math.max(
-    1,
-    Math.ceil(filteredCustomers().length / pageSize)
-  );
-
-  currentPage = Math.max(
-    1,
-    Math.min(totalPages,currentPage + direction)
-  );
-
+ try{
+  const result=ensureOk(await apiGet("customers"));
+  customers=unwrapArray(result,["customers","rows"]);
   renderCustomers();
+  renderCards();
+ }catch(error){
+  console.error(error);
+  toast("Load failed: "+error.message);
+ }finally{
+  showLoader(false);
+ }
 }
 
-function setFilter(value) {
-  $('statusFilter').value = value;
-  currentPage = 1;
-  renderCustomers();
-
-  if (window.innerWidth <= 800) {
-    toggleMenu();
-  }
+function renderCards(){
+ $("cardTotal").textContent=customers.length;
+ $("cardDue").textContent=money(customers.reduce((s,c)=>s+getDue(c),0));
+ $("cardUnpaid").textContent=customers.filter(c=>getDue(c)>0).length;
+ $("cardUpcoming").textContent=customers.filter(c=>statusFor(c)==="Upcoming").length;
 }
 
-// ================= MODAL =================
+/* ================= CUSTOMER TABLE ================= */
 
-function openAddModal() {
-  $('customerForm').reset();
-  $('f_row').value = '';
+function renderCustomers(){
+ const query=($("customerSearch").value||"").toLowerCase();
+ const filter=$("customerFilter").value;
 
-  $('modalTitle').textContent = 'Add New Customer';
+ let list=customers.filter(c=>{
+  const searchText=[
+   getName(c),
+   val(c,"ip","IP"),
+   val(c,"phone","Phone"),
+   val(c,"package","Package"),
+   val(c,"gmail","Gmail's"),
+   val(c,"address","Address")
+  ].join(" ").toLowerCase();
 
-  $('saveBtn').innerHTML =
-    '<i class="fa-solid fa-floppy-disk"></i> Save Customer';
+  return searchText.includes(query);
+ });
 
-  $('customerModal').classList.add('show');
+ if(filter==="due")list=list.filter(c=>getDue(c)>0);
+ if(filter==="paid")list=list.filter(c=>getDue(c)<=0);
+ if(filter==="upcoming")list=list.filter(c=>statusFor(c)==="Upcoming");
+ if(filter==="overdue")list=list.filter(c=>statusFor(c)==="Overdue");
+
+ $("customerRows").innerHTML=list.length?list.map(c=>`
+  <tr>
+   <td>
+    <div class="customer-name">${esc(getName(c))}</div>
+    <div class="subtext">${esc(val(c,"gmail","Gmail's")||"")}</div>
+   </td>
+   <td>
+    ${esc(val(c,"ip","IP")||"—")}
+    <div class="subtext">${esc(val(c,"phone","Phone")||"")}</div>
+   </td>
+   <td>${esc(val(c,"package","Package")||"—")}</td>
+   <td>${money(getBill(c))}</td>
+   <td><b>${money(getDue(c))}</b></td>
+   <td>${dateText(getBilling(c))}</td>
+   <td>${statusBadge(statusFor(c))}</td>
+   <td>
+    <div class="actions">
+     <button class="icon-btn" title="Details" onclick="viewDetails('${esc(getId(c))}')"><i data-lucide="eye"></i></button>
+     <button class="icon-btn" title="Edit" onclick="editCustomer('${esc(getId(c))}')"><i data-lucide="pencil"></i></button>
+     <button class="icon-btn" title="Collect" onclick="openCollect('${esc(getId(c))}')"><i data-lucide="wallet"></i></button>
+     <button class="icon-btn" title="Renew" onclick="renewCustomer('${esc(getId(c))}')"><i data-lucide="refresh-cw"></i></button>
+     <button class="icon-btn" title="Delete" onclick="deleteCustomer('${esc(getId(c))}')"><i data-lucide="trash-2"></i></button>
+    </div>
+   </td>
+  </tr>
+ `).join(""):'<tr><td colspan="8" class="empty">No matching customers found.</td></tr>';
+
+ icons();
 }
 
-function closeModal() {
-  $('customerModal').classList.remove('show');
-}
+/* ================= ADD / EDIT CUSTOMER ================= */
 
-function backdropClose(event) {
-  if (event.target === $('customerModal')) {
-    closeModal();
-  }
-}
+function openCustomerModal(customer=null){
+ const form=$("customerForm");
+ form.reset();
 
-// ================= EDIT CUSTOMER =================
+ form.elements.customerId.value=customer?getId(customer):"";
+ $("customerModalTitle").textContent=customer?"Edit Customer":"Add New Customer";
+ $("customerSaveBtn").textContent=customer?"Update Customer":"Save Customer";
 
-function editCustomer(row) {
-
-  const c = customers.find(
-    x => Number(x.row) === Number(row)
-  );
-
-  if (!c) {
-    showToast('Customer not found');
-    return;
-  }
-
-  $('customerForm').reset();
-
-  $('f_row').value = c.row;
-
-  const fields = {
-    name:c.name,
-    phone:c.phone,
-    ip:c.ip,
-    reason:c.reason,
-    area:c.area,
-    address:c.address,
-    location:c.location,
-    email:c.email,
-    bill:c.bill,
-    billingDate:normalizeDate(c.billingDate),
-    billTrigger:c.billTrigger,
-    ipBill:c.ipBill,
-    ipBillTrigger:c.ipBillTrigger,
-    collect:c.collect,
-    renew:c.renew,
-    onu:c.onu,
-    fiber:c.fiber
+ if(customer){
+  const fields={
+   ip:["ip","IP"],
+   name:["name","Name"],
+   phone:["phone","Phone"],
+   reason:["reason","Reason"],
+   package:["package","Package"],
+   customerBill:["customerBill","Customar Bill","customer bill"],
+   billTrigger:["billTrigger","Bill Triger"],
+   internetBill:["internetBill","Internet bill"],
+   billingDate:["billingDate","Biling date"],
+   billTrigger2:["billTrigger2","Bill triger"],
+   renew:["renew","Renew"],
+   area:["area","Ariya"],
+   address:["address","Address"],
+   location:["location","Location"],
+   onu:["onu","Onu"],
+   fiber:["fiber","Faibar"],
+   gmail:["gmail","Gmail's"],
+   due:["due","Due"]
   };
 
-  Object.entries(fields).forEach(([key,value]) => {
-    const input = $('f_' + key);
-    if (input) input.value = value ?? '';
+  Object.entries(fields).forEach(([field,keys])=>{
+   form.elements[field].value=val(customer,...keys);
   });
 
-  $('modalTitle').textContent = 'Edit Customer';
+  form.elements.billingDate.value=dateInput(getBilling(customer));
+ }
 
-  $('saveBtn').innerHTML =
-    '<i class="fa-solid fa-floppy-disk"></i> Update Customer';
-
-  $('customerModal').classList.add('show');
+ $("customerModal").classList.add("show");
 }
 
-// ================= SAVE CUSTOMER =================
+function closeModal(id){$(id).classList.remove("show");}
 
-async function saveCustomer(event) {
-
-  event.preventDefault();
-
-  if (actionBusy) return;
-
-  const row = $('f_row').value;
-
-  const data = {
-    row:row,
-    name:$('f_name').value.trim(),
-    phone:$('f_phone').value.trim(),
-    ip:$('f_ip').value.trim(),
-    reason:$('f_reason').value.trim(),
-    area:$('f_area').value.trim(),
-    address:$('f_address').value.trim(),
-    location:$('f_location').value.trim(),
-    email:$('f_email').value.trim(),
-    bill:$('f_bill').value,
-    billingDate:$('f_billingDate').value,
-    billTrigger:$('f_billTrigger').value,
-    ipBill:$('f_ipBill').value,
-    ipBillTrigger:$('f_ipBillTrigger').value,
-    collect:$('f_collect').value,
-    renew:$('f_renew').value,
-    onu:$('f_onu').value.trim(),
-    fiber:$('f_fiber').value.trim()
-  };
-
-  if (!data.name && !data.phone) {
-    showToast('Customer name or phone is required');
-    return;
-  }
-
-  actionBusy = true;
-
-  const button = $('saveBtn');
-
-  button.disabled = true;
-
-  button.innerHTML =
-    '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
-
-  try {
-
-    const result = await api(
-      row ? 'updatecustomer' : 'addcustomer',
-      data
-    );
-
-    if (result.success === false) {
-      throw new Error(result.error || 'Save failed');
-    }
-
-    closeModal();
-
-    showToast(
-      row
-        ? 'Customer updated successfully'
-        : 'Customer added successfully'
-    );
-
-    await loadCustomers();
-
-  } catch(error) {
-
-    showToast('Save failed: ' + error.message);
-
-  } finally {
-
-    actionBusy = false;
-
-    button.disabled = false;
-
-    button.innerHTML = row
-      ? '<i class="fa-solid fa-floppy-disk"></i> Update Customer'
-      : '<i class="fa-solid fa-floppy-disk"></i> Save Customer';
-  }
+function editCustomer(id){
+ const customer=customers.find(c=>String(getId(c))===String(id));
+ if(customer)openCustomerModal(customer);
 }
 
-// ================= DELETE CUSTOMER =================
+$("customerForm").addEventListener("submit",async event=>{
+ event.preventDefault();
 
-async function deleteCustomer(row) {
+ const form=event.currentTarget;
+ const payload=Object.fromEntries(new FormData(form).entries());
 
-  if (actionBusy) return;
+ payload.action=payload.customerId?"updateCustomer":"addCustomer";
 
-  const c = customers.find(
-    x => Number(x.row) === Number(row)
-  );
+ ["customerBill","internetBill","due"].forEach(k=>{
+  payload[k]=Number(payload[k]||0);
+ });
 
-  if (!confirm(
-    'Delete ' + (c?.name || 'this customer') +
-    '? This cannot be undone.'
-  )) return;
+ if(!payload.name&&!payload.phone){
+  toast("Enter at least a customer name or phone number.");
+  return;
+ }
 
-  actionBusy = true;
+ showLoader(true);
 
-  try {
+ try{
+  ensureOk(await apiPost(payload));
+  closeModal("customerModal");
+  toast(payload.action==="addCustomer"?"Customer added successfully.":"Customer updated successfully.");
+  await refreshAll();
+ }catch(error){
+  toast("Save failed: "+error.message);
+ }finally{
+  showLoader(false);
+ }
+});
 
-    await api('deletecustomer',{row});
+/* ================= COLLECT PAYMENT ================= */
 
-    showToast('Customer deleted');
+function openCollect(id){
+ const customer=customers.find(c=>String(getId(c))===String(id));
+ if(!customer)return;
 
-    await loadCustomers();
+ const form=$("collectForm");
+ form.reset();
 
-  } catch(error) {
+ form.elements.customerId.value=getId(customer);
+ form.elements.customerName.value=getName(customer);
+ form.elements.currentDue.value=money(getDue(customer));
+ form.elements.amount.value=getDue(customer)>0?getDue(customer):getBill(customer);
 
-    showToast('Delete failed: ' + error.message);
-
-  } finally {
-
-    actionBusy = false;
-  }
+ $("collectModal").classList.add("show");
 }
 
-// ================= COLLECT CUSTOMER =================
+$("collectForm").addEventListener("submit",async event=>{
+ event.preventDefault();
 
-async function collectCustomer(row) {
+ const payload=Object.fromEntries(new FormData(event.currentTarget).entries());
+ payload.action="collect";
+ payload.amount=Number(payload.amount||0);
 
-  if (actionBusy) return;
+ if(payload.amount<=0){
+  toast("Enter a valid collection amount.");
+  return;
+ }
 
-  if (!confirm('Mark this customer as collected?')) return;
+ showLoader(true);
 
-  actionBusy = true;
+ try{
+  ensureOk(await apiPost(payload));
+  closeModal("collectModal");
+  toast("Payment collected successfully.");
+  await refreshAll();
+ }catch(error){
+  toast("Collect failed: "+error.message);
+ }finally{
+  showLoader(false);
+ }
+});
 
-  try {
+/* ================= RENEW ================= */
 
-    const result = await api('collect',{row});
+async function renewCustomer(id){
+ const customer=customers.find(c=>String(getId(c))===String(id));
+ if(!customer)return;
 
-    showToast(result.message || 'Collection status updated');
+ if(!confirm("Renew "+getName(customer)+" for one month?"))return;
 
-    await loadCustomers();
+ showLoader(true);
 
-  } catch(error) {
+ try{
+  ensureOk(await apiPost({
+   action:"renew",
+   customerId:id,
+   note:"Renewed from One Online Customer Page"
+  }));
 
-    showToast('Collect failed: ' + error.message);
-
-  } finally {
-
-    actionBusy = false;
-  }
+  toast("Customer renewed successfully.");
+  await refreshAll();
+ }catch(error){
+  toast("Renew failed: "+error.message);
+ }finally{
+  showLoader(false);
+ }
 }
 
-// ================= RENEW CUSTOMER =================
+/* ================= DELETE ================= */
 
-async function renewCustomer(row) {
+async function deleteCustomer(id){
+ const customer=customers.find(c=>String(getId(c))===String(id));
+ if(!customer)return;
 
-  if (actionBusy) return;
+ if(!confirm("Are you sure you want to delete "+getName(customer)+"?"))return;
 
-  if (!confirm('Mark this customer as renewed?')) return;
+ showLoader(true);
 
-  actionBusy = true;
+ try{
+  ensureOk(await apiPost({
+   action:"deleteCustomer",
+   customerId:id
+  }));
 
-  try {
-
-    const result = await api('renew',{row});
-
-    showToast(result.message || 'Renew status updated');
-
-    await loadCustomers();
-
-  } catch(error) {
-
-    showToast('Renew failed: ' + error.message);
-
-  } finally {
-
-    actionBusy = false;
-  }
+  toast("Customer deleted successfully.");
+  await refreshAll();
+ }catch(error){
+  toast("Delete failed: "+error.message);
+ }finally{
+  showLoader(false);
+ }
 }
 
-// ================= START =================
+/* ================= VIEW DETAILS ================= */
 
-loadCustomers();
+function viewDetails(id){
+ const c=customers.find(x=>String(getId(x))===String(id));
+ if(!c)return;
 
+ const fields=[
+  ["IP Address",val(c,"ip","IP")],
+  ["Name",getName(c)],
+  ["Phone",val(c,"phone","Phone")],
+  ["Reason",val(c,"reason","Reason")],
+  ["Package",val(c,"package","Package")],
+  ["Customer Bill",money(getBill(c))],
+  ["Bill Trigger",val(c,"billTrigger","Bill Triger")],
+  ["Internet Bill",money(val(c,"internetBill","Internet bill"))],
+  ["Billing Date",dateText(getBilling(c))],
+  ["Bill Trigger 2",val(c,"billTrigger2","Bill triger")],
+  ["Renew",val(c,"renew","Renew")],
+  ["Area",val(c,"area","Ariya")],
+  ["Address",val(c,"address","Address")],
+  ["Location",val(c,"location","Location")],
+  ["ONU",val(c,"onu","Onu")],
+  ["Faibar",val(c,"fiber","Faibar")],
+  ["Gmail",val(c,"gmail","Gmail's")],
+  ["Due",money(getDue(c))]
+ ];
+
+ $("detailsContent").innerHTML=fields.map(([label,value])=>`
+  <div class="detail">
+   <span>${esc(label)}</span>
+   <strong>${esc(value||"—")}</strong>
+  </div>
+ `).join("");
+
+ $("detailsModal").classList.add("show");
+}
+
+/* ================= NAVIGATION ================= */
+
+$("menuBtn").addEventListener("click",()=>{
+ $("sidebar").classList.toggle("open");
+ $("mobileOverlay").classList.toggle("show");
+});
+
+$("mobileOverlay").addEventListener("click",()=>{
+ $("sidebar").classList.remove("open");
+ $("mobileOverlay").classList.remove("show");
+});
+
+function icons(){
+ if(window.lucide)lucide.createIcons();
+}
+
+icons();
+refreshAll();
 </script>
 </body>
 </html>
