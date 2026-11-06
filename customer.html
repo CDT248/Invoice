@@ -1,140 +1,1452 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0b1220">
-<title>One Online | Customers</title>
+<title>One Online | Customer Management</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
 <style>
-:root{--bg:#0b1220;--panel:#111c2e;--panel2:#16243a;--line:#26364e;--text:#e8eef8;--muted:#91a1b8;--green:#19c58b;--red:#fb7185;--yellow:#fbbf24;--blue:#38bdf8;--purple:#a78bfa;--shadow:0 18px 50px #0005}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0%,#132a39 0,transparent 32%),var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;font-size:14px}.app{min-height:100vh}.sidebar{position:fixed;inset:0 auto 0 0;width:245px;background:#0d1727;border-right:1px solid var(--line);padding:24px 17px;display:flex;flex-direction:column;z-index:5}.brand{display:flex;align-items:center;gap:12px;padding:0 8px 30px}.brand-icon{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,#19c58b,#087f5b);display:grid;place-items:center;font-size:23px;font-weight:800;color:white}.brand b{display:block;letter-spacing:1.2px;font-size:14px}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:1.4px;margin-top:4px}.nav-label{font-size:10px;letter-spacing:1.5px;color:#61738d;font-weight:800;padding:12px 10px}.nav a{display:flex;align-items:center;gap:12px;padding:12px 13px;margin:3px 0;border-radius:10px;text-decoration:none;color:#9eacc0;font-weight:600}.nav a:hover,.nav a.active{background:#17352f;color:#5ce0b0}.ico{width:20px;text-align:center;font-size:17px}.side-bottom{margin-top:auto;color:#70829b;font-size:11px;line-height:1.8;padding:12px 10px}.side-bottom span{color:var(--yellow)}.main{margin-left:245px;padding:28px 32px 50px;max-width:1700px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:25px}.eyebrow{font-size:10px;letter-spacing:1.8px;color:#5ce0b0;font-weight:800;margin-bottom:7px}.topbar h1{margin:0;font-size:27px;letter-spacing:-.7px}.top-actions{display:flex;align-items:center;gap:9px}.pill{border:1px solid var(--line);background:#111c2e;color:var(--muted);padding:10px 13px;border-radius:10px;font-size:12px}.btn{border:0;border-radius:10px;background:linear-gradient(135deg,#19c58b,#087f5b);color:white;padding:11px 15px;font-weight:700;cursor:pointer;font-size:12px}.btn:hover{filter:brightness(1.1)}.btn.secondary{background:#1a2a40;border:1px solid #30435e;color:#d8e4f3}.btn.danger{background:#44202d;border:1px solid #703448;color:#ff9bad}.btn.warning{background:#43351c;border:1px solid #705523;color:#ffd879}.hamb{display:none}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:20px}.stat{background:linear-gradient(145deg,#142238,#101a2b);border:1px solid var(--line);border-radius:16px;padding:18px;position:relative;overflow:hidden}.stat:after{content:"";position:absolute;width:95px;height:95px;border-radius:50%;right:-30px;top:-35px;background:var(--glow);opacity:.09;filter:blur(2px)}.stat-label{font-size:10px;letter-spacing:1.2px;color:var(--muted);font-weight:800}.stat-value{font-size:27px;font-weight:800;margin:11px 0 4px}.stat-foot{font-size:11px;color:#7588a2}.panel{background:linear-gradient(145deg,#111d30,#101a2b);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow)}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.panel-head h2{font-size:16px;margin:0}.muted{color:var(--muted)}.small{font-size:11px}.toolbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:15px}.field{background:#0b1525;border:1px solid #2b3c55;color:var(--text);border-radius:9px;padding:11px 12px;font:inherit;outline:none;min-width:0}.field:focus{border-color:#1fc992;box-shadow:0 0 0 3px #19c58b18}.search{flex:1;min-width:200px}.tabs{display:flex;gap:6px;flex-wrap:wrap}.tab{border:1px solid #2a3b53;background:#101b2c;color:#9eacc0;padding:9px 12px;border-radius:9px;cursor:pointer;font-size:11px;font-weight:700}.tab.active{background:#174033;border-color:#207a5d;color:#69e4b8}.table-wrap{width:100%;overflow:auto;border:1px solid var(--line);border-radius:12px}table{width:100%;border-collapse:collapse;min-width:920px}th{background:#15243a;color:#9eacc0;font-size:10px;letter-spacing:.8px;text-align:left;padding:13px 12px;white-space:nowrap}td{padding:13px 12px;border-top:1px solid #24344b;font-size:12px;white-space:nowrap}tbody tr:hover{background:#ffffff05}.customer-name{font-weight:700}.sub{display:block;color:#8294ad;font-size:10px;margin-top:4px}.status{display:inline-flex;padding:5px 8px;border-radius:30px;font-size:10px;font-weight:800}.status.paid{background:#123d31;color:#64e2b5}.status.upcoming{background:#17344a;color:#7dd3fc}.status.due{background:#44351b;color:#fcd574}.status.overdue{background:#482330;color:#ff9bad}.actions{display:flex;gap:5px}.actions .btn{padding:7px 9px;font-size:10px}.empty{text-align:center;color:#8192aa;padding:35px!important}.loading{text-align:center;color:#9eacc0;padding:35px}.modal-back{display:none;position:fixed;inset:0;background:#020712c9;z-index:20;align-items:center;justify-content:center;padding:15px}.modal-back.show{display:flex}.modal{width:min(760px,100%);max-height:92vh;overflow:auto;background:#111d30;border:1px solid #344861;border-radius:17px;padding:22px;box-shadow:0 30px 100px #000a}.modal h3{margin:0 0 6px;font-size:19px}.modal p{color:var(--muted);font-size:12px;margin:0 0 18px}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.form-item label{display:block;font-size:10px;color:#9eacc0;font-weight:700;margin:0 0 6px}.form-item .field{width:100%}.form-item.full{grid-column:1/-1}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.toast{position:fixed;right:22px;bottom:22px;background:#1b2b40;border:1px solid #3a506d;color:#fff;padding:13px 17px;border-radius:11px;box-shadow:var(--shadow);opacity:0;transform:translateY(10px);transition:.2s;z-index:50;max-width:min(420px,calc(100vw - 40px));pointer-events:none}.toast.show{opacity:1;transform:translateY(0)}.connection{font-size:11px;color:var(--yellow);margin-left:8px}.hidden{display:none!important}
-@media(max-width:1050px){.sidebar{width:215px}.main{margin-left:215px;padding:24px 20px}.stats{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:760px){.sidebar{transform:translateX(-100%);transition:.22s;width:245px}.sidebar.open{transform:translateX(0)}.main{margin-left:0;padding:20px 14px 40px}.hamb{display:inline-block}.topbar{align-items:flex-start}.topbar h1{font-size:22px}.top-actions .pill{display:none}.stats{gap:9px}.stat{padding:14px}.stat-value{font-size:22px}.panel{padding:14px}.form-grid{grid-template-columns:1fr}.form-item.full{grid-column:auto}}
-@media(max-width:420px){.stats{grid-template-columns:1fr 1fr}.stat-value{font-size:19px}.top-actions{gap:5px}.top-actions .btn{padding:10px;font-size:10px}}
+:root {
+  --bg:#0b1220;
+  --panel:#111c2e;
+  --panel2:#172438;
+  --border:#26364d;
+  --text:#edf4ff;
+  --muted:#8fa2bc;
+  --green:#10b981;
+  --blue:#3b82f6;
+  --red:#ef4444;
+  --orange:#f59e0b;
+  --purple:#a78bfa;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,Arial,sans-serif;
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{min-height:100vh}
+.topbar{
+  height:70px;
+  padding:0 25px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  background:#101b2c;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-weight:800;
+  font-size:19px;
+}
+.brand-icon{
+  width:38px;height:38px;
+  display:grid;place-items:center;
+  background:linear-gradient(135deg,#10b981,#059669);
+  border-radius:11px;
+}
+.top-actions{display:flex;gap:10px;align-items:center}
+.container{max-width:1500px;margin:auto;padding:25px}
+.page-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:22px;
+}
+.page-head h1{font-size:25px;margin:0 0 7px}
+.page-head p{color:var(--muted);margin:0;font-size:13px}
+.btn{
+  border:0;
+  border-radius:9px;
+  padding:11px 15px;
+  font-weight:700;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+.btn-primary{background:var(--green);color:#03251a}
+.btn-secondary{background:#26364d;color:white}
+.btn-danger{background:#4b2028;color:#fecaca}
+.btn-blue{background:#173a69;color:#bfdbfe}
+.btn-small{padding:7px 10px;font-size:12px}
+.cards{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:14px;
+  margin-bottom:22px;
+}
+.stat{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:18px;
+  min-height:120px;
+}
+.stat-top{display:flex;justify-content:space-between;align-items:center}
+.stat-label{font-size:12px;color:var(--muted);font-weight:600}
+.stat-icon{
+  width:34px;height:34px;
+  display:grid;place-items:center;
+  border-radius:9px;
+  background:#24354b;
+}
+.stat-value{font-size:25px;font-weight:800;margin-top:16px}
+.green{color:#34d399}
+.blue{color:#60a5fa}
+.red{color:#fb7185}
+.orange{color:#fbbf24}
+.purple{color:#c4b5fd}
+.panel{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:13px;
+  overflow:hidden;
+}
+.panel-head{
+  padding:17px 19px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+.panel-head h2{font-size:15px;margin:0}
+.toolbar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  padding:16px;
+  align-items:center;
+}
+.field{
+  background:#0c1728;
+  border:1px solid var(--border);
+  color:var(--text);
+  border-radius:8px;
+  padding:10px 12px;
+  outline:none;
+  min-height:40px;
+}
+.field:focus{border-color:var(--green)}
+.search{flex:1;min-width:190px}
+select.field{min-width:130px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:1050px}
+th,td{
+  padding:13px 14px;
+  border-bottom:1px solid #233247;
+  text-align:left;
+  font-size:12px;
+  white-space:nowrap;
+}
+th{
+  color:#91a6c1;
+  background:#142136;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.4px;
+}
+td{color:#dbe7f7}
+tbody tr:hover{background:#17263a}
+.customer-name{font-weight:700;color:#fff}
+.sub{font-size:11px;color:var(--muted);margin-top:4px}
+.status{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:10px;
+  font-weight:800;
+}
+.status-paid{background:#123d32;color:#6ee7b7}
+.status-due{background:#48202a;color:#fda4af}
+.status-upcoming{background:#493516;color:#fcd34d}
+.status-overdue{background:#55202a;color:#fecaca}
+.status-normal{background:#1c3556;color:#93c5fd}
+.actions{display:flex;gap:6px}
+.icon-btn{
+  width:30px;height:30px;
+  border:1px solid var(--border);
+  background:#1a2a40;
+  color:#dbeafe;
+  border-radius:7px;
+}
+.icon-btn:hover{border-color:var(--green);color:var(--green)}
+.empty{
+  text-align:center;
+  padding:50px 20px;
+  color:var(--muted);
+}
+.empty i{font-size:30px;margin-bottom:12px}
+.pagination{
+  display:flex;justify-content:space-between;
+  align-items:center;padding:14px 17px;
+  color:var(--muted);font-size:12px;
+}
+.modal{
+  display:none;
+  position:fixed;inset:0;
+  background:#000b;
+  z-index:50;
+  align-items:center;
+  justify-content:center;
+  padding:15px;
+}
+.modal.show{display:flex}
+.modal-box{
+  width:min(850px,100%);
+  max-height:92vh;
+  overflow:auto;
+  background:#111c2e;
+  border:1px solid var(--border);
+  border-radius:15px;
+}
+.modal-head{
+  padding:18px 20px;
+  display:flex;justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;background:#111c2e;z-index:2;
+}
+.modal-head h2{margin:0;font-size:17px}
+.close{
+  background:none;border:0;color:white;
+  font-size:22px;
+}
+.modal-body{padding:20px}
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+.form-group label{
+  display:block;font-size:11px;
+  color:#a9bbd2;margin-bottom:7px;
+  font-weight:700;
+}
+.form-group .field{width:100%}
+.section-title{
+  grid-column:1/-1;
+  color:#34d399;
+  font-size:12px;
+  font-weight:800;
+  padding-bottom:8px;
+  border-bottom:1px solid var(--border);
+}
+.modal-foot{
+  padding:15px 20px;
+  display:flex;justify-content:flex-end;
+  gap:9px;border-top:1px solid var(--border);
+  position:sticky;bottom:0;background:#111c2e;
+}
+.toast{
+  position:fixed;right:20px;bottom:20px;
+  padding:14px 18px;
+  background:#173d32;color:#a7f3d0;
+  border:1px solid #236c52;border-radius:10px;
+  z-index:100;display:none;
+  max-width:90%;
+  font-size:13px;
+}
+.toast.error{background:#4b2028;color:#fecaca;border-color:#7f2938}
+.loading{
+  position:fixed;inset:0;background:#07101ddd;
+  display:none;align-items:center;justify-content:center;
+  z-index:90;flex-direction:column;gap:13px;
+}
+.loading.show{display:flex}
+.spinner{
+  width:35px;height:35px;border:3px solid #334155;
+  border-top-color:var(--green);border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:1050px){
+  .cards{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:650px){
+  .topbar{padding:0 14px;height:60px}
+  .container{padding:15px}
+  .page-head{align-items:flex-start;flex-direction:column}
+  .page-head h1{font-size:21px}
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .stat{padding:13px;min-height:105px}
+  .stat-value{font-size:21px}
+  .stat-label{font-size:10px}
+  .toolbar{padding:11px}
+  .search{min-width:100%}
+  .form-grid{grid-template-columns:1fr 1fr}
+  .form-group.full{grid-column:1/-1}
+  .modal-body{padding:14px}
+  .btn{padding:10px 12px;font-size:12px}
+}
+@media(max-width:390px){
+  .form-grid{grid-template-columns:1fr}
+  .section-title{grid-column:1}
+}
 </style>
 </head>
+
 <body>
 <div class="app">
-<aside class="sidebar" id="sidebar">
-  <div class="brand"><div class="brand-icon">O</div><div><b>ONE ONLINE</b><small>ISP MANAGEMENT</small></div></div>
-  <div class="nav-label">WORKSPACE</div>
-  <nav class="nav">
-    <a href="index.html"><span class="ico">▦</span>Dashboard</a>
-    <a href="customer.html" class="active"><span class="ico">♙</span>Customers</a>
-    <a href="index.html#expenses"><span class="ico">↗</span>Expenses</a>
-    <a href="index.html#reports"><span class="ico">▤</span>Reports</a>
-    <a href="index.html#history"><span class="ico">◷</span>History</a>
-  </nav>
-  <div class="nav-label">COMMUNICATION</div>
-  <nav class="nav">
-    <a href="gmail.html"><span class="ico">✉</span>Gmail Dashboard</a>
-    <a href="gmail.html#send"><span class="ico">➤</span>Send Email</a>
-    <a href="gmail.html#settings"><span class="ico">⚙</span>Email Settings</a>
-  </nav>
-  <div class="side-bottom">One Online<br>Customer & Billing Management<br><span id="apiState">Connecting to database…</span></div>
-</aside>
-<main class="main">
+
 <header class="topbar">
-  <div style="display:flex;align-items:center;gap:12px"><button class="btn secondary hamb" id="hamb">☰</button><div><div class="eyebrow">ONE ONLINE / MANAGEMENT</div><h1>Customer Management</h1><div class="small muted" style="margin-top:6px">Add, edit, collect, renew and manage customers</div></div></div>
-  <div class="top-actions"><span class="pill" id="todayText">—</span><button class="btn secondary" id="refreshBtn">↻ Refresh</button><button class="btn" id="addBtn">＋ Add Customer</button></div>
+  <div class="brand">
+    <div class="brand-icon"><i class="fa-solid fa-wifi"></i></div>
+    <span>ONE ONLINE</span>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn-secondary btn-small" onclick="loadData()">
+      <i class="fa-solid fa-rotate"></i> Refresh
+    </button>
+    <button class="btn btn-primary btn-small" onclick="openAdd()">
+      <i class="fa-solid fa-plus"></i> Add Customer
+    </button>
+  </div>
 </header>
-<section class="stats">
-  <div class="stat" style="--glow:#38bdf8"><div class="stat-label">TOTAL CUSTOMERS</div><div class="stat-value" id="totalCustomers">0</div><div class="stat-foot">All registered connections</div></div>
-  <div class="stat" style="--glow:#fb7185"><div class="stat-label">TOTAL DUE</div><div class="stat-value" id="totalDue">৳0</div><div class="stat-foot">Outstanding balance</div></div>
-  <div class="stat" style="--glow:#fbbf24"><div class="stat-label">DUE TODAY</div><div class="stat-value" id="dueToday">0</div><div class="stat-foot">Billing date is today</div></div>
-  <div class="stat" style="--glow:#a78bfa"><div class="stat-label">UPCOMING</div><div class="stat-value" id="upcoming">0</div><div class="stat-foot">Billing date in next 3 days</div></div>
-</section>
-<section class="panel">
-  <div class="panel-head"><div><h2>Customer List</h2><div class="small muted" style="margin-top:5px">Customer details are loaded from your One Online Google Sheet</div></div><span class="small muted" id="countLabel">0 customers</span></div>
-  <div class="toolbar"><input class="field search" id="searchBox" placeholder="Search name, IP, phone, area or package…"><select class="field" id="sortSelect"><option value="name">Sort: Name</option><option value="date">Billing Date</option><option value="due">Highest Due</option><option value="recent">Recently Updated</option></select></div>
-  <div class="toolbar tabs" id="filters"><button class="tab active" data-filter="all">All</button><button class="tab" data-filter="due">Due Today</button><button class="tab" data-filter="upcoming">Upcoming</button><button class="tab" data-filter="overdue">Overdue</button><button class="tab" data-filter="paid">Paid</button></div>
-  <div class="table-wrap"><table><thead><tr><th>CUSTOMER</th><th>IP ADDRESS</th><th>PHONE</th><th>PACKAGE</th><th>BILLING DATE</th><th>MONTHLY BILL</th><th>DUE</th><th>STATUS</th><th>ACTIONS</th></tr></thead><tbody id="customerRows"><tr><td colspan="9" class="loading">Connecting to One Online database…</td></tr></tbody></table></div>
-</section>
+
+<main class="container">
+
+  <div class="page-head">
+    <div>
+      <h1>Customer Management</h1>
+      <p>Manage your internet customers, payments and renewals.</p>
+    </div>
+    <div id="connectionStatus" class="status status-normal">
+      <i class="fa-solid fa-circle-notch fa-spin"></i> Connecting...
+    </div>
+  </div>
+
+  <section class="cards">
+    <div class="stat">
+      <div class="stat-top">
+        <span class="stat-label">TOTAL CUSTOMERS</span>
+        <span class="stat-icon blue"><i class="fa-solid fa-users"></i></span>
+      </div>
+      <div class="stat-value" id="totalCustomers">0</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-top">
+        <span class="stat-label">TOTAL DUE</span>
+        <span class="stat-icon red"><i class="fa-solid fa-wallet"></i></span>
+      </div>
+      <div class="stat-value red" id="totalDue">৳0</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-top">
+        <span class="stat-label">TOTAL COLLECTED</span>
+        <span class="stat-icon green"><i class="fa-solid fa-money-bill-wave"></i></span>
+      </div>
+      <div class="stat-value green" id="totalCollected">৳0</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-top">
+        <span class="stat-label">UPCOMING</span>
+        <span class="stat-icon orange"><i class="fa-solid fa-calendar-days"></i></span>
+      </div>
+      <div class="stat-value orange" id="upcoming">0</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-top">
+        <span class="stat-label">OVERDUE</span>
+        <span class="stat-icon purple"><i class="fa-solid fa-clock"></i></span>
+      </div>
+      <div class="stat-value purple" id="overdue">0</div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h2><i class="fa-solid fa-users green"></i> Customer List</h2>
+      <span id="resultCount" class="sub">0 customers</span>
+    </div>
+
+    <div class="toolbar">
+      <input id="searchInput" class="field search"
+        placeholder="Search name, IP, phone, package..."
+        oninput="applyFilters()">
+
+      <select id="statusFilter" class="field" onchange="applyFilters()">
+        <option value="all">All Customers</option>
+        <option value="due">Due</option>
+        <option value="upcoming">Upcoming</option>
+        <option value="overdue">Overdue</option>
+        <option value="paid">Paid</option>
+      </select>
+
+      <select id="sortFilter" class="field" onchange="applyFilters()">
+        <option value="name">Sort: Name</option>
+        <option value="due">Highest Due</option>
+        <option value="date">Billing Date</option>
+      </select>
+
+      <button class="btn btn-secondary btn-small" onclick="resetFilters()">
+        <i class="fa-solid fa-filter-circle-xmark"></i> Reset
+      </button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>IP Address</th>
+            <th>Phone</th>
+            <th>Package</th>
+            <th>Monthly Bill</th>
+            <th>Billing Date</th>
+            <th>Due</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="customerTable">
+          <tr><td colspan="9" class="empty">
+            <i class="fa-solid fa-spinner fa-spin"></i><br>
+            Loading customers...
+          </td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination">
+      <span id="showingText">Showing 0 customers</span>
+      <button class="btn btn-secondary btn-small" onclick="loadData()">
+        <i class="fa-solid fa-rotate"></i> Reload Data
+      </button>
+    </div>
+  </section>
+
 </main>
 </div>
 
-<!-- Customer Add/Edit Modal -->
-<div class="modal-back" id="customerModal"><div class="modal">
-  <h3 id="customerModalTitle">Add Customer</h3><p>Fill in the customer information. Fields are saved to the matching customer sheet columns.</p>
-  <input type="hidden" id="customerId">
-  <div class="form-grid">
-    <div class="form-item"><label>Customer Name *</label><input class="field" id="f_name" placeholder="Customer name"></div>
-    <div class="form-item"><label>Phone Number</label><input class="field" id="f_phone" placeholder="01XXXXXXXXX"></div>
-    <div class="form-item"><label>IP Address</label><input class="field" id="f_ip" placeholder="192.168.1.10"></div>
-    <div class="form-item"><label>Package</label><input class="field" id="f_package" placeholder="20 Mbps"></div>
-    <div class="form-item"><label>Customer Bill (৳)</label><input class="field" id="f_customerBill" type="number" min="0" step="0.01" placeholder="500"></div>
-    <div class="form-item"><label>Internet Bill (৳)</label><input class="field" id="f_internetBill" type="number" min="0" step="0.01" placeholder="0"></div>
-    <div class="form-item"><label>Billing Date</label><input class="field" id="f_billingDate" type="date"></div>
-    <div class="form-item"><label>Current Due (৳)</label><input class="field" id="f_due" type="number" min="0" step="0.01" placeholder="0"></div>
-    <div class="form-item"><label>Bill Trigger</label><input class="field" id="f_billTrigger" placeholder="Optional"></div>
-    <div class="form-item"><label>Bill Trigger 2</label><input class="field" id="f_billTrigger2" placeholder="Optional"></div>
-    <div class="form-item"><label>Reason</label><input class="field" id="f_reason" placeholder="New connection / Transfer"></div>
-    <div class="form-item"><label>Renew Status</label><input class="field" id="f_renew" placeholder="Optional"></div>
-    <div class="form-item"><label>Area</label><input class="field" id="f_area" placeholder="Area"></div>
-    <div class="form-item"><label>Address</label><input class="field" id="f_address" placeholder="Full address"></div>
-    <div class="form-item"><label>Location</label><input class="field" id="f_location" placeholder="Location"></div>
-    <div class="form-item"><label>ONU</label><input class="field" id="f_onu" placeholder="ONU details"></div>
-    <div class="form-item"><label>Fiber</label><input class="field" id="f_fiber" placeholder="Fiber details"></div>
-    <div class="form-item"><label>Gmail</label><input class="field" id="f_gmail" type="email" placeholder="customer@gmail.com"></div>
-  </div>
-  <div class="modal-actions"><button class="btn secondary" id="cancelCustomer">Cancel</button><button class="btn" id="saveCustomer">Save Customer</button></div>
-</div></div>
 
-<!-- Collection Modal -->
-<div class="modal-back" id="collectModal"><div class="modal" style="max-width:440px">
-  <h3>Collect Payment</h3><p id="collectCustomerLabel">Record a customer payment.</p><input type="hidden" id="collectCustomerId">
-  <div class="form-grid">
-    <div class="form-item full"><label>Outstanding Due</label><input class="field" id="collectOutstanding" readonly></div>
-    <div class="form-item full"><label>Collect Amount (৳) *</label><input class="field" id="collectAmount" type="number" min="0.01" step="0.01" placeholder="Enter amount"></div>
-    <div class="form-item full"><label>Payment Method</label><select class="field" id="collectMethod"><option>Cash</option><option>bKash</option><option>Nagad</option><option>Bank</option><option>Other</option></select></div>
-    <div class="form-item full"><label>Note</label><input class="field" id="collectNote" placeholder="Optional note"></div>
+<!-- CUSTOMER MODAL -->
+
+<div class="modal" id="customerModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2 id="customerModalTitle">Add Customer</h2>
+      <button class="close" onclick="closeModal('customerModal')">&times;</button>
+    </div>
+
+    <form id="customerForm" onsubmit="saveCustomer(event)">
+      <div class="modal-body">
+        <input type="hidden" id="customerId">
+
+        <div class="form-grid">
+          <div class="section-title">CUSTOMER INFORMATION</div>
+
+          <div class="form-group">
+            <label>Customer Name *</label>
+            <input class="field" id="f_name" required>
+          </div>
+
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input class="field" id="f_phone">
+          </div>
+
+          <div class="form-group">
+            <label>IP Address</label>
+            <input class="field" id="f_ip">
+          </div>
+
+          <div class="form-group">
+            <label>Package</label>
+            <input class="field" id="f_package" placeholder="20 Mbps">
+          </div>
+
+          <div class="form-group">
+            <label>Customer Bill</label>
+            <input class="field" id="f_customerBill" type="number" min="0">
+          </div>
+
+          <div class="form-group">
+            <label>Internet Bill</label>
+            <input class="field" id="f_internetBill" type="number" min="0">
+          </div>
+
+          <div class="form-group">
+            <label>Billing Date</label>
+            <input class="field" id="f_billingDate" type="date">
+          </div>
+
+          <div class="form-group">
+            <label>Due Amount</label>
+            <input class="field" id="f_due" type="number" min="0">
+          </div>
+
+          <div class="form-group">
+            <label>Reason</label>
+            <input class="field" id="f_reason">
+          </div>
+
+          <div class="section-title">CONNECTION INFORMATION</div>
+
+          <div class="form-group">
+            <label>Area</label>
+            <input class="field" id="f_area">
+          </div>
+
+          <div class="form-group">
+            <label>Address</label>
+            <input class="field" id="f_address">
+          </div>
+
+          <div class="form-group">
+            <label>Location</label>
+            <input class="field" id="f_location">
+          </div>
+
+          <div class="form-group">
+            <label>ONU</label>
+            <input class="field" id="f_onu">
+          </div>
+
+          <div class="form-group">
+            <label>Fiber</label>
+            <input class="field" id="f_fiber">
+          </div>
+
+          <div class="form-group">
+            <label>Gmail</label>
+            <input class="field" id="f_gmail" type="email">
+          </div>
+
+          <div class="section-title">BILLING SETTINGS</div>
+
+          <div class="form-group">
+            <label>Bill Trigger</label>
+            <input class="field" id="f_billTrigger">
+          </div>
+
+          <div class="form-group">
+            <label>Bill Trigger 2</label>
+            <input class="field" id="f_billTrigger2">
+          </div>
+
+          <div class="form-group">
+            <label>Renew Status</label>
+            <select class="field" id="f_renew">
+              <option value="">Select</option>
+              <option value="Renew">Renew</option>
+              <option value="Collect">Collect</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-foot">
+        <button type="button" class="btn btn-secondary"
+          onclick="closeModal('customerModal')">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="saveCustomerBtn">
+          <i class="fa-solid fa-floppy-disk"></i> Save Customer
+        </button>
+      </div>
+    </form>
   </div>
-  <div class="modal-actions"><button class="btn secondary" id="cancelCollect">Cancel</button><button class="btn" id="saveCollect">Confirm Collect</button></div>
-</div></div>
+</div>
+
+
+<!-- COLLECT MODAL -->
+
+<div class="modal" id="collectModal">
+  <div class="modal-box" style="max-width:450px">
+    <div class="modal-head">
+      <h2>Collect Payment</h2>
+      <button class="close" onclick="closeModal('collectModal')">&times;</button>
+    </div>
+
+    <form onsubmit="submitCollect(event)">
+      <div class="modal-body">
+        <input type="hidden" id="collectCustomerId">
+
+        <div class="form-group" style="margin-bottom:14px">
+          <label>Customer</label>
+          <input class="field" id="collectCustomerName" readonly>
+        </div>
+
+        <div class="form-group" style="margin-bottom:14px">
+          <label>Outstanding Due</label>
+          <input class="field" id="collectOldDue" readonly>
+        </div>
+
+        <div class="form-group" style="margin-bottom:14px">
+          <label>Collection Amount *</label>
+          <input class="field" id="collectAmount" type="number" min="1" required>
+        </div>
+
+        <div class="form-group" style="margin-bottom:14px">
+          <label>Payment Method</label>
+          <select class="field" id="collectMethod" style="width:100%">
+            <option>Cash</option>
+            <option>bKash</option>
+            <option>Nagad</option>
+            <option>Bank</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Note</label>
+          <textarea class="field" id="collectNote" rows="3" style="width:100%"></textarea>
+        </div>
+      </div>
+
+      <div class="modal-foot">
+        <button type="button" class="btn btn-secondary"
+          onclick="closeModal('collectModal')">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="collectBtn">
+          Confirm Collect
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<div class="loading" id="loading">
+  <div class="spinner"></div>
+  <strong id="loadingText">Please wait...</strong>
+</div>
+
 <div class="toast" id="toast"></div>
 
+
 <script>
-'use strict';
-const CUSTOMER_API='https://script.google.com/macros/s/AKfycbweR6IZ0sR2xoxfOUIAxSlKb3clXrKtXY7a4g9WpjxItag9jAUcLH8dW12n_5EtHljE/exec';
-let customers=[];let activeFilter='all';let jsonpCounter=0;
-const $=id=>document.getElementById(id);
-const money=n=>'৳'+Number(n||0).toLocaleString('en-BD',{maximumFractionDigits:2});
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function toast(message){const el=$('toast');el.textContent=message;el.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove('show'),3500)}
-function jsonpRequest(action,params={},payload=null){return new Promise((resolve,reject)=>{
- const callback='__ooCustomerCb'+Date.now()+(++jsonpCounter);const script=document.createElement('script');const url=new URL(CUSTOMER_API);let finished=false;
- url.searchParams.set('action',String(action).toLowerCase());Object.entries(params).forEach(([k,v])=>{if(v!==undefined&&v!==null&&v!=='')url.searchParams.set(k,String(v))});
- if(payload)url.searchParams.set('payload',JSON.stringify({...payload,action:String(action).toLowerCase()}));url.searchParams.set('callback',callback);
- const timer=setTimeout(()=>finish(new Error('API timeout. Check that the latest JSONP Code.gs version is deployed.')),25000);
- function finish(err,data){if(finished)return;finished=true;clearTimeout(timer);script.onerror=null;script.remove();try{delete window[callback]}catch(e){window[callback]=undefined}if(err)return reject(err);if(!data||data.success!==true)return reject(new Error(data?.message||'API returned an invalid response'));resolve(data)}
- window[callback]=data=>finish(null,data);script.onerror=()=>finish(new Error('Cannot connect to Customer API. Confirm the API URL and deploy access is set to Anyone.'));script.src=url.toString();document.head.appendChild(script);
- })}
-async function apiGet(action,params={}){return jsonpRequest(action,params)}
-async function apiPost(action,data={}){return jsonpRequest(action,{},data)}
-function parseLocalDate(value){if(!value)return null;const s=String(value).trim();let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);if(m)return new Date(+m[1],+m[2]-1,+m[3]);const d=new Date(s);return isNaN(d)?null:new Date(d.getFullYear(),d.getMonth(),d.getDate())}
-function daysToBilling(value){const d=parseLocalDate(value);if(!d)return null;const today=new Date();today.setHours(0,0,0,0);return Math.round((d-today)/86400000)}
-function fmtDate(value){const d=parseLocalDate(value);return d?d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):(value||'—')}
-function statusFor(c){const due=Number(c.due||0);const days=daysToBilling(c.billingDate);if(due<=0)return ['Paid','paid'];if(days===null)return ['Unpaid','due'];if(days<0)return ['Overdue','overdue'];if(days===0)return ['Due Today','due'];if(days<=3)return ['Upcoming','upcoming'];return ['Not Due','upcoming']}
-function updateStats(){let due=0,today=0,upcoming=0;customers.forEach(c=>{const amount=Math.max(0,Number(c.due||0));due+=amount;const days=daysToBilling(c.billingDate);if(amount>0&&days===0)today++;if(amount>0&&days>0&&days<=3)upcoming++});$('totalCustomers').textContent=customers.length;$('totalDue').textContent=money(due);$('dueToday').textContent=today;$('upcoming').textContent=upcoming}
-function renderCustomers(){const q=$('searchBox').value.trim().toLowerCase();let list=customers.filter(c=>{const hay=[c.name,c.ip,c.phone,c.package,c.area,c.address,c.location,c.gmail].join(' ').toLowerCase();if(q&&!hay.includes(q))return false;const days=daysToBilling(c.billingDate);const due=Number(c.due||0);if(activeFilter==='paid')return due<=0;if(activeFilter==='due')return due>0&&days===0;if(activeFilter==='upcoming')return due>0&&days>0&&days<=3;if(activeFilter==='overdue')return due>0&&days<0;return true});
- const sort=$('sortSelect').value;list.sort((a,b)=>sort==='due'?Number(b.due||0)-Number(a.due||0):sort==='date'?((daysToBilling(a.billingDate)??99999)-(daysToBilling(b.billingDate)??99999)):sort==='recent'?String(b.updatedAt||'').localeCompare(String(a.updatedAt||'')):String(a.name||'').localeCompare(String(b.name||'')));
- $('countLabel').textContent=list.length+' of '+customers.length+' customers';$('customerRows').innerHTML=list.length?list.map(c=>{const [status,cls]=statusFor(c);const id=esc(c.customerId||'');return `<tr><td><span class="customer-name">${esc(c.name||'Unnamed')}</span><span class="sub">${esc(c.area||c.address||'')}</span></td><td>${esc(c.ip||'—')}</td><td>${esc(c.phone||'—')}</td><td>${esc(c.package||'—')}</td><td>${fmtDate(c.billingDate)}</td><td>${money(c.customerBill)}</td><td><b>${money(c.due)}</b></td><td><span class="status ${cls}">${status}</span></td><td><div class="actions"><button class="btn secondary" onclick="editCustomer('${id}')">Edit</button><button class="btn" onclick="openCollect('${id}')">Collect</button><button class="btn warning" onclick="renewCustomer('${id}')">Renew</button><button class="btn danger" onclick="deleteCustomer('${id}')">Delete</button></div></td></tr>`}).join(''):'<tr><td colspan="9" class="empty">No customers found for this filter.</td></tr>'}
-async function loadCustomers(){ $('customerRows').innerHTML='<tr><td colspan="9" class="loading">Loading customers…</td></tr>';try{const result=await apiGet('customers');customers=Array.isArray(result.customers)?result.customers:[];updateStats();renderCustomers();$('apiState').textContent='Database connected';$('apiState').style.color='var(--green)'}catch(err){$('customerRows').innerHTML=`<tr><td colspan="9" class="empty">${esc(err.message)}<br><br><button class="btn secondary" onclick="loadCustomers()">Try Again</button></td></tr>`;$('apiState').textContent='API connection error';$('apiState').style.color='var(--red)';toast('Customer load failed: '+err.message)}}
-function openCustomerModal(c=null){$('customerModalTitle').textContent=c?'Edit Customer':'Add Customer';$('customerId').value=c?.customerId||'';const fields={name:'name',phone:'phone',ip:'ip',package:'package',customerBill:'customerBill',internetBill:'internetBill',billingDate:'billingDate',due:'due',billTrigger:'billTrigger',billTrigger2:'billTrigger2',reason:'reason',renew:'renew',area:'area',address:'address',location:'location',onu:'onu',fiber:'fiber',gmail:'gmail'};Object.entries(fields).forEach(([id,key])=>$('f_'+id).value=c?.[key]??(id==='due'?'0':''));$('customerModal').classList.add('show')}
-function closeCustomerModal(){$('customerModal').classList.remove('show')}
-window.editCustomer=id=>{const c=customers.find(x=>String(x.customerId)===String(id));if(c)openCustomerModal(c);else toast('Customer record not found')};
-$('addBtn').onclick=()=>openCustomerModal();$('cancelCustomer').onclick=closeCustomerModal;
-$('saveCustomer').onclick=async()=>{const id=$('customerId').value;const customer={ip:$('f_ip').value,name:$('f_name').value,phone:$('f_phone').value,reason:$('f_reason').value,package:$('f_package').value,customerBill:$('f_customerBill').value,billTrigger:$('f_billTrigger').value,internetBill:$('f_internetBill').value,billingDate:$('f_billingDate').value,billTrigger2:$('f_billTrigger2').value,renew:$('f_renew').value,area:$('f_area').value,address:$('f_address').value,location:$('f_location').value,onu:$('f_onu').value,fiber:$('f_fiber').value,gmail:$('f_gmail').value,due:$('f_due').value};if(!customer.name.trim()&&!customer.phone.trim()&&!customer.ip.trim()){toast('Enter at least customer name, phone number or IP address.');return}const btn=$('saveCustomer');btn.disabled=true;btn.textContent='Saving…';try{if(id)await apiPost('updatecustomer',{customerId:id,customer});else await apiPost('addcustomer',{customer});closeCustomerModal();toast(id?'Customer updated successfully.':'Customer added successfully.');await loadCustomers()}catch(err){toast('Save failed: '+err.message)}finally{btn.disabled=false;btn.textContent='Save Customer'}};
-function openCollect(id){const c=customers.find(x=>String(x.customerId)===String(id));if(!c)return;const due=Number(c.due||0);if(due<=0){toast('This customer has no outstanding due.');return}$('collectCustomerId').value=id;$('collectCustomerLabel').textContent=(c.name||'Customer')+' · '+(c.ip||'No IP');$('collectOutstanding').value=money(due);$('collectAmount').value=due;$('collectAmount').max=due;$('collectMethod').value='Cash';$('collectNote').value='';$('collectModal').classList.add('show')}
-window.openCollect=openCollect;function closeCollect(){$('collectModal').classList.remove('show')}$('cancelCollect').onclick=closeCollect;
-$('saveCollect').onclick=async()=>{const id=$('collectCustomerId').value;const amount=Number($('collectAmount').value);const c=customers.find(x=>String(x.customerId)===String(id));if(!amount||amount<=0){toast('Enter a valid collection amount.');return}if(c&&amount>Number(c.due||0)){toast('Amount cannot exceed outstanding due.');return}const btn=$('saveCollect');btn.disabled=true;btn.textContent='Processing…';try{const result=await apiPost('collect',{customerId:id,amount:amount,method:$('collectMethod').value,note:$('collectNote').value});closeCollect();toast(result.message||'Payment collected.');await loadCustomers()}catch(err){toast('Collection failed: '+err.message)}finally{btn.disabled=false;btn.textContent='Confirm Collect'}};
-window.renewCustomer=async id=>{const c=customers.find(x=>String(x.customerId)===String(id));if(!c)return;if(!confirm('Renew '+(c.name||'this customer')+' for one month?'))return;try{const result=await apiPost('renew',{customerId:id,note:'Renewed from customer page'});toast(result.message||'Customer renewed.');await loadCustomers()}catch(err){toast('Renew failed: '+err.message)}};
-window.deleteCustomer=async id=>{const c=customers.find(x=>String(x.customerId)===String(id));if(!c)return;if(!confirm('Delete '+(c.name||'this customer')+'? This removes the customer row. History logs are retained.'))return;try{const result=await apiPost('deletecustomer',{customerId:id});toast(result.message||'Customer deleted.');await loadCustomers()}catch(err){toast('Delete failed: '+err.message)}};
-$('searchBox').addEventListener('input',renderCustomers);$('sortSelect').addEventListener('change',renderCustomers);$('filters').addEventListener('click',e=>{const b=e.target.closest('[data-filter]');if(!b)return;activeFilter=b.dataset.filter;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));renderCustomers()});$('refreshBtn').onclick=loadCustomers;$('hamb').onclick=()=>$('sidebar').classList.toggle('open');$('todayText').textContent=new Date().toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});
-$('customerModal').addEventListener('click',e=>{if(e.target===$('customerModal'))closeCustomerModal()});$('collectModal').addEventListener('click',e=>{if(e.target===$('collectModal'))closeCollect()});
-loadCustomers();
+/* =====================================================
+   CONFIGURATION
+===================================================== */
+
+// This is the Customer API URL.
+const API_URL =
+"https://script.google.com/macros/s/AKfycbweR6IZ0sR2xoxfOUIAxSlKb3clXrKtXY7a4g9WpjxItag9jAUcLH8dW12n_5EtHljE/exec";
+
+
+/* =====================================================
+   STATE
+===================================================== */
+
+let customers = [];
+let filteredCustomers = [];
+let currentPage = 1;
+const pageSize = 100;
+
+
+/* =====================================================
+   JSONP TRANSPORT
+===================================================== */
+
+function jsonpRequest(url) {
+  return new Promise((resolve, reject) => {
+    const callbackName =
+      "oo_callback_" +
+      Date.now() +
+      "_" +
+      Math.floor(Math.random() * 100000);
+
+    const script = document.createElement("script");
+    const separator = url.includes("?") ? "&" : "?";
+
+    let finished = false;
+
+    const timer = setTimeout(() => {
+      finish();
+      reject(new Error(
+        "API response timeout. Check Code.gs deployment and API URL."
+      ));
+    }, 25000);
+
+    function finish() {
+      if (finished) return;
+      finished = true;
+
+      clearTimeout(timer);
+      delete window[callbackName];
+
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    }
+
+    window[callbackName] = function(data) {
+      finish();
+
+      if (!data || data.success !== true) {
+        reject(new Error(
+          data && data.message
+            ? data.message
+            : "API request failed"
+        ));
+        return;
+      }
+
+      resolve(data);
+    };
+
+    script.onerror = function() {
+      finish();
+      reject(new Error(
+        "Could not connect to Customer API."
+      ));
+    };
+
+    script.src =
+      url +
+      separator +
+      "callback=" +
+      encodeURIComponent(callbackName);
+
+    document.body.appendChild(script);
+  });
+}
+
+
+async function getApi(action, params = {}) {
+  const url = new URL(API_URL);
+
+  url.searchParams.set("action", action);
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null) {
+      url.searchParams.set(key, value);
+    }
+  });
+
+  return jsonpRequest(url.toString());
+}
+
+
+async function postApi(data) {
+  const url = new URL(API_URL);
+
+  url.searchParams.set(
+    "payload",
+    JSON.stringify(data)
+  );
+
+  return jsonpRequest(url.toString());
+}
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+function money(value) {
+  return "৳" + Number(value || 0).toLocaleString(
+    "en-BD",
+    {maximumFractionDigits:2}
+  );
+}
+
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  }[ch]));
+}
+
+
+function showToast(message, error = false) {
+  const el = document.getElementById("toast");
+
+  el.textContent = message;
+  el.className = error ? "toast error" : "toast";
+  el.style.display = "block";
+
+  clearTimeout(window.toastTimer);
+
+  window.toastTimer = setTimeout(() => {
+    el.style.display = "none";
+  }, 4000);
+}
+
+
+function setLoading(show, message = "Please wait...") {
+  document.getElementById("loading").classList.toggle(
+    "show",
+    show
+  );
+
+  document.getElementById("loadingText").textContent =
+    message;
+}
+
+
+function setConnection(online, text) {
+  const el = document.getElementById("connectionStatus");
+
+  el.className = online
+    ? "status status-paid"
+    : "status status-due";
+
+  el.innerHTML = online
+    ? '<i class="fa-solid fa-circle-check"></i> ' + escapeHtml(text)
+    : '<i class="fa-solid fa-circle-exclamation"></i> ' + escapeHtml(text);
+}
+
+
+function parseLocalDate(value) {
+  if (!value) return null;
+
+  const s = String(value).slice(0, 10);
+  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+
+  if (m) {
+    return new Date(
+      Number(m[1]),
+      Number(m[2]) - 1,
+      Number(m[3])
+    );
+  }
+
+  const d = new Date(value);
+
+  return isNaN(d.getTime()) ? null : d;
+}
+
+
+function dateDifference(value) {
+  const d = parseLocalDate(value);
+
+  if (!d) return null;
+
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  return Math.round(
+    (d.getTime() - today.getTime()) / 86400000
+  );
+}
+
+
+function dateDisplay(value) {
+  const d = parseLocalDate(value);
+
+  if (!d) return "—";
+
+  return d.toLocaleDateString("en-GB", {
+    day:"2-digit",
+    month:"short",
+    year:"numeric"
+  });
+}
+
+
+function customerStatus(c) {
+  const due = Number(c.due || 0);
+  const days = dateDifference(c.billingDate);
+
+  if (due <= 0) {
+    return {key:"paid", label:"Paid", css:"status-paid"};
+  }
+
+  if (days !== null && days < 0) {
+    return {key:"overdue", label:"Overdue", css:"status-overdue"};
+  }
+
+  if (days !== null && days <= 3) {
+    return {key:"upcoming", label:"Upcoming", css:"status-upcoming"};
+  }
+
+  return {key:"due", label:"Due", css:"status-due"};
+}
+
+
+function getCustomerId(c) {
+  return c.customerId || "";
+}
+
+
+/* =====================================================
+   LOAD DATA
+===================================================== */
+
+async function loadData() {
+  setLoading(true, "Loading customer data...");
+
+  try {
+    const [dashboard, customerData] = await Promise.all([
+      getApi("dashboard"),
+      getApi("customers")
+    ]);
+
+    customers = Array.isArray(customerData.customers)
+      ? customerData.customers
+      : Array.isArray(dashboard.customers)
+        ? dashboard.customers
+        : [];
+
+    document.getElementById("totalCustomers").textContent =
+      Number(dashboard.totalCustomers ?? customers.length).toLocaleString();
+
+    document.getElementById("totalDue").textContent =
+      money(dashboard.totalDue);
+
+    document.getElementById("totalCollected").textContent =
+      money(dashboard.totalCollected);
+
+    document.getElementById("upcoming").textContent =
+      Number(dashboard.upcoming || 0).toLocaleString();
+
+    document.getElementById("overdue").textContent =
+      Number(dashboard.overdue || 0).toLocaleString();
+
+    setConnection(true, "Connected");
+
+    applyFilters();
+
+    if (customers.some(c => !c.customerId)) {
+      showToast(
+        "Data loaded, but some existing customers have no Customer ID in column S. Existing records need ID setup before editing or deleting.",
+        true
+      );
+    }
+
+  } catch (err) {
+    console.error(err);
+
+    setConnection(false, "Connection Error");
+
+    document.getElementById("customerTable").innerHTML =
+      `<tr><td colspan="9" class="empty">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <br><b>Customer data could not be loaded</b>
+        <br><br>${escapeHtml(err.message)}
+        <br><br>
+        <button class="btn btn-secondary btn-small" onclick="loadData()">
+          Try Again
+        </button>
+      </td></tr>`;
+
+    showToast(err.message, true);
+
+  } finally {
+    setLoading(false);
+  }
+}
+
+
+/* =====================================================
+   FILTERS AND TABLE
+===================================================== */
+
+function resetFilters() {
+  document.getElementById("searchInput").value = "";
+  document.getElementById("statusFilter").value = "all";
+  document.getElementById("sortFilter").value = "name";
+
+  applyFilters();
+}
+
+
+function applyFilters() {
+  const search = document.getElementById(
+    "searchInput"
+  ).value.trim().toLowerCase();
+
+  const status = document.getElementById(
+    "statusFilter"
+  ).value;
+
+  const sort = document.getElementById(
+    "sortFilter"
+  ).value;
+
+  filteredCustomers = customers.filter(c => {
+    const haystack = [
+      c.name,
+      c.ip,
+      c.phone,
+      c.package,
+      c.area,
+      c.address,
+      c.gmail
+    ].join(" ").toLowerCase();
+
+    const matchSearch = !search ||
+      haystack.includes(search);
+
+    const matchStatus = status === "all" ||
+      customerStatus(c).key === status;
+
+    return matchSearch && matchStatus;
+  });
+
+  if (sort === "due") {
+    filteredCustomers.sort(
+      (a,b) => Number(b.due || 0) - Number(a.due || 0)
+    );
+
+  } else if (sort === "date") {
+    filteredCustomers.sort((a,b) => {
+      return String(a.billingDate || "")
+        .localeCompare(String(b.billingDate || ""));
+    });
+
+  } else {
+    filteredCustomers.sort((a,b) =>
+      String(a.name || "").localeCompare(
+        String(b.name || "")
+      )
+    );
+  }
+
+  currentPage = 1;
+  renderTable();
+}
+
+
+function renderTable() {
+  const tbody = document.getElementById("customerTable");
+
+  document.getElementById("resultCount").textContent =
+    filteredCustomers.length + " customers";
+
+  document.getElementById("showingText").textContent =
+    "Showing " + filteredCustomers.length + " customers";
+
+  if (!filteredCustomers.length) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="9" class="empty">
+          <i class="fa-solid fa-user-slash"></i>
+          <br>No customers found
+        </td>
+      </tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filteredCustomers.map(c => {
+    const status = customerStatus(c);
+    const id = getCustomerId(c);
+
+    return `
+      <tr>
+        <td>
+          <div class="customer-name">${escapeHtml(c.name || "Unnamed")}</div>
+          <div class="sub">${escapeHtml(c.area || c.address || "")}</div>
+        </td>
+
+        <td>${escapeHtml(c.ip || "—")}</td>
+        <td>${escapeHtml(c.phone || "—")}</td>
+        <td>${escapeHtml(c.package || "—")}</td>
+
+        <td>${money(c.customerBill)}</td>
+
+        <td>${dateDisplay(c.billingDate)}</td>
+
+        <td>
+          <strong class="${Number(c.due || 0) > 0 ? "red" : "green"}">
+            ${money(c.due)}
+          </strong>
+        </td>
+
+        <td>
+          <span class="status ${status.css}">
+            ${status.label}
+          </span>
+        </td>
+
+        <td>
+          <div class="actions">
+            <button class="icon-btn"
+              title="Edit"
+              onclick="editCustomer('${escapeHtml(id)}')">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+
+            <button class="icon-btn"
+              title="Collect"
+              onclick="openCollect('${escapeHtml(id)}')">
+              <i class="fa-solid fa-money-bill"></i>
+            </button>
+
+            <button class="icon-btn"
+              title="Renew"
+              onclick="renewCustomer('${escapeHtml(id)}')">
+              <i class="fa-solid fa-rotate"></i>
+            </button>
+
+            <button class="icon-btn"
+              title="Delete"
+              onclick="deleteCustomer('${escapeHtml(id)}')">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        </td>
+      </tr>`;
+  }).join("");
+}
+
+
+/* =====================================================
+   CUSTOMER FORM
+===================================================== */
+
+function openModal(id) {
+  document.getElementById(id).classList.add("show");
+}
+
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove("show");
+}
+
+
+function openAdd() {
+  document.getElementById("customerForm").reset();
+  document.getElementById("customerId").value = "";
+
+  document.getElementById("customerModalTitle").textContent =
+    "Add New Customer";
+
+  openModal("customerModal");
+}
+
+
+function editCustomer(id) {
+  if (!id) {
+    showToast(
+      "This existing customer has no Customer ID. Set up IDs in the sheet before editing.",
+      true
+    );
+    return;
+  }
+
+  const c = customers.find(
+    x => String(x.customerId) === String(id)
+  );
+
+  if (!c) {
+    showToast("Customer not found", true);
+    return;
+  }
+
+  document.getElementById("customerId").value = id;
+
+  const map = {
+    name:"name",
+    phone:"phone",
+    ip:"ip",
+    package:"package",
+    customerBill:"customerBill",
+    internetBill:"internetBill",
+    billingDate:"billingDate",
+    due:"due",
+    reason:"reason",
+    area:"area",
+    address:"address",
+    location:"location",
+    onu:"onu",
+    fiber:"fiber",
+    gmail:"gmail",
+    billTrigger:"billTrigger",
+    billTrigger2:"billTrigger2",
+    renew:"renew"
+  };
+
+  Object.entries(map).forEach(([field,key]) => {
+    const el = document.getElementById("f_" + field);
+
+    if (el) {
+      el.value = c[key] ?? "";
+    }
+  });
+
+  document.getElementById("customerModalTitle").textContent =
+    "Edit Customer";
+
+  openModal("customerModal");
+}
+
+
+async function saveCustomer(event) {
+  event.preventDefault();
+
+  const id = document.getElementById("customerId").value;
+
+  const customer = {
+    name: document.getElementById("f_name").value,
+    phone: document.getElementById("f_phone").value,
+    ip: document.getElementById("f_ip").value,
+    package: document.getElementById("f_package").value,
+    customerBill: document.getElementById("f_customerBill").value,
+    internetBill: document.getElementById("f_internetBill").value,
+    billingDate: document.getElementById("f_billingDate").value,
+    due: document.getElementById("f_due").value,
+    reason: document.getElementById("f_reason").value,
+    area: document.getElementById("f_area").value,
+    address: document.getElementById("f_address").value,
+    location: document.getElementById("f_location").value,
+    onu: document.getElementById("f_onu").value,
+    fiber: document.getElementById("f_fiber").value,
+    gmail: document.getElementById("f_gmail").value,
+    billTrigger: document.getElementById("f_billTrigger").value,
+    billTrigger2: document.getElementById("f_billTrigger2").value,
+    renew: document.getElementById("f_renew").value
+  };
+
+  const btn = document.getElementById("saveCustomerBtn");
+
+  btn.disabled = true;
+  btn.textContent = "Saving...";
+
+  try {
+    const result = await postApi({
+      action: id ? "updatecustomer" : "addcustomer",
+      customerId: id,
+      customer: customer
+    });
+
+    closeModal("customerModal");
+    showToast(result.message || "Customer saved successfully");
+
+    await loadData();
+
+  } catch (err) {
+    showToast(err.message, true);
+
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML =
+      '<i class="fa-solid fa-floppy-disk"></i> Save Customer';
+  }
+}
+
+
+/* =====================================================
+   COLLECT
+===================================================== */
+
+function openCollect(id) {
+  if (!id) {
+    showToast(
+      "This customer has no Customer ID. Set up IDs before collecting.",
+      true
+    );
+    return;
+  }
+
+  const c = customers.find(
+    x => String(x.customerId) === String(id)
+  );
+
+  if (!c) return;
+
+  if (Number(c.due || 0) <= 0) {
+    showToast("This customer has no outstanding due.", true);
+    return;
+  }
+
+  document.getElementById("collectCustomerId").value = id;
+  document.getElementById("collectCustomerName").value =
+    c.name || "";
+
+  document.getElementById("collectOldDue").value =
+    money(c.due);
+
+  document.getElementById("collectAmount").value =
+    Number(c.due);
+
+  document.getElementById("collectAmount").max =
+    Number(c.due);
+
+  document.getElementById("collectNote").value = "";
+
+  openModal("collectModal");
+}
+
+
+async function submitCollect(event) {
+  event.preventDefault();
+
+  const id = document.getElementById(
+    "collectCustomerId"
+  ).value;
+
+  const amount = Number(
+    document.getElementById("collectAmount").value
+  );
+
+  const oldDue = Number(
+    customers.find(c => String(c.customerId) === String(id))?.due || 0
+  );
+
+  if (!amount || amount <= 0) {
+    showToast("Enter a valid amount", true);
+    return;
+  }
+
+  if (amount > oldDue) {
+    showToast("Amount cannot be greater than due", true);
+    return;
+  }
+
+  const btn = document.getElementById("collectBtn");
+  btn.disabled = true;
+  btn.textContent = "Processing...";
+
+  try {
+    const result = await postApi({
+      action: "collect",
+      customerId: id,
+      amount: amount,
+      method: document.getElementById("collectMethod").value,
+      note: document.getElementById("collectNote").value
+    });
+
+    closeModal("collectModal");
+    showToast(result.message || "Payment collected");
+
+    await loadData();
+
+  } catch (err) {
+    showToast(err.message, true);
+
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Confirm Collect";
+  }
+}
+
+
+/* =====================================================
+   RENEW
+===================================================== */
+
+async function renewCustomer(id) {
+  if (!id) {
+    showToast(
+      "This customer has no Customer ID. Set up IDs before renewing.",
+      true
+    );
+    return;
+  }
+
+  const c = customers.find(
+    x => String(x.customerId) === String(id)
+  );
+
+  if (!c) return;
+
+  const yes = confirm(
+    "Renew " + (c.name || "this customer") +
+    " for one month?\n\nCurrent billing date: " +
+    dateDisplay(c.billingDate)
+  );
+
+  if (!yes) return;
+
+  setLoading(true, "Renewing customer...");
+
+  try {
+    const result = await postApi({
+      action: "renew",
+      customerId: id,
+      note: "Renewed from Customer Management"
+    });
+
+    showToast(result.message || "Customer renewed");
+
+    await loadData();
+
+  } catch (err) {
+    showToast(err.message, true);
+
+  } finally {
+    setLoading(false);
+  }
+}
+
+
+/* =====================================================
+   DELETE
+===================================================== */
+
+async function deleteCustomer(id) {
+  if (!id) {
+    showToast(
+      "This customer has no Customer ID. Set up IDs before deleting.",
+      true
+    );
+    return;
+  }
+
+  const c = customers.find(
+    x => String(x.customerId) === String(id)
+  );
+
+  if (!c) return;
+
+  if (!confirm(
+    "Are you sure you want to delete " +
+    (c.name || "this customer") +
+    "?\n\nThis action cannot be undone."
+  )) return;
+
+  setLoading(true, "Deleting customer...");
+
+  try {
+    const result = await postApi({
+      action: "deletecustomer",
+      customerId: id
+    });
+
+    showToast(result.message || "Customer deleted");
+
+    await loadData();
+
+  } catch (err) {
+    showToast(err.message, true);
+
+  } finally {
+    setLoading(false);
+  }
+}
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadData();
+
+  // Refresh data every 60 seconds.
+  setInterval(() => {
+    if (!document.querySelector(".modal.show")) {
+      loadData();
+    }
+  }, 60000);
+});
+
 </script>
 </body>
 </html>
