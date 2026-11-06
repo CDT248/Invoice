@@ -5,223 +5,257 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#101827">
-<title>RS NETWORK | Gmail & Invoice Control</title>
+<title>RS NETWORK | Gmail Control Panel</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
 <style>
 :root{
-  --bg:#0b1120;
-  --panel:#111b2e;
-  --panel2:#162238;
-  --border:#26344c;
-  --text:#edf3ff;
-  --muted:#91a0b8;
-  --primary:#4f8cff;
-  --green:#19c58b;
-  --red:#ff5d72;
-  --orange:#ffb454;
+  --bg:#0b1220;
+  --panel:#111c2e;
+  --panel2:#16243a;
+  --border:#26364d;
+  --text:#e8eef8;
+  --muted:#91a1b8;
+  --primary:#087f5b;
+  --accent:#12b886;
+  --danger:#fa5252;
+  --warning:#f59f00;
   --radius:15px;
 }
 *{box-sizing:border-box}
 body{
-  margin:0;background:var(--bg);color:var(--text);
-  font-family:Inter,Arial,sans-serif;font-size:14px;
+  margin:0;
+  font-family:Inter,sans-serif;
+  background:var(--bg);
+  color:var(--text);
 }
-button,input,select,textarea{font:inherit}
+button,input,textarea,select{font:inherit}
 button{cursor:pointer}
 .app{display:flex;min-height:100vh}
 .sidebar{
-  width:250px;flex-shrink:0;background:#0e1728;
-  border-right:1px solid var(--border);padding:22px 15px;
-  display:flex;flex-direction:column;gap:24px;
+  width:250px;
+  background:#0e192a;
+  border-right:1px solid var(--border);
+  padding:22px 15px;
+  position:fixed;
+  inset:0 auto 0 0;
+  z-index:20;
+  overflow-y:auto;
 }
-.brand{display:flex;align-items:center;gap:12px;padding:5px 8px}
+.brand{
+  display:flex;align-items:center;gap:12px;
+  padding:5px 8px 25px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:22px;
+}
 .brand-icon{
-  width:42px;height:42px;border-radius:13px;
-  display:grid;place-items:center;background:linear-gradient(135deg,#367aff,#18c99a);
+  width:42px;height:42px;border-radius:12px;
+  display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--primary),var(--accent));
   font-size:19px;color:white;
 }
-.brand h2{font-size:16px;margin:0;font-weight:800}
+.brand h2{font-size:15px;margin:0;font-weight:800}
 .brand small{display:block;color:var(--muted);font-size:10px;margin-top:4px}
-.nav-label{font-size:10px;color:#63728c;font-weight:800;letter-spacing:1.4px;padding:0 10px}
-.nav{display:grid;gap:6px}
-.nav button{
-  border:0;background:transparent;color:#aab7cc;padding:12px;
-  border-radius:10px;text-align:left;display:flex;align-items:center;gap:12px;
-  transition:.2s;width:100%;
+.nav-label{
+  color:#64748b;font-size:10px;font-weight:800;
+  letter-spacing:1.4px;padding:12px 12px 8px;
 }
-.nav button:hover,.nav button.active{background:#1a2b46;color:white}
-.nav button.active{box-shadow:inset 3px 0 var(--primary)}
-.nav i{width:18px;text-align:center}
-.sidebar-bottom{margin-top:auto}
-.connection{
-  padding:13px;border:1px solid var(--border);border-radius:12px;
+.nav-btn{
+  display:flex;align-items:center;gap:12px;
+  width:100%;padding:12px;border:0;
+  border-radius:10px;background:transparent;
+  color:#a9b8cc;text-align:left;margin:3px 0;
+  font-size:13px;font-weight:600;
+  transition:.2s;
+}
+.nav-btn i{width:18px;text-align:center}
+.nav-btn:hover,.nav-btn.active{
+  background:rgba(18,184,134,.13);
+  color:#48e0ae;
+}
+.sidebar-footer{
+  border-top:1px solid var(--border);
+  margin-top:25px;padding:16px 8px;
   color:var(--muted);font-size:11px;line-height:1.8;
 }
-.connection strong{color:var(--text)}
-.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--orange);margin-right:6px}
-.dot.online{background:var(--green)}
-.main{flex:1;min-width:0}
+.main{margin-left:250px;width:calc(100% - 250px);min-width:0}
 .topbar{
-  height:72px;border-bottom:1px solid var(--border);
+  height:70px;border-bottom:1px solid var(--border);
+  background:rgba(11,18,32,.92);
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 28px;background:#0e1728;position:sticky;top:0;z-index:10;
+  padding:0 28px;position:sticky;top:0;z-index:10;
+  backdrop-filter:blur(12px);
 }
-.topbar h1{font-size:18px;margin:0}
-.top-actions{display:flex;align-items:center;gap:10px}
-.user-chip{padding:9px 12px;background:var(--panel2);border-radius:9px;color:#c7d4e8;font-size:12px}
-.content{padding:26px;max-width:1500px;margin:auto}
+.top-title{font-size:16px;font-weight:800}
+.top-right{display:flex;align-items:center;gap:12px}
+.status-dot{
+  width:8px;height:8px;background:#20c997;
+  border-radius:50%;display:inline-block;margin-right:7px;
+}
+.connection{font-size:11px;color:var(--muted)}
+.mobile-menu{display:none}
+.content{padding:27px;max-width:1500px;margin:auto}
 .page{display:none}
 .page.active{display:block}
-.page-heading{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:22px;flex-wrap:wrap}
-.page-heading h2{font-size:21px;margin:0 0 6px}
+.page-heading{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:15px;flex-wrap:wrap;margin-bottom:23px;
+}
+.page-heading h1{font-size:23px;margin:0 0 7px}
 .page-heading p{margin:0;color:var(--muted);font-size:12px}
-.grid{display:grid;gap:16px}
-.stats-grid{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:20px}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}
 .card{
   background:var(--panel);border:1px solid var(--border);
-  border-radius:var(--radius);padding:19px;min-width:0;
+  border-radius:var(--radius);padding:19px;
+  min-width:0;
 }
-.stat{display:flex;align-items:center;justify-content:space-between}
-.stat-label{color:var(--muted);font-size:12px}
-.stat-value{font-size:27px;font-weight:800;margin-top:12px}
+.stat-card{position:relative;overflow:hidden}
+.stat-top{display:flex;align-items:center;justify-content:space-between}
 .stat-icon{
-  width:43px;height:43px;border-radius:13px;display:grid;place-items:center;
-  background:#20385e;color:#79aaff;font-size:17px;
+  width:39px;height:39px;border-radius:11px;
+  display:grid;place-items:center;font-size:16px;
+  background:rgba(18,184,134,.13);color:#48e0ae;
 }
-.stat-icon.green{background:#123d37;color:#36dba9}
-.stat-icon.orange{background:#49351f;color:#ffc16c}
-.stat-icon.red{background:#482632;color:#ff8192}
-.section-title{font-size:15px;font-weight:800;margin:0 0 16px}
-.two-col{grid-template-columns:1.2fr .8fr}
-.action-list{display:grid;gap:10px}
-.action-row{
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
-  padding:13px;background:var(--panel2);border-radius:11px;
-}
-.action-row strong{font-size:12px}
-.action-row small{display:block;color:var(--muted);margin-top:5px;font-size:11px}
+.stat-card h3{font-size:26px;margin:17px 0 5px}
+.stat-card p{font-size:11px;color:var(--muted);margin:0}
+.section-title{font-size:14px;font-weight:800;margin:0 0 16px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:17px}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
 .btn{
-  border:1px solid var(--border);background:#1a2942;color:#eaf1ff;
-  padding:10px 14px;border-radius:9px;font-weight:700;font-size:12px;
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  transition:.2s;white-space:nowrap;
+  border:1px solid var(--border);border-radius:9px;
+  padding:10px 14px;background:var(--panel2);
+  color:var(--text);font-size:12px;font-weight:700;
+  display:inline-flex;align-items:center;justify-content:center;
+  gap:8px;transition:.2s;
 }
-.btn:hover{filter:brightness(1.18);transform:translateY(-1px)}
-.btn.primary{background:var(--primary);border-color:var(--primary);color:white}
-.btn.success{background:#087c5b;border-color:#087c5b;color:white}
-.btn.danger{background:#9d3044;border-color:#9d3044;color:white}
-.btn.warning{background:#8b5b1e;border-color:#8b5b1e;color:white}
-.btn.small{padding:7px 9px;font-size:10px}
-.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px}
+.btn:hover{filter:brightness(1.2);transform:translateY(-1px)}
+.btn-primary{background:var(--primary);border-color:var(--primary);color:white}
+.btn-success{background:#087f5b;border-color:#087f5b;color:white}
+.btn-danger{background:#8d292f;border-color:#8d292f;color:white}
+.btn-warning{background:#8a5b0b;border-color:#8a5b0b;color:white}
+.btn-small{padding:7px 9px;font-size:10px}
+.btn-block{width:100%}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:15px}
 .search{
-  flex:1;min-width:200px;background:var(--panel2);border:1px solid var(--border);
-  border-radius:9px;color:white;padding:11px 13px;outline:none;
+  flex:1;min-width:180px;background:var(--panel);
+  border:1px solid var(--border);border-radius:9px;
+  padding:11px 13px;color:var(--text);outline:none;font-size:12px;
 }
-.search:focus,input:focus,textarea:focus,select:focus{border-color:var(--primary)!important}
-.table-wrap{overflow:auto;border:1px solid var(--border);border-radius:12px}
-table{width:100%;border-collapse:collapse;min-width:850px}
-th,td{padding:13px 12px;text-align:left;border-bottom:1px solid var(--border);font-size:11px}
-th{color:#91a3bf;background:#162238;font-weight:800;white-space:nowrap}
-td{color:#dce6f6}
+.search:focus,.field input:focus,.field textarea:focus,.field select:focus{
+  border-color:var(--accent);
+}
+.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px}
+table{width:100%;border-collapse:collapse;min-width:760px}
+th,td{padding:13px 12px;text-align:left;border-bottom:1px solid var(--border);font-size:11px;white-space:nowrap}
+th{color:#9eb0c8;background:#142137;font-weight:800}
+td{color:#dce6f5}
 tr:last-child td{border-bottom:0}
 .muted{color:var(--muted)}
 .badge{
   display:inline-flex;padding:5px 8px;border-radius:20px;
-  font-size:10px;font-weight:800;background:#26344b;color:#b9c8df;
+  font-size:9px;font-weight:800;
 }
-.badge.green{background:#123d34;color:#54e0b2}
-.badge.red{background:#492631;color:#ff91a0}
-.badge.orange{background:#49371f;color:#ffc879}
-.badge.blue{background:#1e355a;color:#8bb7ff}
-.switch{
-  position:relative;width:43px;height:24px;display:inline-block;flex-shrink:0;
+.badge-green{background:#123d35;color:#55e0ad}
+.badge-red{background:#48252c;color:#ff8585}
+.badge-yellow{background:#493a1e;color:#ffd166}
+.badge-blue{background:#1c3554;color:#8bc4ff}
+.field{margin-bottom:14px;min-width:0}
+.field label{
+  display:block;color:#aebdd0;font-size:11px;
+  font-weight:700;margin-bottom:7px;
 }
-.switch input{opacity:0;width:0;height:0}
-.switch span{
-  position:absolute;inset:0;background:#34435b;border-radius:30px;transition:.2s;
-}
-.switch span:before{
-  content:"";position:absolute;width:18px;height:18px;left:3px;top:3px;
-  background:white;border-radius:50%;transition:.2s;
-}
-.switch input:checked+span{background:#0aa879}
-.switch input:checked+span:before{transform:translateX(19px)}
-.setting-row{
-  display:flex;align-items:center;justify-content:space-between;gap:15px;
-  padding:15px 0;border-bottom:1px solid var(--border);
-}
-.setting-row:last-child{border:0}
-.setting-row strong{font-size:12px}
-.setting-row small{display:block;color:var(--muted);margin-top:5px;font-size:11px}
-.field{display:grid;gap:7px;margin-bottom:14px}
-.field label{font-size:11px;color:#a9b8ce;font-weight:700}
 .field input,.field textarea,.field select{
-  width:100%;background:#0d1729;border:1px solid var(--border);
-  color:white;padding:11px 12px;border-radius:9px;outline:none;
+  width:100%;background:#0c1728;border:1px solid var(--border);
+  color:var(--text);padding:11px 12px;border-radius:9px;
+  outline:none;font-size:12px;
 }
-.field textarea{min-height:125px;resize:vertical;line-height:1.6}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.template-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-.template-card h3{font-size:14px;margin:0 0 6px}
-.template-card p{font-size:11px;color:var(--muted);margin:0 0 15px}
-.template-card .field textarea{min-height:170px}
-.hint{color:var(--muted);font-size:11px;line-height:1.7}
-.empty{text-align:center;padding:35px;color:var(--muted)}
-.empty i{font-size:28px;margin-bottom:12px;display:block}
+.field textarea{min-height:145px;resize:vertical;line-height:1.6}
+.field input[type=color]{
+  height:43px;padding:4px;cursor:pointer;
+}
+.field input[type=checkbox]{width:auto;accent-color:var(--accent)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+.switch-row{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:12px;padding:14px 0;border-bottom:1px solid var(--border);
+}
+.switch-row:last-child{border-bottom:0}
+.switch-row strong{font-size:12px;display:block}
+.switch-row small{font-size:10px;color:var(--muted);display:block;margin-top:5px}
+.switch{position:relative;width:43px;height:24px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.slider{
+  position:absolute;inset:0;background:#40516a;
+  border-radius:30px;transition:.2s;
+}
+.slider:before{
+  content:"";position:absolute;width:18px;height:18px;
+  left:3px;top:3px;background:white;border-radius:50%;transition:.2s;
+}
+.switch input:checked+.slider{background:var(--accent)}
+.switch input:checked+.slider:before{transform:translateX(19px)}
+.template-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.template-tab{
+  background:var(--panel2);border:1px solid var(--border);
+  padding:9px 13px;border-radius:8px;color:#aebdd0;
+  font-size:11px;font-weight:700;
+}
+.template-tab.active{background:var(--primary);border-color:var(--primary);color:white}
+.color-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+.preview{
+  background:#f4faf7;color:#172033;border-radius:12px;
+  overflow:hidden;max-width:600px;margin-top:12px;
+}
+.preview-header{padding:22px;color:white;background:#087f5b}
+.preview-body{padding:22px;font-size:12px;line-height:1.7}
+.preview-footer{padding:14px 22px;background:#e9f5ef;color:#47635a;font-size:10px}
+.empty{text-align:center;color:var(--muted);padding:35px;font-size:12px}
+.loading{opacity:.6;pointer-events:none}
+.toast{
+  position:fixed;right:20px;bottom:20px;z-index:100;
+  background:#17263b;border:1px solid #36506e;color:white;
+  padding:13px 17px;border-radius:10px;font-size:12px;
+  box-shadow:0 12px 35px #0006;display:none;max-width:90vw;
+}
+.toast.show{display:block;animation:fadein .2s}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.modal-backdrop{
+  display:none;position:fixed;inset:0;background:#0009;
+  z-index:80;align-items:center;justify-content:center;padding:15px;
+}
+.modal-backdrop.show{display:flex}
 .modal{
-  display:none;position:fixed;inset:0;background:#020713c9;
-  z-index:50;align-items:center;justify-content:center;padding:18px;
-}
-.modal.show{display:flex}
-.modal-box{
+  width:100%;max-width:650px;max-height:90vh;overflow:auto;
   background:var(--panel);border:1px solid var(--border);
-  width:100%;max-width:520px;max-height:90vh;overflow:auto;
-  border-radius:16px;padding:22px;
+  border-radius:15px;padding:22px;
 }
 .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
 .modal-head h3{margin:0;font-size:16px}
-.close{border:0;background:transparent;color:#aab7cc;font-size:20px}
-.toast{
-  position:fixed;right:22px;bottom:22px;z-index:100;
-  background:#182841;border:1px solid #344b6c;color:white;
-  padding:13px 17px;border-radius:11px;box-shadow:0 10px 30px #0006;
-  max-width:350px;display:none;font-size:12px;
-}
-.toast.show{display:block;animation:pop .2s ease}
-@keyframes pop{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
-.loading{opacity:.6;pointer-events:none}
-.mobile-menu{display:none}
-.footer-note{color:#687b98;text-align:center;font-size:10px;margin-top:25px}
-@media(max-width:1050px){
-  .stats-grid{grid-template-columns:repeat(2,1fr)}
-  .two-col{grid-template-columns:1fr}
-}
+.close-btn{background:transparent;border:0;color:var(--muted);font-size:20px}
+.help{font-size:10px;color:var(--muted);line-height:1.7}
+hr{border:0;border-top:1px solid var(--border);margin:18px 0}
+@media(max-width:1050px){.grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:760px){
-  .sidebar{
-    position:fixed;z-index:30;left:-270px;top:0;bottom:0;
-    transition:.25s;box-shadow:10px 0 30px #0005;
-  }
-  .sidebar.open{left:0}
+  .sidebar{transform:translateX(-100%);transition:.25s}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0;width:100%}
   .mobile-menu{display:inline-flex}
-  .topbar{padding:0 15px;height:64px}
-  .topbar h1{font-size:15px}
-  .content{padding:17px 13px}
-  .stats-grid{gap:10px}
-  .card{padding:15px}
-  .stat-value{font-size:23px}
-  .template-grid,.form-grid{grid-template-columns:1fr}
-  .page-heading h2{font-size:18px}
+  .topbar{padding:0 15px}
+  .content{padding:18px 13px}
+  .two-col{grid-template-columns:1fr}
+  .color-grid{grid-template-columns:repeat(2,1fr)}
+  .three-col{grid-template-columns:1fr}
 }
-@media(max-width:420px){
-  .stats-grid{grid-template-columns:1fr 1fr}
-  .stat-icon{width:35px;height:35px}
-  .stat-value{font-size:20px}
-  .user-chip{display:none}
+@media(max-width:430px){
+  .grid{grid-template-columns:1fr 1fr;gap:9px}
+  .card{padding:13px}
+  .stat-card h3{font-size:21px}
+  .connection{display:none}
+  .form-grid{grid-template-columns:1fr}
+  .page-heading h1{font-size:20px}
 }
 </style>
 </head>
@@ -232,42 +266,36 @@ tr:last-child td{border-bottom:0}
 <aside class="sidebar" id="sidebar">
   <div class="brand">
     <div class="brand-icon"><i class="fa-solid fa-network-wired"></i></div>
-    <div>
-      <h2>RS NETWORK</h2>
-      <small>GMAIL & INVOICE CONTROL</small>
-    </div>
+    <div><h2>RS NETWORK</h2><small>GMAIL CONTROL CENTER</small></div>
   </div>
 
-  <div>
-    <div class="nav-label">MAIN MENU</div>
-    <nav class="nav">
-      <button class="active" data-page="dashboard"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
-      <button data-page="customers"><i class="fa-solid fa-users"></i> Customers</button>
-      <button data-page="templates"><i class="fa-solid fa-envelope-open-text"></i> Email Templates</button>
-      <button data-page="automation"><i class="fa-solid fa-robot"></i> Automation</button>
-      <button data-page="history"><i class="fa-solid fa-clock-rotate-left"></i> Email History</button>
-      <button data-page="settings"><i class="fa-solid fa-gear"></i> Settings</button>
-    </nav>
-  </div>
+  <div class="nav-label">MAIN MENU</div>
+  <button class="nav-btn active" data-page="dashboard"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
+  <button class="nav-btn" data-page="customers"><i class="fa-solid fa-users"></i> Customers</button>
 
-  <div class="sidebar-bottom">
-    <div class="connection">
-      <div><span class="dot" id="connectionDot"></span><strong id="connectionText">Connecting...</strong></div>
-      <div>RS NETWORK Gmail System</div>
-      <div id="lastSync">Not synced yet</div>
-    </div>
+  <div class="nav-label">EMAIL MANAGEMENT</div>
+  <button class="nav-btn" data-page="templates"><i class="fa-solid fa-envelope-open-text"></i> Email Templates</button>
+  <button class="nav-btn" data-page="automation"><i class="fa-solid fa-robot"></i> Automation</button>
+  <button class="nav-btn" data-page="history"><i class="fa-solid fa-clock-rotate-left"></i> Email History</button>
+
+  <div class="nav-label">CONFIGURATION</div>
+  <button class="nav-btn" data-page="settings"><i class="fa-solid fa-gear"></i> Settings</button>
+
+  <div class="sidebar-footer">
+    <i class="fa-solid fa-shield-halved"></i> RS NETWORK Admin Panel<br>
+    Gmail & Invoice Management
   </div>
 </aside>
 
 <main class="main">
   <header class="topbar">
-    <div style="display:flex;align-items:center;gap:12px">
+    <div class="top-right">
       <button class="btn mobile-menu" id="menuBtn"><i class="fa-solid fa-bars"></i></button>
-      <h1 id="topTitle">Dashboard</h1>
+      <div class="top-title" id="topTitle">Dashboard</div>
     </div>
-    <div class="top-actions">
-      <button class="btn" id="refreshBtn"><i class="fa-solid fa-rotate"></i> Refresh</button>
-      <div class="user-chip"><i class="fa-solid fa-shield-halved"></i> Admin Panel</div>
+    <div class="top-right">
+      <span class="connection"><span class="status-dot"></span><span id="connectionText">Connecting...</span></span>
+      <button class="btn btn-small" onclick="refreshAll()"><i class="fa-solid fa-rotate"></i> Refresh</button>
     </div>
   </header>
 
@@ -276,259 +304,187 @@ tr:last-child td{border-bottom:0}
     <!-- DASHBOARD -->
     <section class="page active" id="page-dashboard">
       <div class="page-heading">
-        <div>
-          <h2>Dashboard Overview</h2>
-          <p>Manage customer emails, invoices and automatic reminders.</p>
-        </div>
-        <span class="badge blue" id="todayLabel">RS NETWORK</span>
+        <div><h1>Dashboard</h1><p>RS NETWORK Gmail automation overview</p></div>
+        <button class="btn btn-primary" onclick="runReminders()"><i class="fa-solid fa-play"></i> Run Reminders</button>
       </div>
 
-      <div class="grid stats-grid">
-        <div class="card">
-          <div class="stat">
-            <div><div class="stat-label">Total Customers</div><div class="stat-value" id="statCustomers">0</div></div>
-            <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
-          </div>
+      <div class="grid">
+        <div class="card stat-card">
+          <div class="stat-top"><span class="muted">Total Customers</span><span class="stat-icon"><i class="fa-solid fa-users"></i></span></div>
+          <h3 id="statCustomers">0</h3><p>Customers in database</p>
         </div>
-        <div class="card">
-          <div class="stat">
-            <div><div class="stat-label">Emails Sent</div><div class="stat-value" id="statSent">0</div></div>
-            <div class="stat-icon green"><i class="fa-solid fa-paper-plane"></i></div>
-          </div>
+        <div class="card stat-card">
+          <div class="stat-top"><span class="muted">Customers with Email</span><span class="stat-icon"><i class="fa-solid fa-at"></i></span></div>
+          <h3 id="statEmails">0</h3><p>Email addresses available</p>
         </div>
-        <div class="card">
-          <div class="stat">
-            <div><div class="stat-label">Due Customers</div><div class="stat-value" id="statDue">0</div></div>
-            <div class="stat-icon orange"><i class="fa-solid fa-file-invoice-dollar"></i></div>
-          </div>
+        <div class="card stat-card">
+          <div class="stat-top"><span class="muted">Emails Sent</span><span class="stat-icon"><i class="fa-solid fa-paper-plane"></i></span></div>
+          <h3 id="statSent">0</h3><p>Successful email records</p>
         </div>
-        <div class="card">
-          <div class="stat">
-            <div><div class="stat-label">Auto Email</div><div class="stat-value" id="statAuto">OFF</div></div>
-            <div class="stat-icon red"><i class="fa-solid fa-robot"></i></div>
-          </div>
+        <div class="card stat-card">
+          <div class="stat-top"><span class="muted">Email Errors</span><span class="stat-icon"><i class="fa-solid fa-triangle-exclamation"></i></span></div>
+          <h3 id="statErrors">0</h3><p>Failed email records</p>
         </div>
       </div>
 
-      <div class="grid two-col">
+      <div class="two-col">
         <div class="card">
-          <h3 class="section-title">Email Automation Status</h3>
-          <div class="action-list">
-            <div class="action-row">
-              <div><strong>Due Reminder Email</strong><small>Automatic customer due reminders</small></div>
-              <span class="badge" id="dashDueStatus">OFF</span>
-            </div>
-            <div class="action-row">
-              <div><strong>Payment Email</strong><small>Automatic email after payment collection</small></div>
-              <span class="badge" id="dashPaymentStatus">OFF</span>
-            </div>
-            <div class="action-row">
-              <div><strong>Test Email</strong><small>Manual only</small></div>
-              <span class="badge blue">MANUAL</span>
-            </div>
-            <div class="action-row">
-              <div><strong>New Line Email</strong><small>Manual only</small></div>
-              <span class="badge blue">MANUAL</span>
-            </div>
+          <h3 class="section-title">Automation Status</h3>
+          <div class="switch-row">
+            <div><strong>Due Reminder Email</strong><small>Upcoming, due and overdue reminders</small></div>
+            <span id="dashDueStatus" class="badge badge-yellow">Loading</span>
           </div>
-          <div style="margin-top:15px">
-            <button class="btn primary" onclick="showPage('automation')"><i class="fa-solid fa-sliders"></i> Manage Automation</button>
+          <div class="switch-row">
+            <div><strong>Payment Confirmation</strong><small>Email after Collect</small></div>
+            <span id="dashPaymentStatus" class="badge badge-yellow">Loading</span>
           </div>
         </div>
-
         <div class="card">
           <h3 class="section-title">Quick Actions</h3>
-          <div class="action-list">
-            <div class="action-row">
-              <div><strong>Run Due Reminder Check</strong><small>Check customers who need a reminder</small></div>
-              <button class="btn small primary" onclick="runReminderCheck()">Run Now</button>
-            </div>
-            <div class="action-row">
-              <div><strong>Send Monthly Summary</strong><small>Send monthly invoice summary</small></div>
-              <button class="btn small" onclick="sendMonthly()">Send</button>
-            </div>
-            <div class="action-row">
-              <div><strong>View Customers</strong><small>Find a customer and send email</small></div>
-              <button class="btn small" onclick="showPage('customers')">Open</button>
-            </div>
-            <div class="action-row">
-              <div><strong>Email History</strong><small>Check previous email activity</small></div>
-              <button class="btn small" onclick="showPage('history')">View</button>
-            </div>
+          <div class="three-col">
+            <button class="btn btn-primary" onclick="sendMonthly()"><i class="fa-solid fa-calendar"></i> Monthly</button>
+            <button class="btn" onclick="installReminders()"><i class="fa-solid fa-clock"></i> Reminder Trigger</button>
+            <button class="btn" onclick="installMonthly()"><i class="fa-solid fa-calendar-check"></i> Monthly Trigger</button>
           </div>
+          <p class="help" style="margin-top:14px">Install triggers once to activate scheduled automation. Existing triggers should not be repeatedly installed unnecessarily.</p>
         </div>
       </div>
 
-      <div class="card" style="margin-top:16px">
+      <div class="card" style="margin-top:17px">
         <h3 class="section-title">Recent Email Activity</h3>
-        <div id="recentHistory"><div class="empty"><i class="fa-regular fa-envelope"></i>No email activity loaded.</div></div>
+        <div class="table-wrap">
+          <table><thead><tr><th>Date</th><th>Customer</th><th>Email</th><th>Type</th><th>Status</th></tr></thead>
+          <tbody id="recentHistory"><tr><td colspan="5" class="empty">Loading...</td></tr></tbody></table>
+        </div>
       </div>
     </section>
 
     <!-- CUSTOMERS -->
     <section class="page" id="page-customers">
       <div class="page-heading">
-        <div>
-          <h2>Customer Management</h2>
-          <p>Send emails to the Gmail address saved for each customer.</p>
-        </div>
-        <button class="btn primary" onclick="loadCustomers()"><i class="fa-solid fa-rotate"></i> Load Customers</button>
+        <div><h1>Customers</h1><p>Send emails to individual customers</p></div>
+        <button class="btn" onclick="loadCustomers()"><i class="fa-solid fa-rotate"></i> Reload Customers</button>
       </div>
 
       <div class="toolbar">
-        <input class="search" id="customerSearch" placeholder="Search by name, phone, IP or Gmail...">
-        <select class="search" style="max-width:180px;flex:0 0 180px" id="customerFilter">
-          <option value="all">All Customers</option>
-          <option value="email">Has Gmail</option>
-          <option value="noemail">No Gmail</option>
-        </select>
+        <input class="search" id="customerSearch" placeholder="Search name, phone, email or IP..." oninput="renderCustomers()">
+        <span class="badge badge-blue" id="customerCount">0 Customers</span>
       </div>
 
-      <div class="card" style="padding:0">
+      <div class="card">
         <div class="table-wrap">
           <table>
-            <thead>
-              <tr>
-                <th>SI</th><th>Customer</th><th>Phone</th><th>IP</th>
-                <th>Gmail</th><th>Bill</th><th>Billing Date</th><th>Email Actions</th>
-              </tr>
-            </thead>
-            <tbody id="customerTable">
-              <tr><td colspan="8"><div class="empty">Loading customers...</div></td></tr>
-            </tbody>
+            <thead><tr><th>SI</th><th>Customer</th><th>Phone</th><th>Email</th><th>Bill</th><th>Billing Date</th><th>Actions</th></tr></thead>
+            <tbody id="customerTable"><tr><td colspan="7" class="empty">Loading customers...</td></tr></tbody>
           </table>
         </div>
       </div>
-      <p class="hint" style="margin-top:12px">Email পাঠানোর আগে Customer-এর Gmail ঠিক আছে কি না দেখে নাও। এখানে Email পাঠানোর কাজ হবে; Sheet-এর customer data structure পরিবর্তন করা হবে না।</p>
     </section>
 
     <!-- TEMPLATES -->
     <section class="page" id="page-templates">
       <div class="page-heading">
-        <div>
-          <h2>Email Templates</h2>
-          <p>Customize the subject and message for each email type.</p>
-        </div>
-        <button class="btn success" onclick="saveTemplates()"><i class="fa-solid fa-floppy-disk"></i> Save All Templates</button>
+        <div><h1>Email Templates</h1><p>Edit customer email subject and message body</p></div>
+        <button class="btn btn-primary" onclick="saveTemplates()"><i class="fa-solid fa-floppy-disk"></i> Save All Templates</button>
       </div>
 
-      <div class="grid template-grid">
-        <div class="card template-card">
-          <h3><i class="fa-solid fa-file-invoice-dollar" style="color:#ffb454"></i> Due Email</h3>
-          <p>Customer bill due reminder email.</p>
-          <div class="field"><label>Email Subject</label><input id="tpl_due_subject"></div>
-          <div class="field"><label>Email Message</label><textarea id="tpl_due_body"></textarea></div>
+      <div class="card">
+        <div class="template-tabs" id="templateTabs">
+          <button class="template-tab active" data-template="before">Upcoming</button>
+          <button class="template-tab" data-template="due">Due</button>
+          <button class="template-tab" data-template="overdue">Overdue</button>
+          <button class="template-tab" data-template="paid">Payment</button>
+          <button class="template-tab" data-template="test">Test</button>
+          <button class="template-tab" data-template="newline">New Line</button>
         </div>
 
-        <div class="card template-card">
-          <h3><i class="fa-solid fa-circle-check" style="color:#19c58b"></i> Payment Email</h3>
-          <p>Payment confirmation email.</p>
-          <div class="field"><label>Email Subject</label><input id="tpl_paid_subject"></div>
-          <div class="field"><label>Email Message</label><textarea id="tpl_paid_body"></textarea></div>
+        <div class="field">
+          <label>Email Subject</label>
+          <input id="templateSubject" placeholder="Email subject">
         </div>
-
-        <div class="card template-card">
-          <h3><i class="fa-solid fa-vial" style="color:#4f8cff"></i> Test Email</h3>
-          <p>Manual test email to a selected customer.</p>
-          <div class="field"><label>Email Subject</label><input id="tpl_test_subject"></div>
-          <div class="field"><label>Email Message</label><textarea id="tpl_test_body"></textarea></div>
+        <div class="field">
+          <label>Email Message / HTML Body</label>
+          <textarea id="templateBody" rows="13" placeholder="Write your email template here..."></textarea>
         </div>
-
-        <div class="card template-card">
-          <h3><i class="fa-solid fa-wifi" style="color:#b68cff"></i> New Line Email</h3>
-          <p>Manual new connection / new line email.</p>
-          <div class="field"><label>Email Subject</label><input id="tpl_newline_subject"></div>
-          <div class="field"><label>Email Message</label><textarea id="tpl_newline_body"></textarea></div>
+        <div class="help">
+          Available placeholders:
+          {{name}}, {{phone}}, {{email}}, {{ip}}, {{bill}}, {{billingDate}},
+          {{address}}, {{location}}, {{area}}, {{si}}, {{onu}}, {{fiber}}
+          <br>HTML tags are supported if your backend sends the body as HTML.
         </div>
-      </div>
-
-      <div class="card" style="margin-top:16px">
-        <h3 class="section-title">Available Template Variables</h3>
-        <p class="hint">
-          Use these placeholders in your email message if supported by your backend:
-          <br><b>{name}</b> Customer name &nbsp; <b>{phone}</b> Phone number &nbsp;
-          <b>{ip}</b> IP address &nbsp; <b>{bill}</b> Bill amount
-          <br><b>{billingDate}</b> Billing date &nbsp; <b>{email}</b> Customer Gmail
-          <br><b>{address}</b> Address &nbsp; <b>{area}</b> Area
-        </p>
+        <hr>
+        <button class="btn" onclick="previewTemplate()"><i class="fa-solid fa-eye"></i> Preview Template</button>
+        <div id="templatePreview" style="display:none">
+          <h4 class="section-title" style="margin-top:20px">Template Preview</h4>
+          <div class="preview" id="templatePreviewContent"></div>
+        </div>
       </div>
     </section>
 
     <!-- AUTOMATION -->
     <section class="page" id="page-automation">
       <div class="page-heading">
-        <div>
-          <h2>Email Automation</h2>
-          <p>Enable or disable automatic customer emails.</p>
-        </div>
-        <button class="btn primary" onclick="saveSettings()"><i class="fa-solid fa-floppy-disk"></i> Save Settings</button>
+        <div><h1>Email Automation</h1><p>Control automatic customer email delivery</p></div>
+        <button class="btn btn-primary" onclick="saveAutomation()"><i class="fa-solid fa-floppy-disk"></i> Save Automation</button>
       </div>
 
-      <div class="grid two-col">
+      <div class="two-col">
         <div class="card">
-          <h3 class="section-title">Automatic Email Controls</h3>
-
-          <div class="setting-row">
-            <div><strong>Automatic Due Email</strong><small>Enable scheduled due reminder emails.</small></div>
-            <label class="switch"><input type="checkbox" id="autoDueEmail"><span></span></label>
+          <h3 class="section-title">Automatic Emails</h3>
+          <div class="switch-row">
+            <div><strong>Due Reminder Email</strong><small>Upcoming, due date and overdue email automation</small></div>
+            <label class="switch"><input type="checkbox" id="autoDueEmail"><span class="slider"></span></label>
           </div>
-
-          <div class="setting-row">
-            <div><strong>Automatic Payment Email</strong><small>Send confirmation after payment collection.</small></div>
-            <label class="switch"><input type="checkbox" id="autoPaymentEmail"><span></span></label>
+          <div class="switch-row">
+            <div><strong>Payment Confirmation Email</strong><small>Send email after customer payment is collected</small></div>
+            <label class="switch"><input type="checkbox" id="autoPaymentEmail"><span class="slider"></span></label>
           </div>
-
-          <div class="setting-row">
-            <div><strong>Test Email</strong><small>Manual sending only. No automatic sending.</small></div>
-            <span class="badge blue">MANUAL ONLY</span>
-          </div>
-
-          <div class="setting-row">
-            <div><strong>New Line Email</strong><small>Manual sending only. No automatic sending.</small></div>
-            <span class="badge blue">MANUAL ONLY</span>
-          </div>
-
-          <div class="hint" style="margin-top:14px">
-            Due এবং Payment Email-এর ON/OFF সেটিংস আলাদাভাবে কাজ করবে। Test এবং New Line Email automatic করা হবে না।
-          </div>
+          <p class="help">Payment confirmation is controlled separately from due reminders.</p>
         </div>
 
         <div class="card">
-          <h3 class="section-title">Reminder Controls</h3>
-          <div class="setting-row">
-            <div><strong>Run Reminder Check</strong><small>Run the reminder function now.</small></div>
-            <button class="btn primary small" onclick="runReminderCheck()">Run Now</button>
+          <h3 class="section-title">Manual Email Actions</h3>
+          <div class="field">
+            <label>Customer Email Address</label>
+            <input id="manualEmail" type="email" placeholder="customer@example.com">
           </div>
-          <div class="setting-row">
-            <div><strong>Install Reminder Trigger</strong><small>Install or refresh scheduled reminder trigger.</small></div>
-            <button class="btn small" onclick="installReminders()">Install</button>
+          <div class="field">
+            <label>Customer Name</label>
+            <input id="manualName" placeholder="Customer name">
           </div>
-          <div class="setting-row">
-            <div><strong>Install Monthly Trigger</strong><small>Schedule monthly summary email.</small></div>
-            <button class="btn small" onclick="installMonthly()">Install</button>
+          <div class="toolbar">
+            <button class="btn btn-primary" onclick="manualSend('testemail')"><i class="fa-solid fa-vial"></i> Test Email</button>
+            <button class="btn" onclick="manualSend('newlineemail')"><i class="fa-solid fa-plus"></i> New Line Email</button>
           </div>
-          <div class="setting-row">
-            <div><strong>Send Monthly Summary</strong><small>Manually send the monthly summary.</small></div>
-            <button class="btn small success" onclick="sendMonthly()">Send Now</button>
-          </div>
+          <p class="help">Test and New Line emails are manual actions only.</p>
         </div>
+      </div>
+
+      <div class="card" style="margin-top:17px">
+        <h3 class="section-title">Scheduled Automation</h3>
+        <div class="toolbar">
+          <button class="btn btn-primary" onclick="runReminders()"><i class="fa-solid fa-play"></i> Run Reminder Now</button>
+          <button class="btn" onclick="installReminders()"><i class="fa-solid fa-clock"></i> Install Reminder Trigger</button>
+          <button class="btn" onclick="installMonthly()"><i class="fa-solid fa-calendar"></i> Install Monthly Trigger</button>
+        </div>
+        <p class="help">Reminder timing and duplicate prevention are managed by Code.gs. Install the triggers after authorizing the Apps Script project.</p>
       </div>
     </section>
 
     <!-- HISTORY -->
     <section class="page" id="page-history">
       <div class="page-heading">
-        <div>
-          <h2>Email History</h2>
-          <p>Review previous customer email activity.</p>
-        </div>
-        <button class="btn primary" onclick="loadHistory()"><i class="fa-solid fa-rotate"></i> Refresh History</button>
+        <div><h1>Email History</h1><p>Review sent emails and delivery errors</p></div>
+        <button class="btn" onclick="loadHistory()"><i class="fa-solid fa-rotate"></i> Refresh History</button>
       </div>
-      <div class="card" style="padding:0">
+      <div class="toolbar">
+        <input class="search" id="historySearch" placeholder="Search customer, email, type or status..." oninput="renderHistory()">
+      </div>
+      <div class="card">
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Date</th><th>Customer</th><th>Email</th><th>Type</th><th>Status</th><th>Details</th></tr></thead>
-            <tbody id="historyTable"><tr><td colspan="6"><div class="empty">Loading history...</div></td></tr></tbody>
+            <thead><tr><th>Date / Time</th><th>SI</th><th>Customer</th><th>Email</th><th>Subject</th><th>Type</th><th>Status</th><th>Message</th></tr></thead>
+            <tbody id="historyTable"><tr><td colspan="8" class="empty">Loading history...</td></tr></tbody>
           </table>
         </div>
       </div>
@@ -537,679 +493,603 @@ tr:last-child td{border-bottom:0}
     <!-- SETTINGS -->
     <section class="page" id="page-settings">
       <div class="page-heading">
-        <div>
-          <h2>System Settings</h2>
-          <p>Configure email recipient and invoice appearance.</p>
-        </div>
-        <button class="btn success" onclick="saveSettings()"><i class="fa-solid fa-floppy-disk"></i> Save Settings</button>
+        <div><h1>Settings</h1><p>Admin email and email design configuration</p></div>
+        <button class="btn btn-primary" onclick="saveAllSettings()"><i class="fa-solid fa-floppy-disk"></i> Save Settings</button>
       </div>
 
-      <div class="grid two-col">
+      <div class="two-col">
         <div class="card">
-          <h3 class="section-title">Email Configuration</h3>
+          <h3 class="section-title">Admin Configuration</h3>
           <div class="field">
-            <label>Admin Email / Monthly Summary Recipient</label>
-            <input id="adminEmail" type="email" placeholder="admin@example.com">
+            <label>Admin Email (Monthly Summary Recipient)</label>
+            <input type="email" id="adminEmail" placeholder="admin@example.com">
           </div>
-          <p class="hint">Customer Due, Payment, Test এবং New Line Email প্রতিটি Customer-এর Sheet-এ থাকা Gmail address-এ পাঠানোর জন্য নির্ধারিত। Admin Email মূলত admin summary বা backend-এর admin notification-এর জন্য।</p>
+          <div class="field">
+            <label>Company Name</label>
+            <input id="companyName" placeholder="RS NETWORK">
+          </div>
+          <div class="field">
+            <label>Company Address</label>
+            <input id="companyAddress" placeholder="Company address">
+          </div>
+          <div class="field">
+            <label>Company Phone</label>
+            <input id="companyPhone" placeholder="Phone number">
+          </div>
+          <div class="field">
+            <label>Logo URL (Optional)</label>
+            <input id="invoiceLogo" placeholder="https://example.com/logo.png">
+          </div>
+          <div class="field">
+            <label>Email Footer Text</label>
+            <textarea id="invoiceFooter" rows="3" placeholder="Thank you for choosing RS NETWORK."></textarea>
+          </div>
         </div>
 
         <div class="card">
-          <h3 class="section-title">Invoice Design</h3>
-          <div class="field"><label>Company Name</label><input id="companyName" placeholder="RS NETWORK"></div>
-          <div class="field"><label>Company Address</label><input id="companyAddress" placeholder="Your business address"></div>
-          <div class="field"><label>Company Phone</label><input id="companyPhone" placeholder="01XXXXXXXXX"></div>
-          <div class="field"><label>Invoice Logo URL</label><input id="invoiceLogo" placeholder="https://example.com/logo.png"></div>
-          <div class="field"><label>Invoice Footer</label><textarea id="invoiceFooter" style="min-height:75px" placeholder="Thank you for choosing RS NETWORK"></textarea></div>
+          <h3 class="section-title">Email Color Customization</h3>
+          <p class="help">Change these colors to customize the appearance of customer emails. Your backend must use these invoice color settings when building HTML email content.</p>
+          <div class="color-grid">
+            <div class="field"><label>Primary / Header</label><input type="color" id="invoicePrimaryColor" value="#087f5b"></div>
+            <div class="field"><label>Accent / Button</label><input type="color" id="invoiceAccentColor" value="#12b886"></div>
+            <div class="field"><label>Email Background</label><input type="color" id="invoiceBackgroundColor" value="#f4faf7"></div>
+            <div class="field"><label>Text Color</label><input type="color" id="invoiceTextColor" value="#172033"></div>
+          </div>
+          <div class="field">
+            <label>Currency Symbol</label>
+            <input id="invoiceCurrency" value="৳" placeholder="৳">
+          </div>
+          <button class="btn" onclick="updateColorPreview()"><i class="fa-solid fa-eye"></i> Update Preview</button>
+          <div class="preview" id="emailColorPreview">
+            <div class="preview-header" id="colorPreviewHeader">RS NETWORK</div>
+            <div class="preview-body" id="colorPreviewBody">Hello Customer,<br>Your internet bill information is available here.</div>
+            <div class="preview-footer" id="colorPreviewFooter">Thank you for choosing RS NETWORK.</div>
+          </div>
         </div>
+      </div>
+
+      <div class="card" style="margin-top:17px">
+        <h3 class="section-title">Email Sender Information</h3>
+        <p class="help">
+          Customer emails are delivered to the email address saved in each customer's record.
+          The sender account is the Gmail account that authorized the Apps Script project.
+          A website setting cannot independently change the authorized sender Gmail.
+        </p>
       </div>
     </section>
 
-    <div class="footer-note">RS NETWORK • Gmail & Invoice Management System</div>
   </div>
 </main>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <!-- CUSTOMER EMAIL MODAL -->
-<div class="modal" id="emailModal">
-  <div class="modal-box">
+<div class="modal-backdrop" id="emailModal">
+  <div class="modal">
     <div class="modal-head">
       <h3 id="emailModalTitle">Send Customer Email</h3>
-      <button class="close" onclick="closeModal('emailModal')">&times;</button>
+      <button class="close-btn" onclick="closeEmailModal()">&times;</button>
     </div>
-    <div id="emailCustomerInfo" class="hint" style="margin-bottom:15px"></div>
-    <div class="field">
-      <label>Email Type</label>
-      <select id="emailType">
-        <option value="due">Due Email</option>
-        <option value="paid">Payment Email</option>
-        <option value="test">Test Email</option>
-        <option value="newline">New Line Email</option>
-      </select>
+    <div class="field"><label>Customer</label><input id="modalCustomerName" readonly></div>
+    <div class="field"><label>Customer Gmail</label><input id="modalCustomerEmail" readonly></div>
+    <div class="field"><label>Email Type</label><select id="modalEmailType">
+      <option value="due">Due Email</option>
+      <option value="paid">Payment Email</option>
+      <option value="test">Test Email</option>
+      <option value="newline">New Line Email</option>
+    </select></div>
+    <p class="help">The email will be sent to the customer's Gmail address. No PDF file will be attached.</p>
+    <div class="toolbar">
+      <button class="btn btn-primary" onclick="confirmCustomerEmail()"><i class="fa-solid fa-paper-plane"></i> Send Email</button>
+      <button class="btn" onclick="closeEmailModal()">Cancel</button>
     </div>
-    <div class="hint" style="margin-bottom:15px">এই Email নির্বাচিত Customer-এর Gmail address-এ পাঠানো হবে।</div>
-    <button class="btn primary" style="width:100%" id="sendEmailBtn" onclick="confirmSendEmail()">
-      <i class="fa-solid fa-paper-plane"></i> Send Email
-    </button>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
-
 <script>
-/* ======================================================
-   RS NETWORK — GMAIL & INVOICE CONTROL PANEL
-   Connects to the existing Google Apps Script backend.
-   ====================================================== */
+/* =====================================================
+   RS NETWORK - GMAIL CONTROL PANEL
+   API actions must match the deployed Code.gs backend.
+===================================================== */
 
-// 1. PUT YOUR CURRENT APPS SCRIPT WEB APP URL HERE
 const API_URL = "https://script.google.com/macros/s/AKfycbyioEIFcRitWzLOpr_6YolutiNN0uiUb4pqpb_awVf_bFZoOTlCFPIx5cPnKR3t_4o_kw/exec";
 
-// Application state
-const state = {
-  customers: [],
-  settings: {},
-  templates: {},
-  history: [],
-  stats: {},
-  selectedCustomer: null
+let customers = [];
+let historyData = [];
+let settings = {};
+let templates = {};
+let activeTemplate = "before";
+let selectedCustomer = null;
+
+const templateNames = {
+  before:"Upcoming",
+  due:"Due",
+  overdue:"Overdue",
+  paid:"Payment",
+  test:"Test",
+  newline:"New Line"
 };
 
-const TITLES = {
-  dashboard: "Dashboard",
-  customers: "Customers",
-  templates: "Email Templates",
-  automation: "Automation",
-  history: "Email History",
-  settings: "Settings"
+const defaultTemplates = {
+  before:{
+    subject:"Your RS NETWORK internet bill is due soon",
+    body:"<div style='font-family:Arial,sans-serif;padding:24px'><h2>Hello {{name}},</h2><p>Your internet bill is due soon.</p><p><b>Bill:</b> {{bill}}</p><p><b>Billing Date:</b> {{billingDate}}</p><p>Please make your payment on time. Thank you.</p></div>"
+  },
+  due:{
+    subject:"Your RS NETWORK internet bill is due today",
+    body:"<div style='font-family:Arial,sans-serif;padding:24px'><h2>Hello {{name}},</h2><p>Your internet bill is due today.</p><p><b>Bill:</b> {{bill}}</p><p><b>Billing Date:</b> {{billingDate}}</p><p>Please complete your payment. Thank you.</p></div>"
+  },
+  overdue:{
+    subject:"Your RS NETWORK internet bill is overdue",
+    body:"<div style='font-family:Arial,sans-serif;padding:24px'><h2>Hello {{name}},</h2><p>Your internet bill is overdue.</p><p><b>Outstanding Bill:</b> {{bill}}</p><p><b>Billing Date:</b> {{billingDate}}</p><p>Please pay your outstanding bill as soon as possible.</p></div>"
+  },
+  paid:{
+    subject:"Payment received - RS NETWORK",
+    body:"<div style='font-family:Arial,sans-serif;padding:24px'><h2>Thank you {{name}}!</h2><p>We have received your payment.</p><p><b>Payment:</b> {{bill}}</p><p>Your internet service is appreciated.</p></div>"
+  },
+  test:{
+    subject:"RS NETWORK - Test Email",
+    body:"<div style='font-family:Arial,sans-serif;padding:24px'><h2>Hello {{name}},</h2><p>This is a test email from RS NETWORK.</p><p>Your email connection is working.</p></div>"
+  },
+  newline:{
+    subject:"Welcome to RS NETWORK",
+    body:"<div style='font-family:Arial,sans-serif;padding:24px'><h2>Welcome {{name}}!</h2><p>Your new internet connection is ready.</p><p><b>IP:</b> {{ip}}</p><p>Thank you for choosing RS NETWORK.</p></div>"
+  }
 };
 
-const $ = id => document.getElementById(id);
-
-function escapeHTML(value) {
-  return String(value ?? "").replace(/[&<>"']/g, char => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[char]));
-}
-
-function toast(message, isError = false) {
-  const el = $("toast");
-  el.textContent = message;
-  el.style.borderColor = isError ? "#a94357" : "#287d67";
-  el.style.display = "block";
-  el.classList.add("show");
-  clearTimeout(toast.timer);
-  toast.timer = setTimeout(() => {
-    el.classList.remove("show");
-    el.style.display = "none";
-  }, 3500);
-}
-
-function setConnection(online, message) {
-  $("connectionDot").classList.toggle("online", !!online);
-  $("connectionText").textContent = message || (online ? "Connected" : "Disconnected");
-  if (online) $("lastSync").textContent = "Last sync: " + new Date().toLocaleTimeString();
-}
-
-function normalizeResponse(result) {
-  if (typeof result === "string") {
-    try { return JSON.parse(result); } catch (_) { return { success: false, message: result }; }
-  }
-  return result || {};
-}
-
-async function api(action, payload = {}) {
-  if (!API_URL || API_URL.includes("PASTE_YOUR")) {
-    throw new Error("প্রথমে HTML-এর API_URL-এ Apps Script Web App URL বসাও।");
-  }
-
-  const response = await fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify({ action, ...payload })
+async function api(action,payload={}){
+  const body = Object.assign({action},payload);
+  const response = await fetch(API_URL,{
+    method:"POST",
+    headers:{"Content-Type":"text/plain;charset=utf-8"},
+    body:JSON.stringify(body),
+    redirect:"follow"
   });
-
-  if (!response.ok) throw new Error("Server error: " + response.status);
-
-  const result = normalizeResponse(await response.json());
-
-  if (result.success === false || result.ok === false || result.status === "error") {
-    throw new Error(result.message || result.error || "Request failed");
-  }
-
+  if(!response.ok) throw new Error("Server request failed: "+response.status);
+  const result = await response.json();
+  if(result && result.success === false) throw new Error(result.message || result.error || "Request failed");
   return result;
 }
 
-function getDataArray(result, keys) {
-  for (const key of keys) {
-    if (Array.isArray(result?.[key])) return result[key];
-    if (Array.isArray(result?.data?.[key])) return result.data[key];
+function toast(message,type="success"){
+  const el=document.getElementById("toast");
+  el.textContent=message;
+  el.style.borderColor=type==="error"?"#fa5252":"#12b886";
+  el.classList.add("show");
+  clearTimeout(toast.timer);
+  toast.timer=setTimeout(()=>el.classList.remove("show"),3500);
+}
+
+function setBusy(button,busy,label){
+  if(!button)return;
+  if(busy){
+    button.dataset.oldText=button.innerHTML;
+    button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> '+(label||"Please wait");
+    button.disabled=true;
+  }else{
+    button.innerHTML=button.dataset.oldText||button.innerHTML;
+    button.disabled=false;
   }
-  if (Array.isArray(result)) return result;
-  if (Array.isArray(result?.data)) return result.data;
-  return [];
 }
 
-function getObject(result, keys) {
-  for (const key of keys) {
-    if (result?.[key] && typeof result[key] === "object") return result[key];
-    if (result?.data?.[key] && typeof result.data[key] === "object") return result.data[key];
-  }
-  if (result?.data && typeof result.data === "object" && !Array.isArray(result.data)) return result.data;
-  return result || {};
+function esc(value){
+  return String(value??"").replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
 }
 
-function getCustomerEmail(c) {
-  return c.email || c.gmail || c.gmailAddress || c.customerEmail || "";
+function val(id){
+  return document.getElementById(id)?.value ?? "";
 }
 
-function getCustomerName(c) {
-  return c.name || c.customerName || "Unknown";
+function setVal(id,value){
+  const el=document.getElementById(id);
+  if(el && value!==undefined && value!==null) el.value=value;
 }
 
-function getCustomerRow(c) {
-  return Number(c.row || c.rowNumber || c.sheetRow || 0);
+function showPage(name){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.page===name));
+  const page=document.getElementById("page-"+name);
+  if(page)page.classList.add("active");
+  const titles={
+    dashboard:"Dashboard",customers:"Customers",templates:"Email Templates",
+    automation:"Automation",history:"Email History",settings:"Settings"
+  };
+  document.getElementById("topTitle").textContent=titles[name]||name;
+  document.getElementById("sidebar").classList.remove("open");
+  if(name==="customers")loadCustomers();
+  if(name==="history")loadHistory();
+  if(name==="settings")loadSettings();
 }
 
-function showPage(name) {
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.querySelectorAll(".nav button").forEach(b => b.classList.remove("active"));
-
-  const page = $("page-" + name);
-  if (page) page.classList.add("active");
-
-  const nav = document.querySelector(`.nav button[data-page="${name}"]`);
-  if (nav) nav.classList.add("active");
-
-  $("topTitle").textContent = TITLES[name] || name;
-  $("sidebar").classList.remove("open");
-
-  if (name === "customers") renderCustomers();
-  if (name === "history") renderHistory();
-}
-
-document.querySelectorAll(".nav button").forEach(button => {
-  button.addEventListener("click", () => showPage(button.dataset.page));
+document.querySelectorAll(".nav-btn").forEach(btn=>{
+  btn.addEventListener("click",()=>showPage(btn.dataset.page));
+});
+document.getElementById("menuBtn").addEventListener("click",()=>{
+  document.getElementById("sidebar").classList.toggle("open");
 });
 
-$("menuBtn").addEventListener("click", () => $("sidebar").classList.toggle("open"));
-$("refreshBtn").addEventListener("click", refreshAll);
+async function loadInit(){
+  try{
+    await api("ping");
+    document.getElementById("connectionText").textContent="Connected";
+    document.getElementById("connectionText").style.color="#20c997";
+  }catch(e){
+    document.getElementById("connectionText").textContent="Connection issue";
+    document.getElementById("connectionText").style.color="#fa5252";
+  }
+  await Promise.allSettled([
+    loadCustomers(),loadSettings(),loadTemplates(),loadHistory(),loadStats()
+  ]);
+}
 
-$("todayLabel").textContent = new Date().toLocaleDateString(undefined, {
-  weekday: "short", year: "numeric", month: "short", day: "numeric"
-});
+async function refreshAll(){
+  toast("Refreshing data...");
+  await loadInit();
+  toast("Data refreshed");
+}
 
-// INITIAL LOAD
-async function initialize() {
-  try {
-    setConnection(false, "Connecting...");
-    const result = await api("init");
-
-    const customers = getDataArray(result, ["customers", "customerList"]);
-    if (customers.length) state.customers = customers;
-
-    state.settings = getObject(result, ["settings"]);
-    state.templates = getObject(result, ["templates"]);
-    state.stats = getObject(result, ["stats"]);
-    state.history = getDataArray(result, ["history", "logs", "emails"]);
-
-    // Load individual data sources if init did not return them
-    await Promise.allSettled([
-      state.customers.length ? Promise.resolve() : loadCustomers(),
-      Object.keys(state.settings).length ? Promise.resolve() : loadSettings(),
-      Object.keys(state.templates).length ? Promise.resolve() : loadTemplates(),
-      state.history.length ? Promise.resolve() : loadHistory(),
-      loadStats()
-    ]);
-
-    applySettings();
-    applyTemplates();
+/* CUSTOMERS */
+async function loadCustomers(){
+  const tbody=document.getElementById("customerTable");
+  tbody.innerHTML='<tr><td colspan="7" class="empty">Loading customers...</td></tr>';
+  try{
+    const r=await api("getcustomers");
+    customers=Array.isArray(r)?r:(r.customers||r.data||[]);
     renderCustomers();
-    renderHistory();
-    renderDashboard();
-    setConnection(true, "Connected");
-  } catch (error) {
-    setConnection(false, "Connection failed");
-    toast(error.message, true);
+    document.getElementById("statCustomers").textContent=customers.length;
+    document.getElementById("statEmails").textContent=customers.filter(c=>c.email).length;
+  }catch(e){
+    tbody.innerHTML='<tr><td colspan="7" class="empty">Could not load customers: '+esc(e.message)+'</td></tr>';
+    toast("Customer load failed: "+e.message,"error");
   }
 }
 
-async function refreshAll() {
-  $("refreshBtn").disabled = true;
-  try {
-    await Promise.allSettled([
-      loadCustomers(), loadSettings(), loadTemplates(), loadHistory(), loadStats()
-    ]);
-    applySettings();
-    applyTemplates();
-    renderCustomers();
-    renderHistory();
-    renderDashboard();
-    setConnection(true, "Connected");
-    toast("Data refreshed successfully.");
-  } catch (error) {
-    toast(error.message, true);
-  } finally {
-    $("refreshBtn").disabled = false;
-  }
-}
-
-// CUSTOMER DATA
-async function loadCustomers() {
-  const result = await api("getcustomers");
-  state.customers = getDataArray(result, ["customers", "customerList", "rows"]);
-  renderCustomers();
-  renderDashboard();
-  return state.customers;
-}
-
-function renderCustomers() {
-  const tbody = $("customerTable");
-  if (!tbody) return;
-
-  const search = ($("customerSearch")?.value || "").toLowerCase().trim();
-  const filter = $("customerFilter")?.value || "all";
-
-  const filtered = state.customers.filter(c => {
-    const email = getCustomerEmail(c);
-    const text = [
-      c.name, c.phone, c.ip, c.si, email, c.address, c.area, c.location
-    ].join(" ").toLowerCase();
-
-    const matchSearch = !search || text.includes(search);
-    const matchFilter =
-      filter === "all" ||
-      (filter === "email" && !!email) ||
-      (filter === "noemail" && !email);
-
-    return matchSearch && matchFilter;
-  });
-
-  if (!filtered.length) {
-    tbody.innerHTML = `<tr><td colspan="8"><div class="empty"><i class="fa-solid fa-users"></i>No customers found.</div></td></tr>`;
+function renderCustomers(){
+  const q=val("customerSearch").toLowerCase().trim();
+  const filtered=customers.filter(c=>
+    [c.name,c.phone,c.email,c.ip,c.si,c.address].some(x=>String(x??"").toLowerCase().includes(q))
+  );
+  document.getElementById("customerCount").textContent=filtered.length+" Customers";
+  const tbody=document.getElementById("customerTable");
+  if(!filtered.length){
+    tbody.innerHTML='<tr><td colspan="7" class="empty">No customers found</td></tr>';
     return;
   }
-
-  tbody.innerHTML = filtered.map(c => {
-    const email = getCustomerEmail(c);
-    const row = getCustomerRow(c);
-    const bill = c.bill ?? c.customarBill ?? c.customerBill ?? "";
-    const billingDate = c.billingDate || c.billing_date || "";
-
-    return `
-      <tr>
-        <td>${escapeHTML(c.si || "")}</td>
-        <td><strong>${escapeHTML(getCustomerName(c))}</strong><br><span class="muted">${escapeHTML(c.area || c.address || "")}</span></td>
-        <td>${escapeHTML(c.phone || "")}</td>
-        <td>${escapeHTML(c.ip || "")}</td>
-        <td>${email ? `<span style="color:#8fb8ff">${escapeHTML(email)}</span>` : `<span class="badge red">No Gmail</span>`}</td>
-        <td>${escapeHTML(bill)}</td>
-        <td>${escapeHTML(billingDate)}</td>
-        <td>
-          <div style="display:flex;gap:5px;flex-wrap:wrap">
-            <button class="btn small primary" ${!email ? "disabled" : ""} onclick="openEmailModal(${row},'due')">Due</button>
-            <button class="btn small success" ${!email ? "disabled" : ""} onclick="openEmailModal(${row},'paid')">Payment</button>
-            <button class="btn small" ${!email ? "disabled" : ""} onclick="openEmailModal(${row},'test')">Test</button>
-            <button class="btn small warning" ${!email ? "disabled" : ""} onclick="openEmailModal(${row},'newline')">New Line</button>
-          </div>
-        </td>
-      </tr>`;
+  tbody.innerHTML=filtered.map((c,i)=>{
+    const row=Number(c.row||c.rowNumber||c.sheetRow||0);
+    return `<tr>
+      <td>${esc(c.si??i+1)}</td>
+      <td><b>${esc(c.name||"—")}</b><br><span class="muted">${esc(c.ip||"")}</span></td>
+      <td>${esc(c.phone||"—")}</td>
+      <td>${esc(c.email||"—")}</td>
+      <td>${esc(c.bill??c.customerBill??"—")}</td>
+      <td>${esc(c.billingDate||"—")}</td>
+      <td>
+        <button class="btn btn-small btn-primary" onclick="openEmailModal(${i},'due')"><i class="fa-solid fa-envelope"></i> Email</button>
+        <button class="btn btn-small" onclick="openEmailModal(${i},'paid')"><i class="fa-solid fa-check"></i></button>
+      </td>
+    </tr>`;
   }).join("");
 }
 
-$("customerSearch").addEventListener("input", renderCustomers);
-$("customerFilter").addEventListener("change", renderCustomers);
-
-// EMAIL SENDING
-function findCustomerByRow(row) {
-  return state.customers.find(c => getCustomerRow(c) === Number(row));
+function openEmailModal(index,type){
+  const q=val("customerSearch").toLowerCase().trim();
+  const filtered=customers.filter(c=>
+    [c.name,c.phone,c.email,c.ip,c.si,c.address].some(x=>String(x??"").toLowerCase().includes(q))
+  );
+  selectedCustomer=filtered[index];
+  if(!selectedCustomer)return;
+  document.getElementById("modalCustomerName").value=selectedCustomer.name||"";
+  document.getElementById("modalCustomerEmail").value=selectedCustomer.email||"";
+  document.getElementById("modalEmailType").value=type;
+  document.getElementById("emailModal").classList.add("show");
+}
+function closeEmailModal(){
+  document.getElementById("emailModal").classList.remove("show");
 }
 
-function openEmailModal(row, type = "test") {
-  const customer = findCustomerByRow(row);
-  if (!customer) {
-    toast("Customer information not found. Refresh customer list.", true);
-    return;
-  }
-
-  const email = getCustomerEmail(customer);
-  if (!email) {
-    toast("এই Customer-এর Gmail address পাওয়া যায়নি।", true);
-    return;
-  }
-
-  state.selectedCustomer = customer;
-  $("emailType").value = type;
-  $("emailModalTitle").textContent = "Send " + typeLabel(type);
-  $("emailCustomerInfo").innerHTML =
-    `<b>${escapeHTML(getCustomerName(customer))}</b><br>` +
-    `${escapeHTML(email)}<br>` +
-    `Phone: ${escapeHTML(customer.phone || "N/A")} &nbsp; | &nbsp; IP: ${escapeHTML(customer.ip || "N/A")}`;
-
-  $("emailModal").classList.add("show");
+async function confirmCustomerEmail(){
+  if(!selectedCustomer)return;
+  const email=selectedCustomer.email;
+  if(!email){toast("This customer has no Gmail address","error");return;}
+  const type=val("modalEmailType");
+  const action=type==="paid"?"sendpaid":type==="test"?"testemail":type==="newline"?"newlineemail":"senddue";
+  try{
+    const r=await api(action,{customer:selectedCustomer,row:selectedCustomer.row||selectedCustomer.rowNumber||selectedCustomer.sheetRow});
+    closeEmailModal();
+    toast(r.message||"Email request completed");
+    loadHistory();
+  }catch(e){toast("Email failed: "+e.message,"error");}
 }
 
-function typeLabel(type) {
-  return ({
-    due: "Due Email",
-    paid: "Payment Email",
-    test: "Test Email",
-    newline: "New Line Email"
-  })[type] || "Customer Email";
-}
-
-function closeModal(id) {
-  $(id).classList.remove("show");
-}
-
-async function confirmSendEmail() {
-  const customer = state.selectedCustomer;
-  if (!customer) return;
-
-  const row = getCustomerRow(customer);
-  const type = $("emailType").value;
-  const button = $("sendEmailBtn");
-
-  if (!row) {
-    toast("Customer row number পাওয়া যায়নি।", true);
-    return;
-  }
-
-  button.disabled = true;
-  button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
-
-  try {
-    let result;
-
-    if (type === "test") {
-      result = await api("testemail", { row });
-    } else if (type === "due") {
-      result = await api("senddue", { row });
-    } else if (type === "paid") {
-      result = await api("sendpaid", { row });
-    } else {
-      // New Line is manual only.
-      result = await api("sendemail", { row, type: "newline" });
+/* TEMPLATES */
+async function loadTemplates(){
+  try{
+    const r=await api("gettemplates");
+    const data=r.templates||r.data||r;
+    templates={...defaultTemplates};
+    if(Array.isArray(data)){
+      data.forEach(t=>{
+        const key=t.type||t.key;
+        if(key)templates[key]={subject:t.subject||"",body:t.body||""};
+      });
+    }else if(data && typeof data==="object"){
+      Object.keys(defaultTemplates).forEach(key=>{
+        if(data[key])templates[key]={
+          subject:data[key].subject||"",
+          body:data[key].body||""
+        };
+      });
     }
-
-    closeModal("emailModal");
-    toast(result.message || (typeLabel(type) + " sent successfully."));
-    await Promise.allSettled([loadHistory(), loadStats()]);
-    renderDashboard();
-  } catch (error) {
-    toast(error.message || "Email sending failed.", true);
-  } finally {
-    button.disabled = false;
-    button.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Email';
+    selectTemplate(activeTemplate);
+  }catch(e){
+    templates={...defaultTemplates};
+    selectTemplate(activeTemplate);
+    toast("Using default templates: "+e.message,"error");
   }
 }
 
-// SETTINGS
-async function loadSettings() {
-  const result = await api("getsettings");
-  state.settings = getObject(result, ["settings"]);
-  return state.settings;
+function selectTemplate(type){
+  activeTemplate=type;
+  document.querySelectorAll(".template-tab").forEach(b=>b.classList.toggle("active",b.dataset.template===type));
+  const t=templates[type]||defaultTemplates[type];
+  setVal("templateSubject",t.subject);
+  setVal("templateBody",t.body);
+  document.getElementById("templatePreview").style.display="none";
 }
-
-function applySettings() {
-  const s = state.settings || {};
-
-  $("adminEmail").value = s.adminEmail || "";
-
-  $("autoDueEmail").checked = Boolean(
-    s.autoDueEmail ?? s.autoEmail ?? false
-  );
-
-  $("autoPaymentEmail").checked = Boolean(
-    s.autoPaymentEmail ?? false
-  );
-
-  $("companyName").value = s.companyName || s.invoiceCompany || "RS NETWORK";
-  $("companyAddress").value = s.companyAddress || s.invoiceAddress || "";
-  $("companyPhone").value = s.companyPhone || s.invoicePhone || "";
-  $("invoiceLogo").value = s.invoiceLogo || s.logoUrl || "";
-  $("invoiceFooter").value = s.invoiceFooter || s.footerText || "";
-
-  updateAutomationStatus();
-}
-
-function updateAutomationStatus() {
-  const due = $("autoDueEmail").checked;
-  const payment = $("autoPaymentEmail").checked;
-
-  $("dashDueStatus").textContent = due ? "ON" : "OFF";
-  $("dashDueStatus").className = "badge " + (due ? "green" : "red");
-
-  $("dashPaymentStatus").textContent = payment ? "ON" : "OFF";
-  $("dashPaymentStatus").className = "badge " + (payment ? "green" : "red");
-
-  $("statAuto").textContent = due || payment ? "ON" : "OFF";
-}
-
-$("autoDueEmail").addEventListener("change", updateAutomationStatus);
-$("autoPaymentEmail").addEventListener("change", updateAutomationStatus);
-
-async function saveSettings() {
-  const settings = {
-    ...state.settings,
-    adminEmail: $("adminEmail").value.trim(),
-    autoDueEmail: $("autoDueEmail").checked,
-    autoPaymentEmail: $("autoPaymentEmail").checked,
-    autoEmail: $("autoDueEmail").checked,
-    companyName: $("companyName").value.trim(),
-    companyAddress: $("companyAddress").value.trim(),
-    companyPhone: $("companyPhone").value.trim(),
-    invoiceLogo: $("invoiceLogo").value.trim(),
-    invoiceFooter: $("invoiceFooter").value.trim()
-  };
-
-  try {
-    const result = await api("savesettings", { settings, ...settings });
-    state.settings = settings;
-    updateAutomationStatus();
-    toast(result.message || "Settings saved successfully.");
-  } catch (error) {
-    toast(error.message, true);
-  }
-}
-
-// EMAIL TEMPLATES
-async function loadTemplates() {
-  const result = await api("gettemplates");
-  state.templates = getObject(result, ["templates"]);
-  return state.templates;
-}
-
-function readTemplate(type) {
-  const item = state.templates[type] || {};
-
-  if (typeof item === "string") {
-    return { subject: "", body: item };
-  }
-
-  return {
-    subject: item.subject || item.title || "",
-    body: item.body || item.message || item.html || ""
-  };
-}
-
-function applyTemplates() {
-  // Map the Payment template to the backend's "paid" key.
-  const map = {
-    due: "due",
-    paid: "paid",
-    test: "test",
-    newline: "newline"
-  };
-
-  Object.entries(map).forEach(([uiType, key]) => {
-    const template = readTemplate(key);
-    $("tpl_" + uiType + "_subject").value = template.subject;
-    $("tpl_" + uiType + "_body").value = template.body;
-  });
-}
-
-async function saveTemplates() {
-  const updated = { ...state.templates };
-
-  ["due", "paid", "test", "newline"].forEach(type => {
-    updated[type] = {
-      subject: $("tpl_" + type + "_subject").value,
-      body: $("tpl_" + type + "_body").value
+document.querySelectorAll(".template-tab").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    templates[activeTemplate]={
+      subject:val("templateSubject"),
+      body:val("templateBody")
     };
+    selectTemplate(btn.dataset.template);
   });
+});
 
-  try {
-    const result = await api("savetemplates", { templates: updated });
-    state.templates = updated;
-    toast(result.message || "Email templates saved.");
-  } catch (error) {
-    toast(error.message, true);
+async function saveTemplates(){
+  templates[activeTemplate]={
+    subject:val("templateSubject"),
+    body:val("templateBody")
+  };
+  const payload={templates};
+  try{
+    const r=await api("savetemplates",payload);
+    toast(r.message||"All email templates saved");
+  }catch(e){toast("Template save failed: "+e.message,"error");}
+}
+
+function previewTemplate(){
+  const body=val("templateBody")
+    .replaceAll("{{name}}","Customer")
+    .replaceAll("{{phone}}","01700000000")
+    .replaceAll("{{email}}","customer@example.com")
+    .replaceAll("{{ip}}","192.168.1.10")
+    .replaceAll("{{bill}}","500")
+    .replaceAll("{{billingDate}}","06-Nov-2026")
+    .replaceAll("{{address}}","Customer Address")
+    .replaceAll("{{location}}","Customer Location")
+    .replaceAll("{{area}}","Area")
+    .replaceAll("{{si}}","1")
+    .replaceAll("{{onu}}","ONU")
+    .replaceAll("{{fiber}}","2C");
+  const preview=document.getElementById("templatePreviewContent");
+  preview.innerHTML=`<div class="preview-header" style="background:${val("invoicePrimaryColor")||"#087f5b"}">RS NETWORK</div><div class="preview-body" style="background:${val("invoiceBackgroundColor")||"#f4faf7"};color:${val("invoiceTextColor")||"#172033"}">${body}</div><div class="preview-footer">${esc(val("invoiceFooter")||"Thank you for choosing RS NETWORK.")}</div>`;
+  document.getElementById("templatePreview").style.display="block";
+}
+
+/* SETTINGS */
+async function loadSettings(){
+  try{
+    const r=await api("getsettings");
+    settings=r.settings||r.data||r||{};
+    const fields=[
+      "adminEmail","companyName","companyAddress","companyPhone","invoiceLogo",
+      "invoiceFooter","invoicePrimaryColor","invoiceAccentColor",
+      "invoiceBackgroundColor","invoiceTextColor","invoiceCurrency"
+    ];
+    fields.forEach(k=>setVal(k,settings[k]));
+    document.getElementById("autoDueEmail").checked=!!(settings.autoDueEmail??settings.autoEmail);
+    document.getElementById("autoPaymentEmail").checked=!!settings.autoPaymentEmail;
+    updateColorPreview();
+    updateDashAutomation();
+  }catch(e){toast("Settings load failed: "+e.message,"error");}
+}
+
+function collectSettings(){
+  return {
+    adminEmail:val("adminEmail"),
+    companyName:val("companyName"),
+    companyAddress:val("companyAddress"),
+    companyPhone:val("companyPhone"),
+    invoiceLogo:val("invoiceLogo"),
+    invoiceFooter:val("invoiceFooter"),
+    invoicePrimaryColor:val("invoicePrimaryColor"),
+    invoiceAccentColor:val("invoiceAccentColor"),
+    invoiceBackgroundColor:val("invoiceBackgroundColor"),
+    invoiceTextColor:val("invoiceTextColor"),
+    invoiceCurrency:val("invoiceCurrency"),
+    autoDueEmail:document.getElementById("autoDueEmail").checked,
+    autoPaymentEmail:document.getElementById("autoPaymentEmail").checked
+  };
+}
+
+async function saveAllSettings(){
+  const payload=collectSettings();
+  try{
+    const r=await api("savesettings",{settings:payload,...payload});
+    settings=payload;
+    toast(r.message||"Settings saved successfully");
+    updateDashAutomation();
+  }catch(e){toast("Settings save failed: "+e.message,"error");}
+}
+
+async function saveAutomation(){
+  const payload={
+    autoDueEmail:document.getElementById("autoDueEmail").checked,
+    autoPaymentEmail:document.getElementById("autoPaymentEmail").checked
+  };
+  try{
+    const r=await api("savesettings",{settings:payload,...payload});
+    settings={...settings,...payload};
+    updateDashAutomation();
+    toast(r.message||"Automation settings saved");
+  }catch(e){toast("Automation save failed: "+e.message,"error");}
+}
+
+function updateColorPreview(){
+  const primary=val("invoicePrimaryColor")||"#087f5b";
+  const accent=val("invoiceAccentColor")||"#12b886";
+  const bg=val("invoiceBackgroundColor")||"#f4faf7";
+  const text=val("invoiceTextColor")||"#172033";
+  document.getElementById("colorPreviewHeader").style.background=primary;
+  document.getElementById("colorPreviewBody").style.background=bg;
+  document.getElementById("colorPreviewBody").style.color=text;
+  document.getElementById("colorPreviewFooter").style.background=accent;
+  document.getElementById("colorPreviewFooter").style.color="#ffffff";
+  document.getElementById("colorPreviewFooter").textContent=val("invoiceFooter")||"Thank you for choosing RS NETWORK.";
+}
+["invoicePrimaryColor","invoiceAccentColor","invoiceBackgroundColor","invoiceTextColor","invoiceFooter"].forEach(id=>{
+  document.getElementById(id).addEventListener("input",updateColorPreview);
+});
+
+/* AUTOMATION ACTIONS */
+function updateDashAutomation(){
+  const due=document.getElementById("autoDueEmail").checked;
+  const paid=document.getElementById("autoPaymentEmail").checked;
+  const a=document.getElementById("dashDueStatus");
+  const b=document.getElementById("dashPaymentStatus");
+  a.textContent=due?"ON":"OFF";
+  a.className="badge "+(due?"badge-green":"badge-red");
+  b.textContent=paid?"ON":"OFF";
+  b.className="badge "+(paid?"badge-green":"badge-red");
+}
+
+async function runReminders(){
+  try{
+    const r=await api("runreminders");
+    toast(r.message||"Reminder process completed");
+    loadHistory();
+  }catch(e){toast("Reminder failed: "+e.message,"error");}
+}
+async function installReminders(){
+  if(!confirm("Install or update the reminder trigger?"))return;
+  try{
+    const r=await api("installreminders");
+    toast(r.message||"Reminder trigger installed");
+  }catch(e){toast("Trigger setup failed: "+e.message,"error");}
+}
+async function installMonthly(){
+  if(!confirm("Install or update the monthly summary trigger?"))return;
+  try{
+    const r=await api("installmonthly");
+    toast(r.message||"Monthly trigger installed");
+  }catch(e){toast("Monthly trigger setup failed: "+e.message,"error");}
+}
+async function sendMonthly(){
+  if(!confirm("Send the monthly summary email to the Admin Email?"))return;
+  try{
+    const r=await api("sendmonthly");
+    toast(r.message||"Monthly summary request completed");
+    loadHistory();
+  }catch(e){toast("Monthly summary failed: "+e.message,"error");}
+}
+async function manualSend(action){
+  const email=val("manualEmail").trim();
+  const name=val("manualName").trim();
+  if(!email){toast("Enter customer Gmail address","error");return;}
+  try{
+    const r=await api(action,{email,name,customer:{email,name}});
+    toast(r.message||"Email request completed");
+    loadHistory();
+  }catch(e){toast("Email failed: "+e.message,"error");}
+}
+
+/* HISTORY */
+async function loadHistory(){
+  const tbody=document.getElementById("historyTable");
+  tbody.innerHTML='<tr><td colspan="8" class="empty">Loading history...</td></tr>';
+  try{
+    const r=await api("gethistory",{limit:300});
+    historyData=Array.isArray(r)?r:(r.history||r.data||[]);
+    renderHistory();
+    renderRecentHistory();
+    const sent=historyData.filter(x=>String(x.status||"").toUpperCase()==="SENT").length;
+    const errors=historyData.filter(x=>String(x.status||"").toUpperCase()==="ERROR").length;
+    document.getElementById("statSent").textContent=sent;
+    document.getElementById("statErrors").textContent=errors;
+  }catch(e){
+    tbody.innerHTML='<tr><td colspan="8" class="empty">Could not load history: '+esc(e.message)+'</td></tr>';
   }
 }
 
-// STATS
-async function loadStats() {
-  const result = await api("getstats");
-  state.stats = getObject(result, ["stats"]);
-  renderDashboard();
-  return state.stats;
-}
-
-function renderDashboard() {
-  const stats = state.stats || {};
-  const dueCount = state.customers.filter(c => {
-    const trigger = String(c.billTrigger ?? "").toLowerCase();
-    return trigger === "yes" || trigger === "true" || trigger === "due";
-  }).length;
-
-  $("statCustomers").textContent =
-    stats.totalCustomers ?? stats.customers ?? state.customers.length;
-
-  $("statSent").textContent =
-    stats.emailsSent ?? stats.totalSent ?? stats.sent ?? 0;
-
-  $("statDue").textContent =
-    stats.dueCustomers ?? stats.due ?? dueCount;
-
-  updateAutomationStatus();
-  renderRecentHistory();
-}
-
-function renderRecentHistory() {
-  const recent = state.history.slice(0, 5);
-  if (!recent.length) {
-    $("recentHistory").innerHTML =
-      `<div class="empty"><i class="fa-regular fa-envelope"></i>No recent email activity.</div>`;
+function renderHistory(){
+  const q=val("historySearch").toLowerCase().trim();
+  const rows=historyData.filter(x=>
+    [x.date,x.timestamp,x.si,x.name,x.email,x.subject,x.type,x.status,x.message]
+      .some(v=>String(v??"").toLowerCase().includes(q))
+  );
+  const tbody=document.getElementById("historyTable");
+  if(!rows.length){
+    tbody.innerHTML='<tr><td colspan="8" class="empty">No email history found</td></tr>';
     return;
   }
-
-  $("recentHistory").innerHTML = `
-    <div class="table-wrap"><table>
-      <thead><tr><th>Date</th><th>Customer</th><th>Type</th><th>Status</th></tr></thead>
-      <tbody>
-        ${recent.map(h => `
-          <tr>
-            <td>${escapeHTML(h.date || h.timestamp || h.time || "")}</td>
-            <td>${escapeHTML(h.name || h.customer || "")}</td>
-            <td>${escapeHTML(h.type || h.emailType || "")}</td>
-            <td>${statusBadge(h.status || h.result || "")}</td>
-          </tr>`).join("")}
-      </tbody>
-    </table></div>`;
+  tbody.innerHTML=rows.map(x=>{
+    const status=String(x.status||"").toUpperCase();
+    const badge=status==="SENT"?"badge-green":status==="ERROR"?"badge-red":"badge-yellow";
+    return `<tr>
+      <td>${esc(x.timestamp||x.date||"")}</td>
+      <td>${esc(x.si||"")}</td>
+      <td>${esc(x.name||"")}</td>
+      <td>${esc(x.email||"")}</td>
+      <td>${esc(x.subject||"")}</td>
+      <td>${esc(x.type||"")}</td>
+      <td><span class="badge ${badge}">${esc(status||"UNKNOWN")}</span></td>
+      <td title="${esc(x.message||"")}">${esc(x.message||"").slice(0,70)}</td>
+    </tr>`;
+  }).join("");
 }
 
-// HISTORY
-async function loadHistory() {
-  const result = await api("gethistory");
-  state.history = getDataArray(result, ["history", "logs", "emails", "records"]);
-  renderHistory();
-  renderRecentHistory();
-  return state.history;
-}
-
-function statusBadge(status) {
-  const value = String(status || "Unknown");
-  const lower = value.toLowerCase();
-  const cls = lower.includes("success") || lower.includes("sent") || lower.includes("ok")
-    ? "green"
-    : lower.includes("fail") || lower.includes("error")
-      ? "red"
-      : "orange";
-
-  return `<span class="badge ${cls}">${escapeHTML(value)}</span>`;
-}
-
-function renderHistory() {
-  const tbody = $("historyTable");
-  if (!tbody) return;
-
-  if (!state.history.length) {
-    tbody.innerHTML = `<tr><td colspan="6"><div class="empty"><i class="fa-solid fa-clock-rotate-left"></i>No email history found.</div></td></tr>`;
+function renderRecentHistory(){
+  const tbody=document.getElementById("recentHistory");
+  const rows=historyData.slice(0,7);
+  if(!rows.length){
+    tbody.innerHTML='<tr><td colspan="5" class="empty">No recent email activity</td></tr>';
     return;
   }
-
-  tbody.innerHTML = state.history.map(h => `
-    <tr>
-      <td>${escapeHTML(h.date || h.timestamp || h.time || "")}</td>
-      <td>${escapeHTML(h.name || h.customer || "")}</td>
-      <td>${escapeHTML(h.email || h.to || "")}</td>
-      <td>${escapeHTML(h.type || h.emailType || "")}</td>
-      <td>${statusBadge(h.status || h.result || "")}</td>
-      <td>${escapeHTML(h.details || h.message || h.note || "")}</td>
-    </tr>
-  `).join("");
+  tbody.innerHTML=rows.map(x=>{
+    const status=String(x.status||"").toUpperCase();
+    return `<tr>
+      <td>${esc(x.timestamp||x.date||"")}</td>
+      <td>${esc(x.name||"")}</td>
+      <td>${esc(x.email||"")}</td>
+      <td>${esc(x.type||"")}</td>
+      <td><span class="badge ${status==="SENT"?"badge-green":"badge-red"}">${esc(status)}</span></td>
+    </tr>`;
+  }).join("");
 }
 
-// AUTOMATION ACTIONS
-async function runReminderCheck() {
-  if (!confirm("Run the due reminder check now?")) return;
-
-  try {
-    const result = await api("runreminders");
-    toast(result.message || "Reminder check completed.");
-    await Promise.allSettled([loadHistory(), loadStats()]);
-  } catch (error) {
-    toast(error.message, true);
+/* STATS */
+async function loadStats(){
+  try{
+    const r=await api("getstats");
+    const s=r.stats||r.data||r;
+    if(s.totalCustomers!==undefined)document.getElementById("statCustomers").textContent=s.totalCustomers;
+    if(s.totalEmails!==undefined)document.getElementById("statEmails").textContent=s.totalEmails;
+    if(s.sent!==undefined)document.getElementById("statSent").textContent=s.sent;
+    if(s.errors!==undefined)document.getElementById("statErrors").textContent=s.errors;
+  }catch(e){
+    // Dashboard counts are also calculated from customer and history records.
   }
 }
 
-async function installReminders() {
-  if (!confirm("Install or refresh the automatic reminder trigger?")) return;
-
-  try {
-    const result = await api("installreminders");
-    toast(result.message || "Reminder trigger installed.");
-  } catch (error) {
-    toast(error.message, true);
-  }
-}
-
-async function installMonthly() {
-  if (!confirm("Install or refresh the monthly summary trigger?")) return;
-
-  try {
-    const result = await api("installmonthly");
-    toast(result.message || "Monthly trigger installed.");
-  } catch (error) {
-    toast(error.message, true);
-  }
-}
-
-async function sendMonthly() {
-  if (!confirm("Send the monthly summary email now?")) return;
-
-  try {
-    const result = await api("sendmonthly");
-    toast(result.message || "Monthly summary request completed.");
-    await loadHistory();
-  } catch (error) {
-    toast(error.message, true);
-  }
-}
-
-// INIT
-initialize();
+/* INITIALIZE */
+document.addEventListener("DOMContentLoaded",()=>{
+  loadInit();
+});
 </script>
 </body>
 </html>
