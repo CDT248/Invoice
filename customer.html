@@ -3,191 +3,234 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#101827">
+<meta name="theme-color" content="#0f172a">
 <title>One Online | Customer Management</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
-:root {
-  --bg:#f3f6fb;
-  --card:#fff;
+:root{
+  --bg:#f5f7fb;
+  --card:#ffffff;
   --text:#172033;
-  --muted:#788397;
-  --line:#e7ebf2;
-  --green:#087f5b;
-  --green-light:#e4f7ef;
-  --red:#dc3545;
-  --red-light:#fff0f1;
-  --orange:#d97706;
-  --orange-light:#fff6e5;
+  --muted:#718096;
+  --line:#e7ecf3;
+  --primary:#087f5b;
+  --primary2:#0ca678;
+  --red:#dc2626;
   --blue:#2563eb;
-  --blue-light:#edf3ff;
-  --shadow:0 5px 22px rgba(20,35,60,.06);
+  --orange:#d97706;
+  --green:#15803d;
+  --shadow:0 8px 30px rgba(15,23,42,.06);
 }
 *{box-sizing:border-box}
 body{
-  margin:0;background:var(--bg);color:var(--text);
-  font-family:Inter,Arial,sans-serif;font-size:14px;
+  margin:0;
+  font-family:Inter,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
 }
 button,input,select,textarea{font:inherit}
 button{cursor:pointer}
-.app{max-width:1500px;margin:auto;padding:24px}
+.app{min-height:100vh}
 .topbar{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:15px;margin-bottom:25px;flex-wrap:wrap;
+  height:70px;
+  background:#fff;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  position:sticky;
+  top:0;
+  z-index:10;
 }
-.brand{display:flex;align-items:center;gap:12px}
-.logo{
-  width:45px;height:45px;border-radius:13px;
-  background:var(--green);color:white;
-  display:grid;place-items:center;font-size:21px;font-weight:800;
+.brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:20px}
+.brand-icon{
+  width:40px;height:40px;border-radius:12px;
+  display:grid;place-items:center;
+  background:linear-gradient(135deg,#087f5b,#20c997);
+  color:white;
 }
-.brand h1{font-size:20px;margin:0 0 4px;font-weight:800}
-.brand p{margin:0;color:var(--muted);font-size:12px}
-.top-actions{display:flex;gap:9px;flex-wrap:wrap}
+.top-right{display:flex;align-items:center;gap:12px}
+.live-dot{width:9px;height:9px;background:#16a34a;border-radius:50%;display:inline-block}
+.page{max-width:1500px;margin:auto;padding:28px}
+.page-heading{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:15px;margin-bottom:24px;flex-wrap:wrap;
+}
+.page-heading h1{font-size:25px;margin:0 0 6px}
+.page-heading p{margin:0;color:var(--muted);font-size:13px}
 .btn{
   border:0;border-radius:9px;padding:11px 15px;
-  font-weight:700;display:inline-flex;align-items:center;
-  justify-content:center;gap:7px;
+  font-size:13px;font-weight:700;display:inline-flex;
+  align-items:center;gap:8px;justify-content:center;
 }
-.btn-primary{background:var(--green);color:white}
-.btn-light{background:white;border:1px solid var(--line);color:var(--text)}
-.btn-danger{background:var(--red-light);color:var(--red)}
-.btn-small{padding:7px 10px;font-size:12px;border-radius:7px}
-.btn:disabled{opacity:.5;cursor:not-allowed}
-.cards{
-  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:15px;margin-bottom:22px;
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:#066b4d}
+.btn-light{background:#f1f5f9;color:#334155}
+.btn-danger{background:#fee2e2;color:#b91c1c}
+.btn-blue{background:#dbeafe;color:#1d4ed8}
+.btn-small{padding:8px 10px;font-size:12px}
+.stats{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:16px;margin-bottom:22px;
 }
-.stat{
-  background:var(--card);padding:20px;border-radius:14px;
-  box-shadow:var(--shadow);border:1px solid var(--line);
+.stat-card{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:14px;padding:19px;box-shadow:var(--shadow);
 }
-.stat-top{display:flex;justify-content:space-between;align-items:center}
+.stat-top{display:flex;align-items:center;justify-content:space-between}
 .stat-label{font-size:12px;color:var(--muted);font-weight:600}
 .stat-icon{
-  width:35px;height:35px;border-radius:10px;
-  display:grid;place-items:center;font-size:17px;
+  width:38px;height:38px;border-radius:11px;
+  display:grid;place-items:center;font-size:16px;
 }
-.stat-value{font-size:25px;font-weight:800;margin-top:13px}
-.stat-sub{font-size:11px;color:var(--muted);margin-top:5px}
-.green-bg{background:var(--green-light);color:var(--green)}
-.red-bg{background:var(--red-light);color:var(--red)}
-.orange-bg{background:var(--orange-light);color:var(--orange)}
-.blue-bg{background:var(--blue-light);color:var(--blue)}
+.stat-value{font-size:26px;font-weight:800;margin-top:13px}
+.stat-note{font-size:11px;color:var(--muted);margin-top:5px}
+.icon-green{background:#dcfce7;color:#15803d}
+.icon-red{background:#fee2e2;color:#dc2626}
+.icon-orange{background:#ffedd5;color:#c2410c}
+.icon-blue{background:#dbeafe;color:#2563eb}
 .panel{
-  background:white;border:1px solid var(--line);
-  border-radius:14px;box-shadow:var(--shadow);overflow:hidden;
+  background:#fff;border:1px solid var(--line);
+  border-radius:14px;box-shadow:var(--shadow);
 }
 .panel-head{
-  padding:18px 20px;border-bottom:1px solid var(--line);
+  padding:19px 20px;border-bottom:1px solid var(--line);
   display:flex;justify-content:space-between;align-items:center;
-  flex-wrap:wrap;gap:12px;
+  gap:15px;flex-wrap:wrap;
 }
-.panel-head h2{font-size:16px;margin:0}
-.tools{display:flex;gap:9px;flex-wrap:wrap}
-.search{
-  padding:10px 13px;border:1px solid var(--line);
-  border-radius:9px;outline:none;width:230px;background:white;
+.panel-title{font-size:16px;font-weight:800}
+.panel-subtitle{font-size:12px;color:var(--muted);margin-top:4px}
+.toolbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.search-box{position:relative}
+.search-box i{
+  position:absolute;left:12px;top:50%;
+  transform:translateY(-50%);color:#94a3b8;font-size:13px;
 }
-.search:focus,input:focus,select:focus,textarea:focus{
-  border-color:var(--green)!important;
+.search-box input{
+  width:230px;padding:10px 12px 10px 34px;
+  border:1px solid var(--line);border-radius:9px;outline:none;
 }
-.filters{
-  display:flex;gap:7px;flex-wrap:wrap;
-  padding:14px 20px;border-bottom:1px solid var(--line);
+.search-box input:focus,.field input:focus,.field select:focus,.field textarea:focus{
+  border-color:#0ca678;box-shadow:0 0 0 3px rgba(12,166,120,.1);
 }
+.filters{display:flex;gap:7px;flex-wrap:wrap;padding:15px 20px}
 .filter{
-  border:1px solid var(--line);background:white;color:var(--muted);
+  border:1px solid var(--line);background:#fff;color:#64748b;
   padding:8px 13px;border-radius:8px;font-size:12px;font-weight:700;
 }
-.filter.active{background:var(--green);color:white;border-color:var(--green)}
+.filter.active{background:#e6f7f1;border-color:#a7e5d0;color:#087f5b}
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;min-width:1050px}
 th{
-  background:#f9fafc;color:var(--muted);font-size:11px;
-  text-align:left;padding:13px 14px;font-weight:700;
-  white-space:nowrap;
+  background:#f8fafc;text-align:left;padding:13px 14px;
+  color:#64748b;font-size:11px;text-transform:uppercase;
+  letter-spacing:.4px;font-weight:800;white-space:nowrap;
 }
 td{
-  padding:13px 14px;border-top:1px solid var(--line);
-  font-size:12px;white-space:nowrap;vertical-align:middle;
+  padding:14px;border-top:1px solid #eef1f5;
+  font-size:12px;vertical-align:middle;
 }
-.customer-name{font-weight:700;font-size:13px}
-.customer-sub{font-size:11px;color:var(--muted);margin-top:4px}
-.money{font-weight:700}
+tbody tr:hover{background:#fbfdfd}
+.customer-name{font-weight:800;font-size:13px}
+.customer-ip{font-size:11px;color:var(--muted);margin-top:4px}
+.money{font-weight:800;white-space:nowrap}
+.muted{color:var(--muted)}
 .status{
-  display:inline-flex;align-items:center;padding:6px 10px;
-  border-radius:20px;font-size:10px;font-weight:800;
+  display:inline-flex;align-items:center;gap:5px;
+  padding:6px 10px;border-radius:30px;
+  font-size:11px;font-weight:800;white-space:nowrap;
 }
-.status-pending{background:#eef2f7;color:#536174}
-.status-upcoming{background:var(--orange-light);color:var(--orange)}
-.status-due{background:var(--red-light);color:var(--red)}
-.status-collected{background:var(--green-light);color:var(--green)}
-.actions{display:flex;gap:5px}
-.empty{text-align:center;padding:40px;color:var(--muted)}
-.loading{text-align:center;padding:30px;color:var(--muted)}
-.footer{
-  padding:15px;text-align:center;color:var(--muted);font-size:11px;
+.status-upcoming{background:#fff0c2;color:#a15c00;border:1px solid #ffe08a}
+.status-today{background:#dbeafe;color:#1d4ed8;border:1px solid #93c5fd}
+.status-due{background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5}
+.status-collected{background:#dcfce7;color:#15803d;border:1px solid #86efac}
+.actions{display:flex;gap:6px;white-space:nowrap}
+.action-btn{
+  border:0;width:30px;height:30px;border-radius:7px;
+  display:grid;place-items:center;font-size:12px;
 }
-.modal-backdrop{
-  position:fixed;inset:0;background:rgba(15,23,42,.55);
-  display:none;align-items:center;justify-content:center;
-  padding:15px;z-index:50;
+.action-edit{background:#dbeafe;color:#1d4ed8}
+.action-collect{background:#dcfce7;color:#15803d}
+.action-renew{background:#ffedd5;color:#c2410c}
+.action-delete{background:#fee2e2;color:#dc2626}
+.empty{padding:45px;text-align:center;color:var(--muted);font-size:13px}
+.loading{padding:35px;text-align:center;color:var(--muted)}
+.footer-note{font-size:11px;color:#94a3b8;padding:15px 20px}
+.overlay{
+  display:none;position:fixed;inset:0;background:rgba(15,23,42,.55);
+  z-index:50;align-items:center;justify-content:center;padding:15px;
 }
-.modal-backdrop.show{display:flex}
+.overlay.show{display:flex}
 .modal{
   width:100%;max-width:650px;max-height:92vh;overflow:auto;
-  background:white;border-radius:16px;box-shadow:0 20px 70px #0003;
+  background:#fff;border-radius:16px;box-shadow:0 20px 70px rgba(0,0,0,.2);
 }
+.modal.small{max-width:440px}
 .modal-head{
-  padding:18px 20px;border-bottom:1px solid var(--line);
   display:flex;justify-content:space-between;align-items:center;
+  padding:19px 22px;border-bottom:1px solid var(--line);
+  position:sticky;top:0;background:#fff;z-index:2;
 }
-.modal-head h3{margin:0;font-size:16px}
+.modal-head h2{font-size:17px;margin:0}
 .close{
-  border:0;background:#f1f3f6;width:30px;height:30px;
-  border-radius:8px;font-size:18px;
+  width:32px;height:32px;border:0;border-radius:8px;
+  background:#f1f5f9;color:#475569;font-size:17px;
 }
-.modal-body{padding:20px}
+.modal-body{padding:21px}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .field{display:flex;flex-direction:column;gap:7px}
 .field.full{grid-column:1/-1}
-.field label{font-size:11px;font-weight:700;color:#566176}
+.field label{font-size:12px;font-weight:700;color:#475569}
 .field input,.field select,.field textarea{
-  width:100%;padding:11px 12px;border:1px solid var(--line);
-  border-radius:8px;outline:none;background:white;color:var(--text);
+  width:100%;border:1px solid #dce3ec;border-radius:9px;
+  padding:11px 12px;outline:none;font-size:13px;background:#fff;
 }
-.field textarea{min-height:75px;resize:vertical}
-.modal-foot{
-  padding:15px 20px;border-top:1px solid var(--line);
+.field textarea{min-height:70px;resize:vertical}
+.modal-actions{
   display:flex;justify-content:flex-end;gap:9px;
+  padding:16px 21px;border-top:1px solid var(--line);
+}
+.notice{
+  background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;
+  padding:11px 13px;border-radius:9px;font-size:12px;margin-bottom:15px;
 }
 .toast{
   position:fixed;right:20px;bottom:20px;z-index:100;
-  background:#172033;color:white;padding:13px 18px;
-  border-radius:10px;box-shadow:var(--shadow);
+  background:#172033;color:#fff;padding:13px 17px;
+  border-radius:10px;font-size:13px;box-shadow:var(--shadow);
   display:none;max-width:90vw;
 }
 .toast.show{display:block}
-.toast.error{background:#b42332}
-@media(max-width:850px){
-  .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+.spinner{
+  width:15px;height:15px;border:2px solid #ffffff70;
+  border-top-color:#fff;border-radius:50%;
+  display:inline-block;animation:spin .7s linear infinite;
 }
-@media(max-width:550px){
-  .app{padding:13px}
-  .brand h1{font-size:17px}
-  .cards{gap:9px}
-  .stat{padding:14px}
-  .stat-value{font-size:20px}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:900px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .page{padding:18px}
+}
+@media(max-width:600px){
+  .topbar{padding:0 15px;height:62px}
+  .brand{font-size:17px}
+  .page{padding:15px 11px}
+  .page-heading h1{font-size:21px}
+  .stats{gap:9px}
+  .stat-card{padding:13px}
+  .stat-value{font-size:21px}
+  .stat-label{font-size:11px}
+  .stat-icon{width:32px;height:32px}
   .panel-head{padding:14px}
-  .search{width:100%}
-  .tools{width:100%}
-  .tools .search{flex:1}
-  .filters{padding:12px;gap:6px}
-  .filter{padding:8px 10px}
+  .search-box input{width:100%}
+  .search-box{width:100%}
+  .toolbar{width:100%}
+  .toolbar .btn{flex:1}
   .form-grid{grid-template-columns:1fr}
   .field.full{grid-column:auto}
   .modal-body{padding:15px}
@@ -198,75 +241,90 @@ td{
 <body>
 <div class="app">
 
-  <header class="topbar">
-    <div class="brand">
-      <div class="logo">O</div>
-      <div>
-        <h1>One Online</h1>
-        <p>Customer Management System</p>
-      </div>
-    </div>
-    <div class="top-actions">
-      <button class="btn btn-light" onclick="loadData()">↻ Refresh</button>
-      <button class="btn btn-primary" onclick="openCustomerModal()">＋ Add Customer</button>
-    </div>
-  </header>
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-icon"><i class="fa-solid fa-wifi"></i></div>
+    <span>ONE ONLINE</span>
+  </div>
+  <div class="top-right">
+    <span class="live-dot"></span>
+    <span style="font-size:12px;color:#64748b;font-weight:700">System Online</span>
+  </div>
+</header>
 
-  <section class="cards">
-    <div class="stat">
+<main class="page">
+
+  <div class="page-heading">
+    <div>
+      <h1>Customer Management</h1>
+      <p>Manage your internet customers, billing and payments.</p>
+    </div>
+    <button class="btn btn-primary" onclick="openCustomerModal()">
+      <i class="fa-solid fa-plus"></i> Add Customer
+    </button>
+  </div>
+
+  <section class="stats">
+    <div class="stat-card">
       <div class="stat-top">
         <span class="stat-label">TOTAL COLLECT</span>
-        <span class="stat-icon green-bg">৳</span>
+        <div class="stat-icon icon-green"><i class="fa-solid fa-wallet"></i></div>
       </div>
       <div class="stat-value" id="totalCollect">৳0</div>
-      <div class="stat-sub">Collected amount</div>
+      <div class="stat-note">Total collected amount</div>
     </div>
 
-    <div class="stat">
+    <div class="stat-card">
       <div class="stat-top">
         <span class="stat-label">TOTAL DUE</span>
-        <span class="stat-icon red-bg">!</span>
+        <div class="stat-icon icon-red"><i class="fa-solid fa-file-invoice-dollar"></i></div>
       </div>
       <div class="stat-value" id="totalDue">৳0</div>
-      <div class="stat-sub">Outstanding amount</div>
+      <div class="stat-note">Outstanding customer bills</div>
     </div>
 
-    <div class="stat">
+    <div class="stat-card">
       <div class="stat-top">
         <span class="stat-label">UPCOMING</span>
-        <span class="stat-icon orange-bg">◷</span>
+        <div class="stat-icon icon-orange"><i class="fa-solid fa-calendar-days"></i></div>
       </div>
       <div class="stat-value" id="totalUpcoming">0</div>
-      <div class="stat-sub">Within next 3 days</div>
+      <div class="stat-note">Future billing dates</div>
     </div>
 
-    <div class="stat">
+    <div class="stat-card">
       <div class="stat-top">
         <span class="stat-label">TOTAL CUSTOMER</span>
-        <span class="stat-icon blue-bg">♙</span>
+        <div class="stat-icon icon-blue"><i class="fa-solid fa-users"></i></div>
       </div>
-      <div class="stat-value" id="totalCustomer">0</div>
-      <div class="stat-sub">Registered customers</div>
+      <div class="stat-value" id="totalCustomers">0</div>
+      <div class="stat-note">All registered customers</div>
     </div>
   </section>
 
   <section class="panel">
     <div class="panel-head">
-      <h2>Customer List</h2>
-      <div class="tools">
-        <input class="search" id="searchInput"
-          placeholder="Search name, IP, phone..."
-          oninput="renderCustomers()">
-        <button class="btn btn-light btn-small" onclick="loadData()">Refresh</button>
+      <div>
+        <div class="panel-title">Customer List</div>
+        <div class="panel-subtitle">View and manage all customer information</div>
+      </div>
+      <div class="toolbar">
+        <div class="search-box">
+          <i class="fa-solid fa-search"></i>
+          <input type="search" id="searchInput" placeholder="Search name, IP, phone..." oninput="renderTable()">
+        </div>
+        <button class="btn btn-light" onclick="loadData()">
+          <i class="fa-solid fa-rotate"></i> Refresh
+        </button>
       </div>
     </div>
 
     <div class="filters">
-      <button class="filter active" data-filter="all" onclick="setFilter('all',this)">All</button>
-      <button class="filter" data-filter="pending" onclick="setFilter('pending',this)">Pending</button>
-      <button class="filter" data-filter="upcoming" onclick="setFilter('upcoming',this)">Upcoming</button>
-      <button class="filter" data-filter="due" onclick="setFilter('due',this)">Due</button>
-      <button class="filter" data-filter="collected" onclick="setFilter('collected',this)">Collected</button>
+      <button class="filter active" onclick="setFilter('all',this)">All</button>
+      <button class="filter" onclick="setFilter('upcoming',this)">Upcoming</button>
+      <button class="filter" onclick="setFilter('today',this)">Today</button>
+      <button class="filter" onclick="setFilter('due',this)">Due</button>
+      <button class="filter" onclick="setFilter('collected',this)">Collected</button>
     </div>
 
     <div class="table-wrap">
@@ -274,7 +332,6 @@ td{
         <thead>
           <tr>
             <th>Customer</th>
-            <th>IP Address</th>
             <th>Phone</th>
             <th>Package</th>
             <th>Customer Bill</th>
@@ -285,50 +342,50 @@ td{
           </tr>
         </thead>
         <tbody id="customerTable">
-          <tr><td colspan="9" class="loading">Loading customers...</td></tr>
+          <tr><td colspan="8" class="loading">Loading customers...</td></tr>
         </tbody>
       </table>
     </div>
-    <div class="footer" id="resultCount">Loading...</div>
+    <div class="footer-note" id="tableCount">Loading...</div>
   </section>
 
+</main>
 </div>
 
-<!-- CUSTOMER MODAL -->
-<div class="modal-backdrop" id="customerModal">
+<!-- ADD / EDIT CUSTOMER MODAL -->
+<div class="overlay" id="customerOverlay">
   <div class="modal">
     <div class="modal-head">
-      <h3 id="customerModalTitle">Add Customer</h3>
-      <button class="close" onclick="closeModal('customerModal')">×</button>
+      <h2 id="customerModalTitle">Add Customer</h2>
+      <button class="close" onclick="closeModal('customerOverlay')">&times;</button>
     </div>
+
     <form id="customerForm" onsubmit="saveCustomer(event)">
       <div class="modal-body">
-        <input type="hidden" id="originalIp">
         <div class="form-grid">
-
           <div class="field">
             <label>Customer Name *</label>
-            <input id="f_name" required>
+            <input id="f_name" required placeholder="Customer name">
           </div>
           <div class="field">
             <label>IP Address *</label>
-            <input id="f_ip" required>
+            <input id="f_ip" required placeholder="192.168.1.100">
           </div>
           <div class="field">
-            <label>Phone</label>
-            <input id="f_phone">
+            <label>Phone Number</label>
+            <input id="f_phone" placeholder="01XXXXXXXXX">
           </div>
           <div class="field">
             <label>Package</label>
-            <input id="f_package">
+            <input id="f_package" placeholder="20 Mbps">
           </div>
           <div class="field">
             <label>Customer Bill</label>
-            <input id="f_customerBill" type="number" min="0">
+            <input id="f_customerBill" type="number" min="0" placeholder="500">
           </div>
           <div class="field">
             <label>Internet Bill</label>
-            <input id="f_internetBill" type="number" min="0">
+            <input id="f_internetBill" type="number" min="0" placeholder="400">
           </div>
           <div class="field">
             <label>Billing Date</label>
@@ -336,83 +393,79 @@ td{
           </div>
           <div class="field">
             <label>Due Amount</label>
-            <input id="f_due" type="number" min="0">
+            <input id="f_due" type="number" min="0" placeholder="0">
           </div>
           <div class="field">
             <label>Bill Trigger</label>
-            <input id="f_billTrigger">
+            <input id="f_billTrigger" placeholder="ON / OFF">
           </div>
           <div class="field">
             <label>Renew</label>
-            <input id="f_renew">
+            <input id="f_renew" placeholder="Renew amount">
           </div>
           <div class="field">
             <label>Area</label>
-            <input id="f_area">
+            <input id="f_area" placeholder="Area">
           </div>
           <div class="field">
             <label>Location</label>
-            <input id="f_location">
+            <input id="f_location" placeholder="Location">
           </div>
           <div class="field">
             <label>ONU</label>
-            <input id="f_onu">
+            <input id="f_onu" placeholder="ONU information">
           </div>
           <div class="field">
             <label>Fiber</label>
-            <input id="f_fiber">
+            <input id="f_fiber" placeholder="Fiber information">
           </div>
           <div class="field">
-            <label>Gmail</label>
-            <input id="f_email" type="email">
+            <label>Customer Gmail</label>
+            <input id="f_email" type="email" placeholder="customer@gmail.com">
           </div>
           <div class="field">
             <label>Reason</label>
-            <input id="f_reason">
+            <input id="f_reason" placeholder="Reason">
           </div>
           <div class="field full">
             <label>Address</label>
-            <textarea id="f_address"></textarea>
+            <textarea id="f_address" placeholder="Customer address"></textarea>
           </div>
         </div>
       </div>
-      <div class="modal-foot">
-        <button type="button" class="btn btn-light" onclick="closeModal('customerModal')">Cancel</button>
-        <button type="submit" class="btn btn-primary" id="saveCustomerBtn">Save Customer</button>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-light" onclick="closeModal('customerOverlay')">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="saveCustomerBtn">
+          <i class="fa-solid fa-check"></i> Save Customer
+        </button>
       </div>
     </form>
   </div>
 </div>
 
-<!-- PAYMENT MODAL -->
-<div class="modal-backdrop" id="paymentModal">
-  <div class="modal" style="max-width:430px">
+<!-- COLLECT / RENEW MODAL -->
+<div class="overlay" id="paymentOverlay">
+  <div class="modal small">
     <div class="modal-head">
-      <h3 id="paymentTitle">Collect Payment</h3>
-      <button class="close" onclick="closeModal('paymentModal')">×</button>
+      <h2 id="paymentTitle">Collect Payment</h2>
+      <button class="close" onclick="closeModal('paymentOverlay')">&times;</button>
     </div>
-    <form onsubmit="submitPayment(event)">
-      <div class="modal-body">
-        <input type="hidden" id="paymentIp">
-        <input type="hidden" id="paymentType">
-        <div class="field">
-          <label>Customer</label>
-          <input id="paymentCustomer" readonly>
-        </div>
-        <div class="field" style="margin-top:14px">
-          <label id="paymentAmountLabel">Amount</label>
-          <input id="paymentAmount" type="number" min="0" step="0.01" required>
-        </div>
-        <div class="field" style="margin-top:14px">
-          <label>Note</label>
-          <textarea id="paymentNote" placeholder="Optional note"></textarea>
-        </div>
+    <div class="modal-body">
+      <div class="notice" id="paymentCustomerInfo">Customer information</div>
+      <div class="field">
+        <label id="paymentAmountLabel">Collect Amount</label>
+        <input type="number" id="paymentAmount" min="0" step="0.01">
       </div>
-      <div class="modal-foot">
-        <button type="button" class="btn btn-light" onclick="closeModal('paymentModal')">Cancel</button>
-        <button type="submit" class="btn btn-primary" id="paymentSubmit">Confirm</button>
+      <div class="field" style="margin-top:14px">
+        <label>Note</label>
+        <textarea id="paymentNote" placeholder="Optional note"></textarea>
       </div>
-    </form>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-light" onclick="closeModal('paymentOverlay')">Cancel</button>
+      <button class="btn btn-primary" id="paymentSubmitBtn" onclick="submitPayment()">Confirm</button>
+    </div>
   </div>
 </div>
 
@@ -420,610 +473,556 @@ td{
 
 <script>
 /* =========================================
-   ONE ONLINE - CUSTOMER MANAGEMENT
-   API CONFIGURATION
+   ONE ONLINE — CUSTOMER MANAGEMENT
+   Google Apps Script API
 ========================================= */
 
 const API_URL = "https://script.google.com/macros/s/AKfycbweR6IZ0sR2xoxfOUIAxSlKb3clXrKtXY7a4g9WpjxItag9jAUcLH8dW12n_5EtHljE/exec";
 const API_TOKEN = "123456789123";
 
 let customers = [];
-let dashboard = {};
 let activeFilter = "all";
+let editingCustomer = null;
+let paymentCustomer = null;
+let paymentMode = "collect";
 let busy = false;
 
-/* =========================================
-   API REQUEST - JSONP
-========================================= */
+/* ---------- COMMON HELPERS ---------- */
 
-function apiRequest(action, payload = {}) {
-  return new Promise((resolve, reject) => {
-    const callbackName = "oneOnlineCallback_" +
-      Date.now() + "_" + Math.floor(Math.random() * 100000);
-
-    const script = document.createElement("script");
-    const params = new URLSearchParams();
-
-    params.set("action", action);
-    params.set("token", API_TOKEN);
-    params.set("payload", JSON.stringify(payload));
-    params.set("callback", callbackName);
-
-    const timeout = setTimeout(() => {
-      cleanup();
-      reject(new Error("Server response timeout. Please try again."));
-    }, 25000);
-
-    function cleanup() {
-      clearTimeout(timeout);
-      delete window[callbackName];
-      if (script.parentNode) script.parentNode.removeChild(script);
-    }
-
-    window[callbackName] = function(data) {
-      cleanup();
-      if (!data) {
-        reject(new Error("Empty server response"));
-        return;
-      }
-      if (data.success === false) {
-        reject(new Error(data.message || data.error || "Request failed"));
-        return;
-      }
-      resolve(data);
-    };
-
-    script.onerror = function() {
-      cleanup();
-      reject(new Error("API connection failed. Check API URL and deployment."));
-    };
-
-    script.src = API_URL + "?" + params.toString();
-    document.body.appendChild(script);
-  });
-}
-
-/* =========================================
-   HELPERS
-========================================= */
-
-function number(value) {
-  const n = Number(String(value ?? 0).replace(/,/g, ""));
+function num(value){
+  const n = Number(String(value ?? 0).replace(/[৳,\s]/g,""));
   return Number.isFinite(n) ? n : 0;
 }
 
-function money(value) {
-  return "৳" + number(value).toLocaleString("en-BD", {
-    maximumFractionDigits: 2
+function money(value){
+  return "৳" + num(value).toLocaleString("en-IN",{
+    maximumFractionDigits:2
   });
 }
 
-function esc(value) {
-  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+function escapeHTML(value){
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
     "&":"&amp;",
     "<":"&lt;",
     ">":"&gt;",
     '"':"&quot;",
     "'":"&#39;"
-  })[ch]);
+  })[char]);
 }
 
-function dateOnly(value) {
-  if (!value) return null;
+function showToast(message){
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(()=>toast.classList.remove("show"),3000);
+}
 
-  if (value instanceof Date && !isNaN(value)) {
-    return new Date(value.getFullYear(), value.getMonth(), value.getDate());
-  }
+function setButtonLoading(button, loading, text){
+  if(!button) return;
+  button.disabled = loading;
+  button.innerHTML = loading
+    ? '<span class="spinner"></span> Please wait...'
+    : text;
+}
 
-  const s = String(value).trim();
-  if (!s) return null;
+function closeModal(id){
+  document.getElementById(id).classList.remove("show");
+}
 
-  // YYYY-MM-DD or ISO date string
-  let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
-  if (m) {
-    const d = new Date(+m[1], +m[2] - 1, +m[3]);
-    return validDate(d) ? d : null;
+/* ---------- DATE HELPERS ---------- */
+
+function parseDate(value){
+  if(!value) return null;
+  if(value instanceof Date && !isNaN(value)) return value;
+
+  const str = String(value).trim();
+  if(!str) return null;
+
+  // YYYY-MM-DD
+  let m = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if(m){
+    const d = new Date(Number(m[1]),Number(m[2])-1,Number(m[3]));
+    return isNaN(d) ? null : d;
   }
 
   // DD/MM/YYYY or DD-MM-YYYY
-  m = s.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
-  if (m) {
-    const d = new Date(+m[3], +m[2] - 1, +m[1]);
-    return validDate(d) ? d : null;
+  m = str.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+  if(m){
+    const d = new Date(Number(m[3]),Number(m[2])-1,Number(m[1]));
+    return isNaN(d) ? null : d;
   }
 
-  const parsed = new Date(s);
-  if (isNaN(parsed)) return null;
-
-  return new Date(
-    parsed.getFullYear(),
-    parsed.getMonth(),
-    parsed.getDate()
-  );
+  const d = new Date(str);
+  if(isNaN(d)) return null;
+  return new Date(d.getFullYear(),d.getMonth(),d.getDate());
 }
 
-function validDate(d) {
-  return d instanceof Date && !isNaN(d) &&
-    d.getDate() > 0;
+function dateKey(date){
+  return date.getFullYear()+"-"+String(date.getMonth()+1).padStart(2,"0")+"-"+String(date.getDate()).padStart(2,"0");
 }
 
-function daysUntil(value) {
-  const d = dateOnly(value);
-  if (!d) return null;
+function daysUntil(value){
+  const date = parseDate(value);
+  if(!date) return null;
 
-  const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  date.setHours(0,0,0,0);
 
-  return Math.round((d.getTime() - today.getTime()) / 86400000);
+  return Math.round((date-today)/86400000);
 }
 
-function dateDisplay(value) {
-  const d = dateOnly(value);
-  if (!d) return "—";
-
-  return d.toLocaleDateString("en-GB", {
-    day:"2-digit", month:"short", year:"numeric"
+function formatDate(value){
+  const date = parseDate(value);
+  if(!date) return value ? escapeHTML(value) : "—";
+  return date.toLocaleDateString("en-GB",{
+    day:"2-digit",month:"short",year:"numeric"
   });
 }
 
-function dateInputValue(value) {
-  const d = dateOnly(value);
-  if (!d) return "";
+/* ---------- CUSTOMER DATA NORMALIZATION ---------- */
 
-  return [
-    d.getFullYear(),
-    String(d.getMonth() + 1).padStart(2, "0"),
-    String(d.getDate()).padStart(2, "0")
-  ].join("-");
-}
-
-function getDue(c) {
-  return number(c.due ?? c.dueAmount ?? c.outstandingDue ?? 0);
-}
-
-/* =========================================
-   STATUS LOGIC - FIXED
-========================================= */
-
-function getStatus(c) {
-  const due = getDue(c);
-  const days = daysUntil(c.billingDate);
-
-  // Due amount আছে, কিন্তু Billing Date নেই
-  if (days === null) {
-    return { key:"pending", label:"Pending" };
-  }
-
-  // Billing Date পার হয়েছে এবং টাকা বাকি
-  if (days < 0 && due > 0) {
-    return { key:"due", label:"Due" };
-  }
-
-  // Billing Date পার হয়েছে এবং Due নেই
-  if (days < 0 && due <= 0) {
-    return { key:"collected", label:"Collected" };
-  }
-
-  // Billing Date আজ অথবা আগামী ৩ দিনের মধ্যে
-  if (days >= 0 && days <= 3) {
-    return { key:"upcoming", label:"Upcoming" };
-  }
-
-  // Billing Date ৩ দিনের বেশি দূরে
-  return { key:"pending", label:"Pending" };
-}
-
-/*
-  IMPORTANT:
-  Due > 0 হলে তারিখ অনুযায়ী Pending / Upcoming / Due।
-  Due = 0 হলে তারিখ পার হওয়ার পর Collected।
-  ভবিষ্যতের তারিখে Due = 0 থাকলে Pending বা Upcoming।
-*/
-
-/* =========================================
-   CUSTOMER DATA NORMALIZATION
-========================================= */
-
-function normalizeCustomer(c) {
+function normalizeCustomer(c){
   return {
     ...c,
-    ip: c.ip ?? c.IP ?? "",
-    name: c.name ?? c.customerName ?? c.Name ?? "",
-    phone: c.phone ?? c.Phone ?? "",
-    package: c.package ?? c.Package ?? "",
-    customerBill: c.customerBill ?? c.bill ?? c.CustomerBill ?? 0,
-    internetBill: c.internetBill ?? c.ipBill ?? c.InternetBill ?? 0,
-    billingDate: c.billingDate ?? c.billDate ?? c.BillingDate ?? "",
-    due: c.due ?? c.dueAmount ?? c.Due ?? 0,
-    reason: c.reason ?? c.Reason ?? "",
-    billTrigger: c.billTrigger ?? c.billtrigger ?? "",
-    renew: c.renew ?? c.Renew ?? "",
-    area: c.area ?? c.ariya ?? c.Ariya ?? "",
-    address: c.address ?? c.Address ?? "",
-    location: c.location ?? c.Location ?? "",
-    onu: c.onu ?? c.Onu ?? "",
-    fiber: c.fiber ?? c.faibar ?? c.Faibar ?? "",
-    email: c.email ?? c.gmail ?? c.Gmail ?? ""
+    ip:c.ip ?? c.IP ?? "",
+    name:c.name ?? c.Name ?? "",
+    phone:c.phone ?? c.Phone ?? "",
+    reason:c.reason ?? c.Reason ?? "",
+    package:c.package ?? c.Package ?? "",
+    customerBill:c.customerBill ?? c.customer_bill ?? c["Customar Bill"] ?? c["Customer Bill"] ?? 0,
+    billTrigger:c.billTrigger ?? c.bill_trigger ?? c["Bill Triger"] ?? "",
+    internetBill:c.internetBill ?? c.internet_bill ?? c["Internet bill"] ?? 0,
+    billingDate:c.billingDate ?? c.billDate ?? c.BillingDate ?? c["Biling date"] ?? "",
+    billTrigger2:c.billTrigger2 ?? c["Bill triger"] ?? "",
+    renew:c.renew ?? c.Renew ?? "",
+    area:c.area ?? c.Ariya ?? "",
+    address:c.address ?? c.Address ?? "",
+    location:c.location ?? c.Location ?? "",
+    onu:c.onu ?? c.Onu ?? "",
+    fiber:c.fiber ?? c.Faibar ?? "",
+    email:c.email ?? c.gmail ?? c["Gmail's"] ?? "",
+    due:c.due ?? c.dueAmount ?? c.outstandingDue ?? c.Due ?? 0
   };
 }
 
-/* =========================================
-   LOAD DATA
-========================================= */
+function dueAmount(c){
+  return num(c.due);
+}
 
-async function loadData() {
+/* ---------- STATUS LOGIC ---------- */
+
+function getStatus(c){
+  const days = daysUntil(c.billingDate);
+  const due = dueAmount(c);
+
+  // Future billing date is always Upcoming.
+  if(days !== null && days > 0){
+    return {key:"upcoming",label:"Upcoming"};
+  }
+
+  // Billing date is today.
+  if(days === 0){
+    return {key:"today",label:"Today"};
+  }
+
+  // Past billing date: unpaid is Due, otherwise Collected.
+  if(days !== null && days < 0){
+    if(due > 0){
+      return {key:"due",label:"Due"};
+    }
+    return {key:"collected",label:"Collected"};
+  }
+
+  // If no billing date is available, use due amount.
+  return due > 0
+    ? {key:"due",label:"Due"}
+    : {key:"collected",label:"Collected"};
+}
+
+/* ---------- API REQUEST ---------- */
+
+function apiGet(action,payload={}){
+  return new Promise((resolve,reject)=>{
+    const callbackName = "oneOnlineCallback_"+Date.now()+"_"+Math.floor(Math.random()*100000);
+    const params = new URLSearchParams({
+      action,
+      token:API_TOKEN,
+      payload:JSON.stringify(payload),
+      callback:callbackName
+    });
+
+    const script = document.createElement("script");
+    const timeout = setTimeout(()=>{
+      cleanup();
+      reject(new Error("API request timeout. Check Apps Script deployment."));
+    },25000);
+
+    function cleanup(){
+      clearTimeout(timeout);
+      delete window[callbackName];
+      script.remove();
+    }
+
+    window[callbackName] = response=>{
+      cleanup();
+      if(response && (response.success === false || response.error)){
+        reject(new Error(response.message || response.error || "API error"));
+      }else{
+        resolve(response);
+      }
+    };
+
+    script.onerror = ()=>{
+      cleanup();
+      reject(new Error("Cannot connect to Apps Script API."));
+    };
+
+    script.src = API_URL + (API_URL.includes("?") ? "&" : "?") + params.toString();
+    document.body.appendChild(script);
+  });
+}
+
+/* ---------- DATA LOADING ---------- */
+
+async function loadData(){
   const tbody = document.getElementById("customerTable");
-  tbody.innerHTML =
-    '<tr><td colspan="9" class="loading">Loading customers...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="8" class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading customers...</td></tr>';
 
-  try {
-    const result = await apiRequest("getData");
+  try{
+    const response = await apiGet("getData");
+    let rows = response.data ?? response.customers ?? response.rows ?? [];
 
-    customers = (result.customers || []).map(normalizeCustomer);
-    dashboard = result.dashboard || {};
+    if(!Array.isArray(rows) && rows && Array.isArray(rows.customers)){
+      rows = rows.customers;
+    }
 
+    customers = rows.map(normalizeCustomer);
     updateDashboard();
-    renderCustomers();
-
-  } catch (error) {
-    tbody.innerHTML =
-      `<tr><td colspan="9" class="empty">${esc(error.message)}</td></tr>`;
-    showToast(error.message, true);
+    renderTable();
+  }catch(error){
+    tbody.innerHTML = `<tr><td colspan="8" class="empty">${escapeHTML(error.message)}</td></tr>`;
+    document.getElementById("tableCount").textContent = "Could not load customer data.";
+    showToast(error.message);
   }
 }
 
-/* =========================================
-   DASHBOARD
-========================================= */
+/* ---------- DASHBOARD ---------- */
 
-function updateDashboard() {
-  const totalDue = customers.reduce((sum, c) => sum + getDue(c), 0);
+function updateDashboard(){
+  const totalDue = customers.reduce((sum,c)=>sum+dueAmount(c),0);
 
-  const upcoming = customers.filter(c =>
-    getStatus(c).key === "upcoming"
-  ).length;
+  const upcoming = customers.filter(c=>getStatus(c).key==="upcoming").length;
 
-  document.getElementById("totalCollect").textContent =
-    money(dashboard.totalCollect ?? 0);
+  document.getElementById("totalDue").textContent = money(totalDue);
+  document.getElementById("totalUpcoming").textContent = upcoming;
+  document.getElementById("totalCustomers").textContent = customers.length;
 
-  document.getElementById("totalDue").textContent =
-    money(dashboard.totalDue ?? totalDue);
-
-  document.getElementById("totalUpcoming").textContent =
-    upcoming;
-
-  document.getElementById("totalCustomer").textContent =
-    dashboard.totalCustomer ?? customers.length;
+  // Read total collection from the dashboard API if available.
+  loadDashboardCollect();
 }
 
-/* =========================================
-   FILTER
-========================================= */
+async function loadDashboardCollect(){
+  try{
+    const response = await apiGet("getDashboard");
+    const data = response.data ?? response.dashboard ?? response;
 
-function setFilter(filter, button) {
+    const total = data.totalCollect ?? data.totalCollected ??
+      data.totalIncome ?? data.collect ?? data.income ?? 0;
+
+    document.getElementById("totalCollect").textContent = money(total);
+  }catch(error){
+    // Dashboard collection card stays at its last available value.
+  }
+}
+
+/* ---------- FILTER & TABLE ---------- */
+
+function setFilter(filter,button){
   activeFilter = filter;
-
-  document.querySelectorAll(".filter").forEach(el =>
-    el.classList.remove("active")
-  );
-
+  document.querySelectorAll(".filter").forEach(b=>b.classList.remove("active"));
   button.classList.add("active");
-  renderCustomers();
+  renderTable();
 }
 
-/* =========================================
-   RENDER CUSTOMERS
-========================================= */
-
-function renderCustomers() {
+function renderTable(){
   const tbody = document.getElementById("customerTable");
-  const search = document.getElementById("searchInput")
-    .value.trim().toLowerCase();
+  const search = document.getElementById("searchInput").value.trim().toLowerCase();
 
-  let filtered = customers.filter(c => {
+  let list = customers.filter(c=>{
     const status = getStatus(c).key;
 
-    const matchesFilter =
-      activeFilter === "all" || status === activeFilter;
+    const matchesFilter = activeFilter==="all" || status===activeFilter;
 
-    const searchable = [
-      c.name, c.ip, c.phone, c.package, c.email, c.area
+    const searchText = [
+      c.name,c.ip,c.phone,c.package,c.email,c.address,c.location
     ].join(" ").toLowerCase();
 
-    return matchesFilter && searchable.includes(search);
+    return matchesFilter && searchText.includes(search);
   });
 
-  if (!filtered.length) {
-    tbody.innerHTML =
-      '<tr><td colspan="9" class="empty">No customer found</td></tr>';
-    document.getElementById("resultCount").textContent = "0 customers";
+  if(!list.length){
+    tbody.innerHTML = '<tr><td colspan="8" class="empty"><i class="fa-solid fa-users" style="font-size:25px;display:block;margin-bottom:10px"></i>No customers found.</td></tr>';
+    document.getElementById("tableCount").textContent = "Showing 0 customers";
     return;
   }
 
-  tbody.innerHTML = filtered.map(c => {
+  tbody.innerHTML = list.map(c=>{
     const status = getStatus(c);
-    const due = getDue(c);
+    const ip = String(c.ip ?? "");
 
     return `
       <tr>
         <td>
-          <div class="customer-name">${esc(c.name)}</div>
-          <div class="customer-sub">${esc(c.email)}</div>
+          <div class="customer-name">${escapeHTML(c.name || "Unnamed")}</div>
+          <div class="customer-ip">${escapeHTML(ip)}</div>
         </td>
-        <td>${esc(c.ip)}</td>
-        <td>${esc(c.phone)}</td>
-        <td>${esc(c.package)}</td>
+        <td>${escapeHTML(c.phone || "—")}</td>
+        <td>${escapeHTML(c.package || "—")}</td>
         <td class="money">${money(c.customerBill)}</td>
-        <td class="money" style="color:${due > 0 ? '#dc3545' : '#087f5b'}">
-          ${money(due)}
-        </td>
-        <td>${dateDisplay(c.billingDate)}</td>
-        <td>
-          <span class="status status-${status.key}">
-            ${status.label}
-          </span>
-        </td>
+        <td class="money" style="color:${dueAmount(c)>0?"#dc2626":"#15803d"}">${money(c.due)}</td>
+        <td>${formatDate(c.billingDate)}</td>
+        <td><span class="status status-${status.key}">${status.label}</span></td>
         <td>
           <div class="actions">
-            <button class="btn btn-small btn-primary"
-              onclick="openPayment('${esc(c.ip)}','collect')">Collect</button>
-            <button class="btn btn-small btn-light"
-              onclick="openPayment('${esc(c.ip)}','renew')">Renew</button>
-            <button class="btn btn-small btn-light"
-              onclick="editCustomer('${esc(c.ip)}')">Edit</button>
-            <button class="btn btn-small btn-danger"
-              onclick="deleteCustomer('${esc(c.ip)}')">Delete</button>
+            <button class="action-btn action-edit" title="Edit" onclick="editCustomer('${escapeJS(ip)}')"><i class="fa-solid fa-pen"></i></button>
+            <button class="action-btn action-collect" title="Collect" onclick="openPayment('${escapeJS(ip)}','collect')"><i class="fa-solid fa-money-bill-wave"></i></button>
+            <button class="action-btn action-renew" title="Renew" onclick="openPayment('${escapeJS(ip)}','renew')"><i class="fa-solid fa-rotate"></i></button>
+            <button class="action-btn action-delete" title="Delete" onclick="deleteCustomer('${escapeJS(ip)}')"><i class="fa-solid fa-trash"></i></button>
           </div>
         </td>
       </tr>
     `;
   }).join("");
 
-  document.getElementById("resultCount").textContent =
-    `Showing ${filtered.length} of ${customers.length} customers`;
+  document.getElementById("tableCount").textContent =
+    `Showing ${list.length} of ${customers.length} customers`;
 }
 
-/* =========================================
-   CUSTOMER MODAL
-========================================= */
+function escapeJS(value){
+  return String(value ?? "").replace(/\\/g,"\\\\").replace(/'/g,"\\'");
+}
 
-function openCustomerModal() {
+/* ---------- CUSTOMER FORM ---------- */
+
+function openCustomerModal(){
+  editingCustomer = null;
   document.getElementById("customerForm").reset();
-  document.getElementById("originalIp").value = "";
   document.getElementById("customerModalTitle").textContent = "Add Customer";
-  document.getElementById("saveCustomerBtn").textContent = "Save Customer";
-  document.getElementById("customerModal").classList.add("show");
+  document.getElementById("saveCustomerBtn").innerHTML = '<i class="fa-solid fa-check"></i> Save Customer';
+  document.getElementById("f_due").value = "0";
+  document.getElementById("customerOverlay").classList.add("show");
 }
 
-function editCustomer(ip) {
-  const c = customers.find(x => String(x.ip) === String(ip));
-  if (!c) return showToast("Customer not found", true);
-
-  document.getElementById("customerModalTitle").textContent = "Edit Customer";
-  document.getElementById("saveCustomerBtn").textContent = "Update Customer";
-
-  document.getElementById("originalIp").value = c.ip;
-
-  const fields = {
-    f_name:c.name,
-    f_ip:c.ip,
-    f_phone:c.phone,
-    f_package:c.package,
-    f_customerBill:c.customerBill,
-    f_internetBill:c.internetBill,
-    f_billingDate:dateInputValue(c.billingDate),
-    f_due:c.due,
-    f_billTrigger:c.billTrigger,
-    f_renew:c.renew,
-    f_area:c.area,
-    f_location:c.location,
-    f_onu:c.onu,
-    f_fiber:c.fiber,
-    f_email:c.email,
-    f_reason:c.reason,
-    f_address:c.address
-  };
-
-  Object.entries(fields).forEach(([id, value]) => {
-    document.getElementById(id).value = value ?? "";
-  });
-
-  document.getElementById("customerModal").classList.add("show");
-}
-
-function closeModal(id) {
-  document.getElementById(id).classList.remove("show");
-}
-
-/* =========================================
-   SAVE CUSTOMER
-========================================= */
-
-async function saveCustomer(event) {
-  event.preventDefault();
-  if (busy) return;
-
-  const originalIp = document.getElementById("originalIp").value;
-
-  const data = {
-    originalIp: originalIp,
-    name: document.getElementById("f_name").value.trim(),
-    ip: document.getElementById("f_ip").value.trim(),
-    phone: document.getElementById("f_phone").value.trim(),
-    package: document.getElementById("f_package").value.trim(),
-    customerBill: number(document.getElementById("f_customerBill").value),
-    internetBill: number(document.getElementById("f_internetBill").value),
-    billingDate: document.getElementById("f_billingDate").value,
-    due: number(document.getElementById("f_due").value),
-    billTrigger: document.getElementById("f_billTrigger").value.trim(),
-    renew: document.getElementById("f_renew").value.trim(),
-    area: document.getElementById("f_area").value.trim(),
-    location: document.getElementById("f_location").value.trim(),
-    onu: document.getElementById("f_onu").value.trim(),
-    fiber: document.getElementById("f_fiber").value.trim(),
-    email: document.getElementById("f_email").value.trim(),
-    reason: document.getElementById("f_reason").value.trim(),
-    address: document.getElementById("f_address").value.trim()
-  };
-
-  try {
-    setBusy(true);
-
-    const action = originalIp ? "updateCustomer" : "addCustomer";
-    const result = await apiRequest(action, data);
-
-    if (result.success === false) {
-      throw new Error(result.message || "Save failed");
-    }
-
-    closeModal("customerModal");
-    showToast(originalIp ? "Customer updated successfully" : "Customer added successfully");
-    await loadData();
-
-  } catch (error) {
-    showToast(error.message, true);
-  } finally {
-    setBusy(false);
-  }
-}
-
-/* =========================================
-   COLLECT / RENEW MODAL
-========================================= */
-
-function openPayment(ip, type) {
-  const c = customers.find(x => String(x.ip) === String(ip));
-  if (!c) return showToast("Customer not found", true);
-
-  document.getElementById("paymentIp").value = c.ip;
-  document.getElementById("paymentType").value = type;
-  document.getElementById("paymentCustomer").value = c.name;
-
-  if (type === "collect") {
-    document.getElementById("paymentTitle").textContent = "Collect Payment";
-    document.getElementById("paymentAmountLabel").textContent = "Collect Amount";
-    document.getElementById("paymentAmount").value =
-      getDue(c) > 0 ? getDue(c) : number(c.customerBill);
-    document.getElementById("paymentSubmit").textContent = "Confirm Collect";
-  } else {
-    document.getElementById("paymentTitle").textContent = "Renew Expense";
-    document.getElementById("paymentAmountLabel").textContent = "Renew Expense Amount";
-    document.getElementById("paymentAmount").value = number(c.internetBill);
-    document.getElementById("paymentSubmit").textContent = "Confirm Renew";
-  }
-
-  document.getElementById("paymentNote").value = "";
-  document.getElementById("paymentModal").classList.add("show");
-}
-
-async function submitPayment(event) {
-  event.preventDefault();
-  if (busy) return;
-
-  const ip = document.getElementById("paymentIp").value;
-  const type = document.getElementById("paymentType").value;
-  const amount = number(document.getElementById("paymentAmount").value);
-  const note = document.getElementById("paymentNote").value.trim();
-
-  if (amount <= 0) {
-    showToast("Please enter a valid amount", true);
+function editCustomer(ip){
+  const customer = customers.find(c=>String(c.ip)===String(ip));
+  if(!customer){
+    showToast("Customer not found.");
     return;
   }
 
-  const action = type === "collect" ? "collectCustomer" : "renewCustomer";
+  editingCustomer = {...customer};
+  document.getElementById("customerForm").reset();
 
-  try {
-    setBusy(true);
+  document.getElementById("customerModalTitle").textContent = "Edit Customer";
+  document.getElementById("saveCustomerBtn").innerHTML = '<i class="fa-solid fa-check"></i> Update Customer';
 
-    await apiRequest(action, {
-      ip: ip,
-      amount: amount,
-      note: note
-    });
+  const fields = {
+    f_name:customer.name,
+    f_ip:customer.ip,
+    f_phone:customer.phone,
+    f_package:customer.package,
+    f_customerBill:customer.customerBill,
+    f_internetBill:customer.internetBill,
+    f_billingDate:toInputDate(customer.billingDate),
+    f_due:customer.due,
+    f_billTrigger:customer.billTrigger,
+    f_renew:customer.renew,
+    f_area:customer.area,
+    f_location:customer.location,
+    f_onu:customer.onu,
+    f_fiber:customer.fiber,
+    f_email:customer.email,
+    f_reason:customer.reason,
+    f_address:customer.address
+  };
 
-    closeModal("paymentModal");
-
-    showToast(type === "collect"
-      ? "Payment collected successfully"
-      : "Renew expense saved successfully"
-    );
-
-    await loadData();
-
-  } catch (error) {
-    showToast(error.message, true);
-  } finally {
-    setBusy(false);
-  }
-}
-
-/* =========================================
-   DELETE CUSTOMER
-========================================= */
-
-async function deleteCustomer(ip) {
-  const c = customers.find(x => String(x.ip) === String(ip));
-  if (!c) return;
-
-  const confirmed = confirm(
-    `Are you sure you want to delete ${c.name} (${c.ip})?`
-  );
-
-  if (!confirmed || busy) return;
-
-  try {
-    setBusy(true);
-
-    await apiRequest("deleteCustomer", { ip:ip });
-
-    showToast("Customer deleted successfully");
-    await loadData();
-
-  } catch (error) {
-    showToast(error.message, true);
-  } finally {
-    setBusy(false);
-  }
-}
-
-/* =========================================
-   UI HELPERS
-========================================= */
-
-function setBusy(state) {
-  busy = state;
-
-  document.querySelectorAll("button").forEach(button => {
-    button.disabled = state;
+  Object.entries(fields).forEach(([id,value])=>{
+    document.getElementById(id).value = value ?? "";
   });
 
-  document.getElementById("saveCustomerBtn").textContent =
-    state ? "Please wait..." :
-    (document.getElementById("originalIp").value
-      ? "Update Customer" : "Save Customer");
+  document.getElementById("customerOverlay").classList.add("show");
 }
 
-let toastTimer;
-
-function showToast(message, error = false) {
-  const toast = document.getElementById("toast");
-  toast.textContent = message;
-  toast.className = "toast show" + (error ? " error" : "");
-
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => {
-    toast.classList.remove("show");
-  }, 3500);
+function toInputDate(value){
+  const d = parseDate(value);
+  return d ? dateKey(d) : "";
 }
 
-/* =========================================
-   START
-========================================= */
+async function saveCustomer(event){
+  event.preventDefault();
 
-document.addEventListener("DOMContentLoaded", () => {
+  const button = document.getElementById("saveCustomerBtn");
+  if(button.disabled) return;
+
+  const payload = {
+    ip:document.getElementById("f_ip").value.trim(),
+    name:document.getElementById("f_name").value.trim(),
+    phone:document.getElementById("f_phone").value.trim(),
+    reason:document.getElementById("f_reason").value.trim(),
+    package:document.getElementById("f_package").value.trim(),
+    customerBill:num(document.getElementById("f_customerBill").value),
+    billTrigger:document.getElementById("f_billTrigger").value.trim(),
+    internetBill:num(document.getElementById("f_internetBill").value),
+    billingDate:document.getElementById("f_billingDate").value,
+    renew:document.getElementById("f_renew").value.trim(),
+    area:document.getElementById("f_area").value.trim(),
+    address:document.getElementById("f_address").value.trim(),
+    location:document.getElementById("f_location").value.trim(),
+    onu:document.getElementById("f_onu").value.trim(),
+    fiber:document.getElementById("f_fiber").value.trim(),
+    email:document.getElementById("f_email").value.trim(),
+    due:num(document.getElementById("f_due").value)
+  };
+
+  const oldIp = editingCustomer ? editingCustomer.ip : "";
+
+  try{
+    setButtonLoading(button,true,"Save Customer");
+
+    if(editingCustomer){
+      payload.originalIp = oldIp;
+      await apiGet("updateCustomer",payload);
+      showToast("Customer updated successfully.");
+    }else{
+      await apiGet("addCustomer",payload);
+      showToast("Customer added successfully.");
+    }
+
+    closeModal("customerOverlay");
+    await loadData();
+  }catch(error){
+    showToast(error.message);
+  }finally{
+    setButtonLoading(button,false,editingCustomer
+      ? '<i class="fa-solid fa-check"></i> Update Customer'
+      : '<i class="fa-solid fa-check"></i> Save Customer');
+  }
+}
+
+/* ---------- COLLECT / RENEW ---------- */
+
+function openPayment(ip,mode){
+  const customer = customers.find(c=>String(c.ip)===String(ip));
+  if(!customer){
+    showToast("Customer not found.");
+    return;
+  }
+
+  paymentCustomer = customer;
+  paymentMode = mode;
+
+  const isCollect = mode==="collect";
+
+  document.getElementById("paymentTitle").textContent =
+    isCollect ? "Collect Payment" : "Renew Expense";
+
+  document.getElementById("paymentAmountLabel").textContent =
+    isCollect ? "Collect Amount" : "Renew / Expense Amount";
+
+  document.getElementById("paymentCustomerInfo").innerHTML =
+    `<b>${escapeHTML(customer.name)}</b><br>IP: ${escapeHTML(customer.ip)}<br>Current Due: ${money(customer.due)}`;
+
+  document.getElementById("paymentAmount").value =
+    isCollect ? (num(customer.due)>0 ? num(customer.due) : num(customer.customerBill))
+              : num(customer.internetBill);
+
+  document.getElementById("paymentNote").value = "";
+
+  document.getElementById("paymentSubmitBtn").textContent =
+    isCollect ? "Confirm Collect" : "Confirm Renew";
+
+  document.getElementById("paymentOverlay").classList.add("show");
+}
+
+async function submitPayment(){
+  if(!paymentCustomer) return;
+
+  const button = document.getElementById("paymentSubmitBtn");
+  if(button.disabled) return;
+
+  const amount = num(document.getElementById("paymentAmount").value);
+  const note = document.getElementById("paymentNote").value.trim();
+
+  if(amount<=0){
+    showToast("Please enter a valid amount.");
+    return;
+  }
+
+  const action = paymentMode==="collect" ? "collectCustomer" : "renewCustomer";
+
+  const payload = {
+    ip:paymentCustomer.ip,
+    amount,
+    note
+  };
+
+  try{
+    setButtonLoading(button,true,"Confirm");
+
+    await apiGet(action,payload);
+
+    closeModal("paymentOverlay");
+    showToast(paymentMode==="collect"
+      ? "Payment collected successfully."
+      : "Renew expense saved successfully.");
+
+    await loadData();
+  }catch(error){
+    showToast(error.message);
+  }finally{
+    setButtonLoading(button,false,
+      paymentMode==="collect" ? "Confirm Collect" : "Confirm Renew");
+  }
+}
+
+/* ---------- DELETE CUSTOMER ---------- */
+
+async function deleteCustomer(ip){
+  const customer = customers.find(c=>String(c.ip)===String(ip));
+  if(!customer) return;
+
+  const confirmed = confirm(
+    `Are you sure you want to delete ${customer.name} (${customer.ip})?`
+  );
+
+  if(!confirmed) return;
+
+  try{
+    await apiGet("deleteCustomer",{ip});
+    showToast("Customer deleted successfully.");
+    await loadData();
+  }catch(error){
+    showToast(error.message);
+  }
+}
+
+/* ---------- START ---------- */
+
+document.addEventListener("DOMContentLoaded",()=>{
   loadData();
-});
 
+  // Close modal when clicking outside.
+  document.querySelectorAll(".overlay").forEach(overlay=>{
+    overlay.addEventListener("click",event=>{
+      if(event.target===overlay){
+        overlay.classList.remove("show");
+      }
+    });
+  });
+});
 </script>
+
 </body>
 </html>
