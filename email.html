@@ -1,0 +1,1005 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f5f7fb">
+<title>ONE ONLINE | Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root{
+--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#718096;
+--line:#e7ecf3;--primary:#087f5b;--primary2:#0ca678;
+--red:#dc2626;--blue:#2563eb;--orange:#d97706;
+--green:#15803d;--shadow:0 8px 30px rgba(15,23,42,.06)
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{min-height:100vh}
+.topbar{height:68px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:20}
+.brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:19px}
+.brand-icon{width:39px;height:39px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,#087f5b,#20c997);color:white}
+.top-right{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:12px;font-weight:700}
+.live-dot{width:9px;height:9px;background:#16a34a;border-radius:50%}
+.layout{display:flex;min-height:calc(100vh - 68px)}
+.sidebar{width:245px;flex:0 0 245px;background:#fff;border-right:1px solid var(--line);padding:20px 13px;position:sticky;top:68px;height:calc(100vh - 68px);overflow:auto}
+.nav-label{font-size:10px;font-weight:800;color:#94a3b8;letter-spacing:1px;padding:10px 12px}
+.nav-btn{width:100%;border:0;background:transparent;color:#64748b;padding:11px 12px;border-radius:9px;display:flex;align-items:center;gap:11px;font-size:13px;font-weight:700;text-align:left;margin:2px 0}
+.nav-btn i{width:18px;text-align:center}
+.nav-btn:hover,.nav-btn.active{background:#e6f7f1;color:#087f5b}
+.connection{margin:22px 5px 0;padding:13px;background:#f8fafc;border:1px solid var(--line);border-radius:11px;font-size:11px;color:var(--muted);line-height:1.7}
+.connection strong{color:var(--text)}
+.main{flex:1;min-width:0;padding:25px;max-width:1600px;margin:0 auto;width:100%}
+.page{display:none}
+.page.active{display:block}
+.page-heading{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:22px;flex-wrap:wrap}
+.page-heading h1{font-size:24px;margin:0 0 6px}
+.page-heading p{margin:0;color:var(--muted);font-size:13px}
+.btn{border:0;border-radius:9px;padding:10px 14px;font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:8px;justify-content:center}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:#066b4d}
+.btn-light{background:#f1f5f9;color:#334155}
+.btn-danger{background:#fee2e2;color:#b91c1c}
+.btn-blue{background:#dbeafe;color:#1d4ed8}
+.btn-small{padding:7px 9px;font-size:11px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:20px}
+.stat-card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:17px;box-shadow:var(--shadow)}
+.stat-top{display:flex;align-items:center;justify-content:space-between}
+.stat-label{font-size:11px;color:var(--muted);font-weight:700}
+.stat-icon{width:35px;height:35px;border-radius:10px;display:grid;place-items:center}
+.stat-value{font-size:24px;font-weight:800;margin-top:12px}
+.stat-note{font-size:10px;color:var(--muted);margin-top:4px}
+.icon-green{background:#dcfce7;color:#15803d}
+.icon-red{background:#fee2e2;color:#dc2626}
+.icon-orange{background:#ffedd5;color:#c2410c}
+.icon-blue{background:#dbeafe;color:#2563eb}
+.panel{background:#fff;border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow);margin-bottom:18px}
+.panel-head{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.panel-title{font-size:14px;font-weight:800}
+.panel-subtitle{font-size:11px;color:var(--muted);margin-top:4px}
+.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.search{padding:9px 11px;border:1px solid var(--line);border-radius:8px;outline:none;font-size:12px;min-width:210px}
+.search:focus,.field input:focus,.field select:focus,.field textarea:focus{border-color:#0ca678;box-shadow:0 0 0 3px rgba(12,166,120,.1)}
+.filters{display:flex;gap:7px;flex-wrap:wrap;padding:13px 18px}
+.filter{border:1px solid var(--line);background:#fff;color:#64748b;padding:7px 11px;border-radius:8px;font-size:11px;font-weight:700}
+.filter.active{background:#e6f7f1;border-color:#a7e5d0;color:#087f5b}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:850px}
+th{background:#f8fafc;text-align:left;padding:12px;color:#64748b;font-size:10px;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
+td{padding:12px;border-top:1px solid #eef1f5;font-size:11px;vertical-align:middle}
+tbody tr:hover{background:#fbfdfd}
+.customer-name{font-weight:800;font-size:12px}
+.customer-ip{font-size:10px;color:var(--muted);margin-top:3px}
+.money{font-weight:800;white-space:nowrap}
+.status{display:inline-flex;padding:5px 9px;border-radius:30px;font-size:10px;font-weight:800;white-space:nowrap}
+.status-upcoming{background:#fff0c2;color:#a15c00}
+.status-today{background:#dbeafe;color:#1d4ed8}
+.status-due{background:#fee2e2;color:#b91c1c}
+.status-collected{background:#dcfce7;color:#15803d}
+.actions{display:flex;gap:5px;white-space:nowrap}
+.action-btn{border:0;width:28px;height:28px;border-radius:7px;display:grid;place-items:center;font-size:11px}
+.action-edit{background:#dbeafe;color:#1d4ed8}
+.action-collect{background:#dcfce7;color:#15803d}
+.action-renew{background:#ffedd5;color:#c2410c}
+.action-delete{background:#fee2e2;color:#dc2626}
+.empty{padding:35px;text-align:center;color:var(--muted);font-size:12px}
+.footer-note{font-size:10px;color:#94a3b8;padding:12px 18px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.customer-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:16px}
+.customer-card{border:1px solid var(--line);border-radius:11px;padding:14px;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.customer-card h3{font-size:13px;margin:0 0 5px}
+.customer-card p{font-size:11px;color:var(--muted);margin:3px 0}
+.badge{display:inline-block;padding:4px 7px;border-radius:20px;background:#e6f7f1;color:#087f5b;font-size:10px;font-weight:800}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.field label{font-size:11px;font-weight:700;color:#475569}
+.field input,.field select,.field textarea{width:100%;border:1px solid #dce3ec;border-radius:8px;padding:10px 11px;outline:none;font-size:12px;background:#fff}
+.field textarea{min-height:85px;resize:vertical}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:50;align-items:center;justify-content:center;padding:14px}
+.overlay.show{display:flex}
+.modal{width:100%;max-width:660px;max-height:92vh;overflow:auto;background:#fff;border-radius:15px;box-shadow:0 20px 70px rgba(0,0,0,.2)}
+.modal.small{max-width:430px}
+.modal-head{display:flex;justify-content:space-between;align-items:center;padding:17px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#fff;z-index:2}
+.modal-head h2{font-size:16px;margin:0}
+.close{width:30px;height:30px;border:0;border-radius:8px;background:#f1f5f9;color:#475569;font-size:17px}
+.modal-body{padding:19px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field.full{grid-column:1/-1}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;padding:14px 19px;border-top:1px solid var(--line)}
+.notice{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;padding:10px 12px;border-radius:8px;font-size:11px;margin-bottom:13px}
+.toast{position:fixed;right:18px;bottom:18px;z-index:100;background:#172033;color:#fff;padding:12px 16px;border-radius:9px;font-size:12px;box-shadow:var(--shadow);display:none;max-width:90vw}
+.toast.show{display:block}
+.preview{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:14px;font-size:12px;line-height:1.7;white-space:pre-wrap;min-height:100px}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line);font-size:12px}
+.toggle-row input{width:17px;height:17px}
+.muted{color:var(--muted)}
+.hidden{display:none!important}
+
+/* DARK / LIGHT MODE */
+.theme-toggle{
+display:inline-flex;align-items:center;justify-content:center;gap:8px;
+padding:9px 12px;border:1px solid var(--line);border-radius:9px;
+background:#f1f5f9;color:#334155;font-size:12px;font-weight:700;cursor:pointer;
+}
+.theme-toggle:hover{transform:translateY(-1px)}
+body,.topbar,.sidebar,.panel,.stat-card,.customer-card,.modal,
+.modal-head,.connection,th,td,.field input,.field select,
+.field textarea,.search,.filter,.preview,.close,.btn-light,.nav-btn{
+transition:background-color .25s ease,color .25s ease,border-color .25s ease;
+}
+body.dark-mode{
+color-scheme:dark;
+--bg:#0b1220;--card:#111c2e;--text:#e7edf7;--muted:#9aa9bd;
+--line:#26364d;--primary:#12a879;--primary2:#20c997;
+--shadow:0 8px 30px rgba(0,0,0,.22);
+background:var(--bg);color:var(--text);
+}
+body.dark-mode .topbar,
+body.dark-mode .sidebar,
+body.dark-mode .panel,
+body.dark-mode .stat-card,
+body.dark-mode .modal,
+body.dark-mode .modal-head{
+background:var(--card);color:var(--text);border-color:var(--line);
+}
+body.dark-mode .sidebar{border-right-color:var(--line)}
+body.dark-mode .nav-btn{color:#a9b7ca}
+body.dark-mode .nav-btn:hover,
+body.dark-mode .nav-btn.active{background:#123b35;color:#55d6ae}
+body.dark-mode .connection,
+body.dark-mode .customer-card,
+body.dark-mode .preview,
+body.dark-mode .close,
+body.dark-mode .btn-light,
+body.dark-mode .filter{
+background:#17263a;color:#c5d1e2;border-color:var(--line);
+}
+body.dark-mode .connection strong{color:var(--text)}
+body.dark-mode th{background:#17263a;color:#a9b7ca}
+body.dark-mode td{border-top-color:var(--line);color:#d5deeb}
+body.dark-mode tbody tr:hover{background:#15243a}
+body.dark-mode .filter.active{background:#123b35;border-color:#246b58;color:#55d6ae}
+body.dark-mode .field label{color:#c2cede}
+body.dark-mode .field input,
+body.dark-mode .field select,
+body.dark-mode .field textarea,
+body.dark-mode .search{
+background:#0d192b;color:var(--text);border-color:#33445c;
+}
+body.dark-mode .field input::placeholder,
+body.dark-mode .field textarea::placeholder,
+body.dark-mode .search::placeholder{color:#718096}
+body.dark-mode .modal-head,
+body.dark-mode .modal-actions{border-color:var(--line)}
+body.dark-mode .notice{background:#123326;color:#a7f3d0;border-color:#245b45}
+body.dark-mode .badge{background:#123b35;color:#55d6ae}
+body.dark-mode .status-upcoming{background:#4a3514;color:#ffd17a}
+body.dark-mode .status-today{background:#18345b;color:#93c5fd}
+body.dark-mode .status-due{background:#4a2027;color:#fda4af}
+body.dark-mode .status-collected{background:#123b2b;color:#86efac}
+body.dark-mode .icon-green,body.dark-mode .action-collect{background:#123b2b;color:#86efac}
+body.dark-mode .icon-red,body.dark-mode .action-delete,body.dark-mode .btn-danger{background:#4a2027;color:#fda4af}
+body.dark-mode .icon-orange,body.dark-mode .action-renew{background:#4a3514;color:#ffd17a}
+body.dark-mode .icon-blue,body.dark-mode .action-edit,body.dark-mode .btn-blue{background:#18345b;color:#93c5fd}
+body.dark-mode .stat-note,
+body.dark-mode .panel-subtitle,
+body.dark-mode .muted,
+body.dark-mode .page-heading p,
+body.dark-mode .footer-note{color:var(--muted)}
+body.dark-mode .theme-toggle{background:#17263a;color:#e7edf7;border-color:var(--line)}
+body.dark-mode .theme-toggle:hover{background:#26364d}
+body.dark-mode .empty{color:var(--muted)}
+body.dark-mode .toast{background:#e7edf7;color:#0b1220}
+
+@media(max-width:1000px){
+.sidebar{width:210px;flex-basis:210px}
+.main{padding:18px}
+.stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:700px){
+.topbar{height:60px;padding:0 13px}
+.layout{display:block}
+.sidebar{position:sticky;top:60px;width:100%;height:auto;padding:7px;display:flex;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line);z-index:15}
+.nav-label,.connection{display:none}
+.nav-btn{width:auto;flex:0 0 auto;padding:9px 11px;font-size:11px;margin:0}
+.nav-btn i{width:auto}
+.main{padding:14px 10px}
+.page-heading h1{font-size:20px}
+.stats{gap:8px}
+.stat-card{padding:12px}
+.stat-value{font-size:20px}
+.stat-label{font-size:10px}
+.stat-icon{width:30px;height:30px}
+.grid-2,.customer-grid{grid-template-columns:1fr}
+.field-row,.form-grid{grid-template-columns:1fr}
+.field.full{grid-column:auto}
+.search{min-width:0;width:100%}
+.toolbar{width:100%}
+.toolbar .search{flex:1}
+.panel-head{padding:13px}
+.modal-body{padding:14px}
+.theme-toggle{width:36px;height:36px;padding:0}
+.theme-toggle span{display:none}
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<header class="topbar">
+<div class="brand">
+<div class="brand-icon"><i class="fa-solid fa-wifi"></i></div>
+<span>ONE ONLINE</span>
+</div>
+<div class="top-right">
+<button class="theme-toggle" id="themeToggle" type="button" onclick="toggleTheme()" title="Switch theme">
+<i class="fa-solid fa-moon" id="themeIcon"></i>
+<span id="themeText">Dark Mode</span>
+</button>
+<span class="live-dot"></span>
+<span>Management System</span>
+</div>
+</header>
+
+<div class="layout">
+<aside class="sidebar">
+<div class="nav-label">MAIN MENU</div>
+<button class="nav-btn active" data-page="dashboard"><i class="fa-solid fa-gauge"></i> Dashboard</button>
+<button class="nav-btn" data-page="customers"><i class="fa-solid fa-users"></i> Customers</button>
+<div class="nav-label">GMAIL MANAGEMENT</div>
+<button class="nav-btn" data-page="gmailDashboard"><i class="fa-solid fa-chart-line"></i> Gmail Dashboard</button>
+<button class="nav-btn" data-page="gmailCustomers"><i class="fa-solid fa-address-book"></i> Gmail Customers</button>
+<button class="nav-btn" data-page="send"><i class="fa-solid fa-paper-plane"></i> Send Email</button>
+<button class="nav-btn" data-page="templates"><i class="fa-solid fa-file-lines"></i> Email Templates</button>
+<button class="nav-btn" data-page="settings"><i class="fa-solid fa-gear"></i> Email Settings</button>
+<button class="nav-btn" data-page="history"><i class="fa-solid fa-clock-rotate-left"></i> Email History</button>
+<button class="nav-btn" data-page="test"><i class="fa-solid fa-vial"></i> Test Gmail</button>
+<div class="connection">
+<strong>API CONNECTION</strong><br>
+Customer API: <span id="customerConn">Connecting…</span><br>
+Gmail API: <span id="gmailConn">Connecting…</span>
+</div>
+</aside>
+
+<main class="main">
+
+<section class="page active" id="page-dashboard">
+<div class="page-heading">
+<div><h1>Customer Dashboard</h1><p>Manage internet customers, billing and payments.</p></div>
+<button class="btn btn-primary" onclick="openCustomerModal()"><i class="fa fa-plus"></i> Add Customer</button>
+</div>
+<div class="stats">
+<div class="stat-card"><div class="stat-top"><span class="stat-label">TOTAL COLLECT</span><div class="stat-icon icon-green"><i class="fa fa-wallet"></i></div></div><div class="stat-value" id="totalCollect">৳0</div><div class="stat-note">Total collected amount</div></div>
+<div class="stat-card"><div class="stat-top"><span class="stat-label">TOTAL DUE</span><div class="stat-icon icon-red"><i class="fa fa-file-invoice-dollar"></i></div></div><div class="stat-value" id="totalDue">৳0</div><div class="stat-note">Outstanding customer bills</div></div>
+<div class="stat-card"><div class="stat-top"><span class="stat-label">UPCOMING</span><div class="stat-icon icon-orange"><i class="fa fa-calendar-days"></i></div></div><div class="stat-value" id="totalUpcoming">0</div><div class="stat-note">Future billing dates</div></div>
+<div class="stat-card"><div class="stat-top"><span class="stat-label">TOTAL CUSTOMER</span><div class="stat-icon icon-blue"><i class="fa fa-users"></i></div></div><div class="stat-value" id="totalCustomers">0</div><div class="stat-note">All registered customers</div></div>
+</div>
+<div class="panel">
+<div class="panel-head"><div><div class="panel-title">Customer Overview</div><div class="panel-subtitle">Latest customer records</div></div><button class="btn btn-light" onclick="loadCustomerData()"><i class="fa fa-rotate"></i> Refresh</button></div>
+<div class="table-wrap"><table><thead><tr><th>Customer</th><th>Phone</th><th>Package</th><th>Bill</th><th>Due</th><th>Billing Date</th><th>Status</th><th>Actions</th></tr></thead><tbody id="dashboardCustomerTable"><tr><td colspan="8" class="empty">Loading…</td></tr></tbody></table></div>
+</div>
+</section>
+
+<section class="page" id="page-customers">
+<div class="page-heading">
+<div><h1>Customer Management</h1><p>Add, edit, collect, renew and manage all customers.</p></div>
+<button class="btn btn-primary" onclick="openCustomerModal()"><i class="fa fa-plus"></i> Add Customer</button>
+</div>
+<div class="panel">
+<div class="panel-head"><div><div class="panel-title">Customer List</div><div class="panel-subtitle">View and manage all customer information</div></div><div class="toolbar"><input class="search" id="customerSearch" placeholder="Search name, IP, phone…" oninput="renderCustomerTable()"><button class="btn btn-light" onclick="loadCustomerData()"><i class="fa fa-rotate"></i> Refresh</button></div></div>
+<div class="filters" id="customerFilters">
+<button class="filter active" data-filter="all" onclick="setCustomerFilter('all',this)">All</button>
+<button class="filter" data-filter="upcoming" onclick="setCustomerFilter('upcoming',this)">Upcoming</button>
+<button class="filter" data-filter="today" onclick="setCustomerFilter('today',this)">Today</button>
+<button class="filter" data-filter="due" onclick="setCustomerFilter('due',this)">Due</button>
+<button class="filter" data-filter="collected" onclick="setCustomerFilter('collected',this)">Collected</button>
+</div>
+<div class="table-wrap"><table><thead><tr><th>Customer</th><th>Phone</th><th>Package</th><th>Customer Bill</th><th>Due</th><th>Billing Date</th><th>Status</th><th>Actions</th></tr></thead><tbody id="customerTable"><tr><td colspan="8" class="empty">Loading customers…</td></tr></tbody></table></div>
+<div class="footer-note" id="customerCount">Loading…</div>
+</div>
+</section>
+
+<section class="page" id="page-gmailDashboard">
+<div class="page-heading"><div><h1>Gmail Dashboard</h1><p>Email delivery overview and quick actions.</p></div><button class="btn btn-light" onclick="loadGmailData()"><i class="fa fa-rotate"></i> Refresh Data</button></div>
+<div class="stats">
+<div class="stat-card"><div class="stat-top"><span class="stat-label">TOTAL CUSTOMERS</span><div class="stat-icon icon-blue"><i class="fa fa-users"></i></div></div><div class="stat-value" id="gTotalCustomers">0</div><div class="stat-note">Gmail customer records</div></div>
+<div class="stat-card"><div class="stat-top"><span class="stat-label">SENT EMAILS</span><div class="stat-icon icon-green"><i class="fa fa-paper-plane"></i></div></div><div class="stat-value" id="gSent">0</div><div class="stat-note">Successfully sent</div></div>
+<div class="stat-card"><div class="stat-top"><span class="stat-label">FAILED EMAILS</span><div class="stat-icon icon-red"><i class="fa fa-circle-exclamation"></i></div></div><div class="stat-value" id="gFailed">0</div><div class="stat-note">Failed delivery attempts</div></div>
+<div class="stat-card"><div class="stat-top"><span class="stat-label">GMAIL AVAILABLE</span><div class="stat-icon icon-orange"><i class="fa fa-at"></i></div></div><div class="stat-value" id="gAvailable">0</div><div class="stat-note">Customers with email address</div></div>
+</div>
+<div class="grid-2">
+<div class="panel"><div class="panel-head"><div><div class="panel-title">Recent Email Activity</div><div class="panel-subtitle">Latest email history</div></div></div><div id="recentActivity" class="empty">Loading activity…</div></div>
+<div class="panel"><div class="panel-head"><div><div class="panel-title">Quick Actions</div><div class="panel-subtitle">Common email tasks</div></div></div><div style="padding:16px;display:grid;gap:10px"><button class="btn btn-primary" onclick="showPage('send')"><i class="fa fa-paper-plane"></i> Compose Email</button><button class="btn btn-light" onclick="runDueReminders()"><i class="fa fa-bell"></i> Run Due Reminders</button><button class="btn btn-light" onclick="showPage('test')"><i class="fa fa-vial"></i> Test Gmail Connection</button></div></div>
+</div>
+</section>
+
+<section class="page" id="page-gmailCustomers">
+<div class="page-heading"><div><h1>Gmail Customers</h1><p>Customer email addresses loaded from Gmail API.</p></div><button class="btn btn-light" onclick="loadGmailCustomers()"><i class="fa fa-rotate"></i> Refresh</button></div>
+<div class="panel">
+<div class="panel-head"><div><div class="panel-title">Customer Email List</div><div class="panel-subtitle">Choose a customer to compose an email</div></div><input class="search" id="gmailCustomerSearch" placeholder="Search customer or Gmail…" oninput="renderGmailCustomers()"></div>
+<div id="gmailCustomerGrid" class="customer-grid"><div class="empty">Loading customers…</div></div>
+</div>
+</section>
+
+<section class="page" id="page-send">
+<div class="page-heading"><div><h1>Send Email</h1><p>Send customer emails using your configured templates.</p></div></div>
+<div class="grid-2">
+<div class="panel">
+<div class="panel-head"><div><div class="panel-title">Compose Message</div><div class="panel-subtitle">Select a customer and email type</div></div></div>
+<div style="padding:17px">
+<div class="field"><label>Customer</label><select id="sendCustomer" onchange="updateRecipient()"><option value="">Select customer</option></select></div>
+<div class="field"><label>Recipient Gmail</label><input id="sendRecipient" type="email" placeholder="customer@gmail.com"></div>
+<div class="field"><label>Email Type</label><select id="sendType" onchange="updateEmailType()"><option value="due">Due Email</option><option value="payment">Payment Email</option><option value="newline">New Line Email</option><option value="custom">Custom Email</option></select></div>
+<div class="field"><label>Subject</label><input id="sendSubject" placeholder="Email subject"></div>
+<div class="field"><label>Message</label><textarea id="sendMessage" placeholder="Write your email message…" oninput="updateEmailPreview()"></textarea></div>
+<div class="field hidden" id="paymentAmountWrap"><label>Payment Amount</label><input id="sendAmount" type="number" min="0" placeholder="0" oninput="updateEmailPreview()"></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary" id="sendEmailBtn" onclick="sendManualEmail()"><i class="fa fa-paper-plane"></i> Send Email</button><button class="btn btn-light" onclick="updateEmailPreview()">Preview</button></div>
+</div>
+</div>
+<div class="panel">
+<div class="panel-head"><div><div class="panel-title">Email Preview</div><div class="panel-subtitle">Preview before sending</div></div></div>
+<div style="padding:17px"><div style="font-size:11px;color:var(--muted);margin-bottom:7px">SUBJECT</div><div id="previewSubject" style="font-weight:800;font-size:13px;margin-bottom:15px">—</div><div style="font-size:11px;color:var(--muted);margin-bottom:7px">MESSAGE</div><div class="preview" id="emailPreview">Select a customer and email type to preview.</div></div>
+</div>
+</div>
+</section>
+
+<section class="page" id="page-templates">
+<div class="page-heading"><div><h1>Email Templates</h1><p>Edit the message templates used for customer emails.</p></div><button class="btn btn-primary" onclick="saveCurrentTemplate()"><i class="fa fa-save"></i> Save Template</button></div>
+<div class="panel">
+<div class="panel-head"><div><div class="panel-title">Template Editor</div><div class="panel-subtitle">Changes are saved to the Gmail backend.</div></div></div>
+<div style="padding:17px;max-width:850px">
+<div class="field"><label>Template Type</label><select id="templateType" onchange="loadTemplateEditor()"><option value="due">Due Email</option><option value="payment">Payment Email</option><option value="newline">New Line Email</option><option value="custom">Custom Email</option></select></div>
+<div class="toggle-row"><span>Enable this template</span><input type="checkbox" id="templateEnabled" checked></div>
+<div class="field" style="margin-top:14px"><label>Subject</label><input id="templateSubject" placeholder="Template subject"></div>
+<div class="field"><label>Message</label><textarea id="templateMessage" style="min-height:180px" placeholder="Template message"></textarea></div>
+<div class="notice">Available placeholders may include: {{name}}, {{ip}}, {{phone}}, {{bill}}, {{billingDate}}, {{amount}}, {{address}}.</div>
+<button class="btn btn-primary" onclick="saveCurrentTemplate()"><i class="fa fa-save"></i> Save Template</button>
+</div>
+</div>
+</section>
+
+<section class="page" id="page-settings">
+<div class="page-heading"><div><h1>Email Settings</h1><p>Configure automatic reminders and email appearance.</p></div><button class="btn btn-primary" onclick="saveEmailSettings()"><i class="fa fa-save"></i> Save Settings</button></div>
+<div class="grid-2">
+<div class="panel">
+<div class="panel-head"><div><div class="panel-title">Automation Settings</div><div class="panel-subtitle">Automatic email controls</div></div></div>
+<div style="padding:17px">
+<div class="toggle-row"><span>Automatic Due Email</span><input type="checkbox" id="autoDueEmail"></div>
+<div class="toggle-row"><span>Automatic Payment Email</span><input type="checkbox" id="autoPaymentEmail"></div>
+<div class="field" style="margin-top:14px"><label>Reminder Days Before Due</label><input type="number" id="reminderDays" min="0" value="3"></div>
+<div class="field"><label>Admin Gmail (Monthly Summary)</label><input type="email" id="adminEmail" placeholder="admin@gmail.com"></div>
+</div>
+</div>
+<div class="panel">
+<div class="panel-head"><div><div class="panel-title">Email Appearance</div><div class="panel-subtitle">Brand and color settings</div></div></div>
+<div style="padding:17px">
+<div class="field"><label>Brand Name</label><input id="brandName" value="ONE ONLINE"></div>
+<div class="field"><label>Primary Color</label><input id="primaryColor" type="color" value="#087f5b"></div>
+<div class="field"><label>Accent Color</label><input id="accentColor" type="color" value="#12b886"></div>
+<div class="field"><label>Background Color</label><input id="backgroundColor" type="color" value="#f4faf7"></div>
+<div class="field"><label>Text Color</label><input id="textColor" type="color" value="#172033"></div>
+<div class="field"><label>Currency</label><input id="currency" value="৳"></div>
+</div>
+</div>
+</div>
+<div style="margin-top:12px"><button class="btn btn-primary" onclick="saveEmailSettings()"><i class="fa fa-save"></i> Save Settings</button></div>
+</section>
+
+<section class="page" id="page-history">
+<div class="page-heading"><div><h1>Email History</h1><p>Review sent and failed customer emails.</p></div><button class="btn btn-light" onclick="loadEmailHistory()"><i class="fa fa-rotate"></i> Refresh</button></div>
+<div class="panel">
+<div class="panel-head"><div><div class="panel-title">Email Activity Log</div><div class="panel-subtitle">History returned by Gmail API</div></div><input class="search" id="historySearch" placeholder="Search history…" oninput="renderEmailHistory()"></div>
+<div class="table-wrap"><table style="min-width:720px"><thead><tr><th>Date</th><th>Customer</th><th>Email</th><th>Type</th><th>Subject</th><th>Status</th></tr></thead><tbody id="historyTable"><tr><td colspan="6" class="empty">Loading history…</td></tr></tbody></table></div>
+</div>
+</section>
+
+<section class="page" id="page-test">
+<div class="page-heading"><div><h1>Test Gmail</h1><p>Send a test email to verify Gmail connectivity.</p></div></div>
+<div class="panel" style="max-width:650px">
+<div class="panel-head"><div><div class="panel-title">Gmail Connection Test</div><div class="panel-subtitle">This sends a test message to the address you enter.</div></div></div>
+<div style="padding:18px"><div class="field"><label>Test Recipient Gmail</label><input id="testRecipient" type="email" placeholder="your@gmail.com"></div><button class="btn btn-primary" onclick="sendTestEmail()"><i class="fa fa-vial"></i> Send Test Email</button><div id="testResult" style="font-size:12px;margin-top:14px"></div></div>
+</div>
+</section>
+
+</main>
+</div>
+</div>
+
+<!-- CUSTOMER MODAL -->
+<div class="overlay" id="customerOverlay">
+<div class="modal">
+<div class="modal-head"><h2 id="customerModalTitle">Add Customer</h2><button class="close" onclick="closeModal('customerOverlay')">&times;</button></div>
+<form id="customerForm" onsubmit="saveCustomer(event)">
+<div class="modal-body">
+<div class="form-grid">
+<div class="field"><label>Customer Name *</label><input id="f_name" required></div>
+<div class="field"><label>IP Address *</label><input id="f_ip" required></div>
+<div class="field"><label>Phone Number</label><input id="f_phone"></div>
+<div class="field"><label>Package</label><input id="f_package" placeholder="20 Mbps"></div>
+<div class="field"><label>Customer Bill</label><input id="f_customerBill" type="number" min="0"></div>
+<div class="field"><label>Internet Bill</label><input id="f_internetBill" type="number" min="0"></div>
+<div class="field"><label>Billing Date</label><input id="f_billingDate" type="date"></div>
+<div class="field"><label>Due Amount</label><input id="f_due" type="number" min="0"></div>
+<div class="field"><label>Bill Trigger</label><input id="f_billTrigger" placeholder="ON / OFF"></div>
+<div class="field"><label>Renew</label><input id="f_renew" placeholder="Renew amount"></div>
+<div class="field"><label>Area</label><input id="f_area"></div>
+<div class="field"><label>Location</label><input id="f_location"></div>
+<div class="field"><label>ONU</label><input id="f_onu"></div>
+<div class="field"><label>Fiber</label><input id="f_fiber"></div>
+<div class="field"><label>Customer Gmail</label><input id="f_email" type="email"></div>
+<div class="field"><label>Reason</label><input id="f_reason"></div>
+<div class="field full"><label>Address</label><textarea id="f_address"></textarea></div>
+</div>
+</div>
+<div class="modal-actions"><button type="button" class="btn btn-light" onclick="closeModal('customerOverlay')">Cancel</button><button type="submit" class="btn btn-primary" id="saveCustomerBtn">Save Customer</button></div>
+</form>
+</div>
+</div>
+
+<div class="overlay" id="paymentOverlay">
+<div class="modal small">
+<div class="modal-head"><h2 id="paymentTitle">Collect Payment</h2><button class="close" onclick="closeModal('paymentOverlay')">&times;</button></div>
+<div class="modal-body">
+<div class="notice" id="paymentCustomerInfo"></div>
+<div class="field"><label id="paymentAmountLabel">Collect Amount</label><input type="number" id="paymentAmount" min="0" step="0.01"></div>
+<div class="field"><label>Note</label><textarea id="paymentNote"></textarea></div>
+</div>
+<div class="modal-actions"><button class="btn btn-light" onclick="closeModal('paymentOverlay')">Cancel</button><button class="btn btn-primary" id="paymentSubmitBtn" onclick="submitPayment()">Confirm</button></div>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* Separate backend endpoints: do not combine these APIs. */
+const CUSTOMER_API_URL="https://script.google.com/macros/s/AKfycbweR6IZ0sR2xoxfOUIAxSlKb3clXrKtXY7a4g9WpjxItag9jAUcLH8dW12n_5EtHljE/exec";
+const CUSTOMER_API_TOKEN="123456789123";
+const GMAIL_API_URL="https://script.google.com/macros/s/AKfycbyioEIFcRitWzLOpr_6YolutiNN0uiUb4pqpb_awVf_bFZoOTlCFPIx5cPnKR3t_4o_kw/exec";
+const GMAIL_API_TOKEN="";
+
+let customerRows=[],customerFilter="all",editingCustomer=null,paymentCustomer=null,paymentMode="collect";
+let gmailCustomers=[],emailHistory=[],emailTemplates={},emailSettings={};
+
+const $=id=>document.getElementById(id);
+
+function toast(message){
+const el=$("toast");
+el.textContent=message;
+el.classList.add("show");
+clearTimeout(toast.timer);
+toast.timer=setTimeout(()=>el.classList.remove("show"),3200);
+}
+
+/* DARK / LIGHT MODE */
+const THEME_STORAGE_KEY="one-online-theme";
+
+function applyTheme(theme){
+const dark=theme==="dark";
+document.body.classList.toggle("dark-mode",dark);
+
+const icon=$("themeIcon");
+const label=$("themeText");
+const button=$("themeToggle");
+
+if(icon)icon.className=dark?"fa-solid fa-sun":"fa-solid fa-moon";
+if(label)label.textContent=dark?"Light Mode":"Dark Mode";
+
+if(button){
+button.title=dark?"Switch to light mode":"Switch to dark mode";
+button.setAttribute("aria-label",dark?"Switch to light mode":"Switch to dark mode");
+}
+
+const meta=document.querySelector('meta[name="theme-color"]');
+if(meta)meta.content=dark?"#0b1220":"#f5f7fb";
+}
+
+function toggleTheme(){
+const next=document.body.classList.contains("dark-mode")?"light":"dark";
+applyTheme(next);
+try{localStorage.setItem(THEME_STORAGE_KEY,next)}catch(e){}
+}
+
+function initializeTheme(){
+let saved="light";
+try{saved=localStorage.getItem(THEME_STORAGE_KEY)||"light"}catch(e){}
+applyTheme(saved==="dark"?"dark":"light");
+}
+
+function esc(v){
+return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function escJS(v){return String(v??"").replace(/\\/g,"\\\\").replace(/'/g,"\\'")}
+function num(v){const n=Number(String(v??0).replace(/[৳,\s]/g,""));return Number.isFinite(n)?n:0}
+function money(v){return "৳"+num(v).toLocaleString("en-IN",{maximumFractionDigits:2})}
+function closeModal(id){$(id).classList.remove("show")}
+function setConn(id,ok,msg){$(id).textContent=msg||(ok?"Connected":"Not connected");$(id).style.color=ok?"#15803d":"#dc2626"}
+
+function showPage(page){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+$("page-"+page)?.classList.add("active");
+document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
+if(page==="gmailDashboard")renderGmailDashboard();
+if(page==="gmailCustomers")renderGmailCustomers();
+if(page==="history")renderEmailHistory();
+}
+document.querySelectorAll(".nav-btn").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
+
+/* CUSTOMER API: JSONP */
+function customerApi(action,payload={}){
+return new Promise((resolve,reject)=>{
+const cb="oneOnlineCustomer_"+Date.now()+"_"+Math.floor(Math.random()*1e6);
+const params=new URLSearchParams({action,token:CUSTOMER_API_TOKEN,payload:JSON.stringify(payload),callback:cb});
+const script=document.createElement("script");
+const timer=setTimeout(()=>{cleanup();reject(new Error("Customer API timeout. Check Apps Script deployment."))},25000);
+function cleanup(){clearTimeout(timer);delete window[cb];script.remove()}
+window[cb]=res=>{cleanup();if(res&&(res.success===false||res.error))reject(new Error(res.message||res.error||"Customer API error"));else resolve(res||{})};
+script.onerror=()=>{cleanup();reject(new Error("Cannot connect to Customer API."))};
+script.src=CUSTOMER_API_URL+(CUSTOMER_API_URL.includes("?")?"&":"?")+params.toString();
+document.body.appendChild(script);
+});
+}
+
+/* GMAIL API: independent GET query API */
+async function gmailApi(action,payload={}){
+const params=new URLSearchParams({action,token:GMAIL_API_TOKEN,...payload});
+const response=await fetch(GMAIL_API_URL+(GMAIL_API_URL.includes("?")?"&":"?")+params.toString(),{method:"GET",redirect:"follow"});
+if(!response.ok)throw new Error("Gmail API HTTP "+response.status);
+const data=await response.json();
+if(data&&(data.success===false||data.error))throw new Error(data.message||data.error||"Gmail API error");
+return data||{};
+}
+
+function parseDate(v){
+if(!v)return null;
+if(v instanceof Date&&!isNaN(v))return new Date(v.getFullYear(),v.getMonth(),v.getDate());
+const s=String(v).trim();
+let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+if(m)return new Date(+m[1],+m[2]-1,+m[3]);
+m=s.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+if(m)return new Date(+m[3],+m[2]-1,+m[1]);
+const d=new Date(s);
+return isNaN(d)?null:new Date(d.getFullYear(),d.getMonth(),d.getDate());
+}
+function daysUntil(v){
+const d=parseDate(v);
+if(!d)return null;
+const t=new Date();t.setHours(0,0,0,0);
+return Math.round((d-t)/86400000);
+}
+function dateKey(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function inputDate(v){const d=parseDate(v);return d?dateKey(d):""}
+function formatDate(v){const d=parseDate(v);return d?d.toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}):(v?esc(v):"—")}
+
+function normalizeCustomer(c){
+return {...c,
+ip:c.ip??c.IP??"",name:c.name??c.Name??"",phone:c.phone??c.Phone??"",
+reason:c.reason??c.Reason??"",package:c.package??c.Package??"",
+customerBill:c.customerBill??c.customer_bill??c["Customar Bill"]??c["Customer Bill"]??0,
+billTrigger:c.billTrigger??c.bill_trigger??c["Bill Triger"]??"",
+internetBill:c.internetBill??c.internet_bill??c["Internet bill"]??0,
+billingDate:c.billingDate??c.billDate??c.BillingDate??c["Biling date"]??"",
+renew:c.renew??c.Renew??"",area:c.area??c.Ariya??"",
+address:c.address??c.Address??"",location:c.location??c.Location??"",
+onu:c.onu??c.Onu??"",fiber:c.fiber??c.Faibar??"",
+email:c.email??c.gmail??c["Gmail's"]??"",
+due:c.due??c.dueAmount??c.outstandingDue??c.Due??0
+};
+}
+function dueAmount(c){return num(c.due)}
+function getCustomerStatus(c){
+const days=daysUntil(c.billingDate),due=dueAmount(c);
+if(days!==null&&days>0)return{key:"upcoming",label:"Upcoming"};
+if(days===0)return{key:"today",label:"Today"};
+if(days!==null&&days<0)return due>0?{key:"due",label:"Due"}:{key:"collected",label:"Collected"};
+return due>0?{key:"due",label:"Due"}:{key:"collected",label:"Collected"};
+}
+
+async function loadCustomerData(){
+$("customerTable").innerHTML='<tr><td colspan="8" class="empty">Loading customers…</td></tr>';
+try{
+const res=await customerApi("getData");
+let rows=res.data??res.customers??res.rows??[];
+if(!Array.isArray(rows)&&Array.isArray(rows.customers))rows=rows.customers;
+customerRows=rows.map(normalizeCustomer);
+setConn("customerConn",true);
+updateCustomerDashboard();
+renderCustomerTable();
+loadCustomerCollect();
+}catch(e){
+setConn("customerConn",false,"Error");
+$("customerTable").innerHTML=`<tr><td colspan="8" class="empty">${esc(e.message)}</td></tr>`;
+toast(e.message);
+}
+}
+function updateCustomerDashboard(){
+const due=customerRows.reduce((s,c)=>s+dueAmount(c),0);
+$("totalDue").textContent=money(due);
+$("totalUpcoming").textContent=customerRows.filter(c=>getCustomerStatus(c).key==="upcoming").length;
+$("totalCustomers").textContent=customerRows.length;
+}
+async function loadCustomerCollect(){
+try{
+const r=await customerApi("getDashboard");
+const d=r.data??r.dashboard??r;
+const n=d.totalCollect??d.totalCollected??d.totalIncome??d.collect??d.income??0;
+$("totalCollect").textContent=money(n);
+}catch(e){}
+}
+function customerRow(c){
+const s=getCustomerStatus(c),ip=String(c.ip??"");
+return `<tr>
+<td><div class="customer-name">${esc(c.name||"Unnamed")}</div><div class="customer-ip">${esc(ip)}</div></td>
+<td>${esc(c.phone||"—")}</td>
+<td>${esc(c.package||"—")}</td>
+<td class="money">${money(c.customerBill)}</td>
+<td class="money" style="color:${dueAmount(c)>0?"#dc2626":"#15803d"}">${money(c.due)}</td>
+<td>${formatDate(c.billingDate)}</td>
+<td><span class="status status-${s.key}">${s.label}</span></td>
+<td><div class="actions">
+<button class="action-btn action-edit" title="Edit" onclick="editCustomer('${escJS(ip)}')"><i class="fa fa-pen"></i></button>
+<button class="action-btn action-collect" title="Collect" onclick="openPayment('${escJS(ip)}','collect')"><i class="fa fa-money-bill-wave"></i></button>
+<button class="action-btn action-renew" title="Renew" onclick="openPayment('${escJS(ip)}','renew')"><i class="fa fa-rotate"></i></button>
+<button class="action-btn action-delete" title="Delete" onclick="deleteCustomer('${escJS(ip)}')"><i class="fa fa-trash"></i></button>
+</div></td></tr>`;
+}
+function renderCustomerTable(){
+const q=($("customerSearch")?.value||"").trim().toLowerCase();
+const list=customerRows.filter(c=>(customerFilter==="all"||getCustomerStatus(c).key===customerFilter)&&[c.name,c.ip,c.phone,c.package,c.email,c.address,c.location].join(" ").toLowerCase().includes(q));
+const markup=list.length?list.map(customerRow).join(""):'<tr><td colspan="8" class="empty">No customers found.</td></tr>';
+$("customerTable").innerHTML=markup;
+$("dashboardCustomerTable").innerHTML=customerRows.slice(0,8).map(customerRow).join("")||'<tr><td colspan="8" class="empty">No customers found.</td></tr>';
+$("customerCount").textContent=`Showing ${list.length} of ${customerRows.length} customers`;
+}
+function setCustomerFilter(f,b){
+customerFilter=f;
+document.querySelectorAll("#customerFilters .filter").forEach(x=>x.classList.remove("active"));
+b.classList.add("active");
+renderCustomerTable();
+}
+function openCustomerModal(){
+editingCustomer=null;
+$("customerForm").reset();
+$("customerModalTitle").textContent="Add Customer";
+$("saveCustomerBtn").textContent="Save Customer";
+$("f_due").value="0";
+$("customerOverlay").classList.add("show");
+}
+function editCustomer(ip){
+const c=customerRows.find(x=>String(x.ip)===String(ip));
+if(!c)return toast("Customer not found.");
+editingCustomer={...c};
+$("customerForm").reset();
+$("customerModalTitle").textContent="Edit Customer";
+$("saveCustomerBtn").textContent="Update Customer";
+const f={
+f_name:c.name,f_ip:c.ip,f_phone:c.phone,f_package:c.package,
+f_customerBill:c.customerBill,f_internetBill:c.internetBill,
+f_billingDate:inputDate(c.billingDate),f_due:c.due,
+f_billTrigger:c.billTrigger,f_renew:c.renew,f_area:c.area,
+f_location:c.location,f_onu:c.onu,f_fiber:c.fiber,
+f_email:c.email,f_reason:c.reason,f_address:c.address
+};
+Object.entries(f).forEach(([k,v])=>$(k).value=v??"");
+$("customerOverlay").classList.add("show");
+}
+async function saveCustomer(e){
+e.preventDefault();
+const b=$("saveCustomerBtn");
+if(b.disabled)return;
+const p={
+ip:$("f_ip").value.trim(),name:$("f_name").value.trim(),
+phone:$("f_phone").value.trim(),reason:$("f_reason").value.trim(),
+package:$("f_package").value.trim(),customerBill:num($("f_customerBill").value),
+billTrigger:$("f_billTrigger").value.trim(),internetBill:num($("f_internetBill").value),
+billingDate:$("f_billingDate").value,renew:$("f_renew").value.trim(),
+area:$("f_area").value.trim(),address:$("f_address").value.trim(),
+location:$("f_location").value.trim(),onu:$("f_onu").value.trim(),
+fiber:$("f_fiber").value.trim(),email:$("f_email").value.trim(),
+due:num($("f_due").value)
+};
+b.disabled=true;b.textContent="Please wait…";
+try{
+if(editingCustomer){
+p.originalIp=editingCustomer.ip;
+await customerApi("updateCustomer",p);
+toast("Customer updated successfully.");
+}else{
+await customerApi("addCustomer",p);
+toast("Customer added successfully.");
+}
+closeModal("customerOverlay");
+await loadCustomerData();
+}catch(err){toast(err.message)}
+finally{
+b.disabled=false;
+b.textContent=editingCustomer?"Update Customer":"Save Customer";
+}
+}
+function openPayment(ip,mode){
+const c=customerRows.find(x=>String(x.ip)===String(ip));
+if(!c)return toast("Customer not found.");
+paymentCustomer=c;paymentMode=mode;
+const collect=mode==="collect";
+$("paymentTitle").textContent=collect?"Collect Payment":"Renew Expense";
+$("paymentAmountLabel").textContent=collect?"Collect Amount":"Renew / Expense Amount";
+$("paymentCustomerInfo").innerHTML=`<b>${esc(c.name)}</b><br>IP: ${esc(c.ip)}<br>Current Due: ${money(c.due)}`;
+$("paymentAmount").value=collect?(num(c.due)>0?num(c.due):num(c.customerBill)):num(c.internetBill);
+$("paymentNote").value="";
+$("paymentSubmitBtn").textContent=collect?"Confirm Collect":"Confirm Renew";
+$("paymentOverlay").classList.add("show");
+}
+async function submitPayment(){
+if(!paymentCustomer)return;
+const b=$("paymentSubmitBtn"),amount=num($("paymentAmount").value),note=$("paymentNote").value.trim();
+if(amount<=0)return toast("Please enter a valid amount.");
+if(b.disabled)return;
+const mode=paymentMode;
+b.disabled=true;b.textContent="Please wait…";
+try{
+await customerApi(mode==="collect"?"collectCustomer":"renewCustomer",{ip:paymentCustomer.ip,amount,note});
+closeModal("paymentOverlay");
+toast(mode==="collect"?"Payment collected successfully.":"Renew expense saved successfully.");
+await loadCustomerData();
+}catch(e){toast(e.message)}
+finally{
+b.disabled=false;
+b.textContent=mode==="collect"?"Confirm Collect":"Confirm Renew";
+}
+}
+async function deleteCustomer(ip){
+const c=customerRows.find(x=>String(x.ip)===String(ip));
+if(!c||!confirm(`Are you sure you want to delete ${c.name} (${c.ip})?`))return;
+try{
+await customerApi("deleteCustomer",{ip});
+toast("Customer deleted successfully.");
+await loadCustomerData();
+}catch(e){toast(e.message)}
+}
+
+/* GMAIL MODULE */
+function unwrapArray(r,...keys){
+for(const k of keys){
+if(Array.isArray(r?.[k]))return r[k];
+if(Array.isArray(r?.data?.[k]))return r.data[k];
+}
+if(Array.isArray(r?.data))return r.data;
+if(Array.isArray(r?.customers))return r.customers;
+return [];
+}
+function normalizeGmailCustomer(c){
+return {...c,
+ip:c.ip??c.IP??"",name:c.name??c.Name??"",
+phone:c.phone??c.Phone??"",
+email:c.email??c.gmail??c.Gmail??c["Gmail's"]??"",
+address:c.address??c.Address??"",area:c.area??c.Ariya??"",
+package:c.package??c.Package??"",
+bill:c.bill??c.customerBill??c.customer_bill??c["Customar Bill"]??0,
+billingDate:c.billingDate??c["Biling date"]??""
+};
+}
+async function loadGmailData(){
+try{
+const results=await Promise.allSettled([
+gmailApi("getInfo"),gmailApi("getCustomers"),
+gmailApi("getEmailHistory"),gmailApi("getEmailTemplates"),
+gmailApi("getEmailSettings")
+]);
+const [info,cust,hist,templ,sett]=results;
+if(cust.status==="fulfilled")gmailCustomers=unwrapArray(cust.value,"customers").map(normalizeGmailCustomer);
+if(hist.status==="fulfilled")emailHistory=unwrapArray(hist.value,"history","emails","records");
+if(templ.status==="fulfilled")emailTemplates=templ.value.templates??templ.value.data?.templates??templ.value.data??templ.value??{};
+if(sett.status==="fulfilled")emailSettings=sett.value.settings??sett.value.data?.settings??sett.value.data??sett.value??{};
+setConn("gmailConn",results.some(x=>x.status==="fulfilled"));
+if(results.every(x=>x.status==="rejected"))throw results[0].reason;
+renderGmailDashboard();renderGmailCustomers();updateCustomerSelect();loadTemplateEditor();populateSettings();
+}catch(e){setConn("gmailConn",false,"Error");toast("Gmail: "+e.message)}
+}
+async function loadGmailCustomers(){
+try{
+const r=await gmailApi("getCustomers");
+gmailCustomers=unwrapArray(r,"customers").map(normalizeGmailCustomer);
+renderGmailCustomers();updateCustomerSelect();setConn("gmailConn",true);
+}catch(e){toast(e.message);setConn("gmailConn",false,"Error")}
+}
+async function loadEmailHistory(){
+try{
+const r=await gmailApi("getEmailHistory");
+emailHistory=unwrapArray(r,"history","emails","records");
+renderEmailHistory();
+}catch(e){toast(e.message)}
+}
+function renderGmailDashboard(){
+const total=gmailCustomers.length;
+const available=gmailCustomers.filter(c=>c.email).length;
+const sent=emailHistory.filter(h=>/sent|success|delivered/i.test(String(h.status??h.result??""))).length;
+const failed=emailHistory.filter(h=>/fail|error/i.test(String(h.status??h.result??""))).length;
+$("gTotalCustomers").textContent=total;
+$("gAvailable").textContent=available;
+$("gSent").textContent=sent;
+$("gFailed").textContent=failed;
+const recent=emailHistory.slice(0,6);
+$("recentActivity").innerHTML=recent.length?recent.map(h=>`<div style="padding:10px 16px;border-bottom:1px solid var(--line);font-size:11px"><b>${esc(h.name??h.customerName??h.email??"Customer")}</b><span class="muted"> · ${esc(h.type??h.emailType??"Email")}</span><div class="muted" style="margin-top:4px">${esc(h.subject??"")} · ${esc(h.status??h.result??"")}</div></div>`).join(""):'<div class="empty">No recent email activity.</div>';
+}
+function renderGmailCustomers(){
+const q=($("gmailCustomerSearch")?.value||"").toLowerCase().trim();
+const list=gmailCustomers.filter(c=>[c.name,c.ip,c.phone,c.email].join(" ").toLowerCase().includes(q));
+$("gmailCustomerGrid").innerHTML=list.length?list.map((c,i)=>`<div class="customer-card"><div><h3>${esc(c.name||"Unnamed")}</h3><p>${esc(c.ip)} · ${esc(c.phone)}</p><p>${esc(c.email||"No Gmail address")}</p><span class="badge">${esc(c.package||"Customer")}</span></div><div style="display:grid;gap:6px"><button class="btn btn-primary btn-small" onclick="composeForGmailCustomer(${i})">Email</button><button class="btn btn-light btn-small" onclick="copyGmail('${escJS(c.email)}')">Copy</button></div></div>`).join(""):'<div class="empty">No customers found.</div>';
+}
+function composeForGmailCustomer(i){
+const c=gmailCustomers.filter(x=>[x.name,x.ip,x.phone,x.email].join(" ").toLowerCase().includes(($("gmailCustomerSearch")?.value||"").toLowerCase().trim()))[i];
+if(!c)return;
+updateCustomerSelect();
+$("sendCustomer").value=String(gmailCustomers.indexOf(c));
+updateRecipient();
+showPage("send");
+}
+function copyGmail(v){
+if(!v)return toast("No Gmail address.");
+navigator.clipboard?.writeText(v).then(()=>toast("Gmail copied."),()=>toast("Could not copy Gmail."));
+}
+function updateCustomerSelect(){
+const s=$("sendCustomer"),old=s.value;
+s.innerHTML='<option value="">Select customer</option>'+gmailCustomers.map((c,i)=>`<option value="${i}">${esc(c.name||c.ip||"Customer")} — ${esc(c.email||"No Gmail")}</option>`).join("");
+if(old&&gmailCustomers[Number(old)])s.value=old;
+}
+function selectedGmailCustomer(){
+const i=$("sendCustomer").value;
+return i===""?null:gmailCustomers[Number(i)];
+}
+function updateRecipient(){
+const c=selectedGmailCustomer();
+$("sendRecipient").value=c?.email||"";
+updateEmailType();
+}
+function replaceTokens(text,c,amount){
+return String(text??"").replace(/\{\{\s*(name|ip|phone|email|address|area|package|bill|billingDate|amount)\s*\}\}/gi,(_,k)=>{
+const map={name:c?.name,ip:c?.ip,phone:c?.phone,email:c?.email,address:c?.address,area:c?.area,package:c?.package,bill:c?.bill,billingDate:c?.billingDate,amount};
+return String(map[k]??map[k.toLowerCase()]??"");
+});
+}
+function templateFor(type){return emailTemplates?.[type]??emailTemplates?.templates?.[type]??{}}
+function updateEmailType(){
+const type=$("sendType").value,c=selectedGmailCustomer(),t=templateFor(type);
+$("paymentAmountWrap").classList.toggle("hidden",type!=="payment");
+if(type!=="custom"&&t){
+$("sendSubject").value=t.subject??$("sendSubject").value;
+$("sendMessage").value=t.body??t.message??$("sendMessage").value;
+}else if(type==="custom"){
+$("sendSubject").value="";
+$("sendMessage").value="";
+}else if(type==="due"){
+$("sendSubject").value="Internet Bill Reminder";
+$("sendMessage").value="Dear {{name}},\nYour internet bill of {{bill}} is due on {{billingDate}}. Please make payment on time.";
+}else if(type==="payment"){
+$("sendSubject").value="Payment Received";
+$("sendMessage").value="Dear {{name}},\nWe have received your payment of {{amount}}. Thank you.";
+}else if(type==="newline"){
+$("sendSubject").value="Welcome to ONE ONLINE";
+$("sendMessage").value="Dear {{name}},\nYour new internet connection is ready. Thank you for choosing us.";
+}
+updateEmailPreview();
+}
+function updateEmailPreview(){
+const c=selectedGmailCustomer()||{},amount=$("sendAmount").value;
+const msg=replaceTokens($("sendMessage").value,c,amount);
+$("previewSubject").textContent=replaceTokens($("sendSubject").value,c,amount)||"—";
+$("emailPreview").textContent=msg||"Select a customer and email type to preview.";
+}
+async function sendManualEmail(){
+const c=selectedGmailCustomer(),recipient=$("sendRecipient").value.trim();
+if(!recipient)return toast("Enter recipient Gmail.");
+const payload={
+email:recipient,to:recipient,customer:c||{},type:$("sendType").value,
+subject:$("sendSubject").value.trim(),
+message:replaceTokens($("sendMessage").value,c,$("sendAmount").value),
+amount:num($("sendAmount").value)
+};
+const b=$("sendEmailBtn");
+b.disabled=true;b.textContent="Sending…";
+try{
+await gmailApi("sendManualEmail",payload);
+toast("Email sent successfully.");
+await loadEmailHistory();
+renderGmailDashboard();
+}catch(e){toast(e.message)}
+finally{b.disabled=false;b.innerHTML='<i class="fa fa-paper-plane"></i> Send Email'}
+}
+function loadTemplateEditor(){
+const type=$("templateType").value,t=templateFor(type);
+$("templateEnabled").checked=t.enabled!==false;
+$("templateSubject").value=t.subject??"";
+$("templateMessage").value=t.body??t.message??"";
+}
+async function saveCurrentTemplate(){
+const type=$("templateType").value;
+const payload={
+type,templateType:type,enabled:$("templateEnabled").checked,
+subject:$("templateSubject").value,
+message:$("templateMessage").value,
+body:$("templateMessage").value
+};
+try{
+await gmailApi("saveEmailTemplate",payload);
+emailTemplates[type]=payload;
+toast("Template saved successfully.");
+}catch(e){toast(e.message)}
+}
+function populateSettings(){
+const s=emailSettings||{};
+$("autoDueEmail").checked=Boolean(s.autoDueEmail??s.autoEmail??false);
+$("autoPaymentEmail").checked=Boolean(s.autoPaymentEmail??false);
+$("reminderDays").value=s.reminderDays??s.dueReminderDays??3;
+$("adminEmail").value=s.adminEmail??"";
+$("brandName").value=s.brandName??s.brand??"ONE ONLINE";
+$("primaryColor").value=s.primaryColor??"#087f5b";
+$("accentColor").value=s.accentColor??"#12b886";
+$("backgroundColor").value=s.backgroundColor??"#f4faf7";
+$("textColor").value=s.textColor??"#172033";
+$("currency").value=s.currency??"৳";
+}
+async function saveEmailSettings(){
+const p={
+autoDueEmail:$("autoDueEmail").checked,
+autoPaymentEmail:$("autoPaymentEmail").checked,
+reminderDays:num($("reminderDays").value),
+adminEmail:$("adminEmail").value.trim(),
+brandName:$("brandName").value.trim(),
+primaryColor:$("primaryColor").value,
+accentColor:$("accentColor").value,
+backgroundColor:$("backgroundColor").value,
+textColor:$("textColor").value,
+currency:$("currency").value.trim()
+};
+try{
+await gmailApi("saveEmailSettings",p);
+emailSettings=p;
+toast("Email settings saved.");
+}catch(e){toast(e.message)}
+}
+function renderEmailHistory(){
+const q=($("historySearch")?.value||"").toLowerCase().trim();
+const list=emailHistory.filter(h=>[h.name,h.customerName,h.email,h.to,h.type,h.subject,h.status].join(" ").toLowerCase().includes(q));
+$("historyTable").innerHTML=list.length?list.map(h=>`<tr><td>${esc(h.date??h.timestamp??h.createdAt??"—")}</td><td>${esc(h.name??h.customerName??"—")}</td><td>${esc(h.email??h.to??"—")}</td><td>${esc(h.type??h.emailType??"—")}</td><td>${esc(h.subject??"—")}</td><td>${esc(h.status??h.result??"—")}</td></tr>`).join(""):'<tr><td colspan="6" class="empty">No email history found.</td></tr>';
+}
+async function runDueReminders(){
+if(!confirm("Run automatic due reminders now?"))return;
+try{
+await gmailApi("runAutoReminders");
+toast("Due reminder process completed.");
+await loadEmailHistory();
+renderGmailDashboard();
+}catch(e){toast(e.message)}
+}
+async function sendTestEmail(){
+const email=$("testRecipient").value.trim();
+if(!email)return toast("Enter test Gmail address.");
+$("testResult").textContent="Sending test…";
+try{
+const r=await gmailApi("testEmail",{email,to:email});
+$("testResult").textContent=r.message||"Test email sent successfully.";
+toast("Test email request completed.");
+}catch(e){
+$("testResult").textContent=e.message;
+toast(e.message);
+}
+}
+
+document.querySelectorAll(".overlay").forEach(o=>o.addEventListener("click",e=>{
+if(e.target===o)o.classList.remove("show");
+}));
+
+document.addEventListener("DOMContentLoaded",()=>{
+initializeTheme();
+loadCustomerData();
+loadGmailData();
+});
+</script>
+</body>
+</html>
